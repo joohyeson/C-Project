@@ -117,9 +117,9 @@ xcopy /y /d "$(SolutionDir)SFML\bin\sfml-graphics-2.dll" "$(TargetDir)"</Command
       <AdditionalDependencies>sfml-graphics-d.lib;sfml-window-d.lib;sfml-system-d.lib;OpenGL32.lib;winmm.lib;gdi32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
-      <Command>xcopy /y /d "$(SolutionDir)SFML\bin\sfml-window-d-2.dll" "$(TargetDir)"
-xcopy /y /d "$(SolutionDir)SFML\bin\sfml-system-d-2.dll" "$(TargetDir)"
-xcopy /y /d "$(SolutionDir)SFML\bin\sfml-graphics-d-2.dll" "$(TargetDir)"</Command>
+      <Command>xcopy /y /d "$(SolutionDir)SFML\dll\sfml-window-d-2.dll" "$(TargetDir)"
+xcopy /y /d "$(SolutionDir)SFML\dll\sfml-system-d-2.dll" "$(TargetDir)"
+xcopy /y /d "$(SolutionDir)SFML\dll\sfml-graphics-d-2.dll" "$(TargetDir)"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -167,9 +167,9 @@ xcopy /y /d "$(SolutionDir)SFML\bin\sfml-graphics-2.dll" "$(TargetDir)"</Command
       <AdditionalDependencies>sfml-graphics.lib;sfml-window.lib;sfml-system.lib;OpenGL32.lib;winmm.lib;gdi32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
-      <Command>xcopy /y /d "$(SolutionDir)SFML\bin\sfml-window-2.dll" "$(TargetDir)"
-xcopy /y /d "$(SolutionDir)SFML\bin\sfml-system-2.dll" "$(TargetDir)"
-xcopy /y /d "$(SolutionDir)SFML\bin\sfml-graphics-2.dll" "$(TargetDir)"</Command>
+      <Command>xcopy /y /d "$(SolutionDir)SFML\dll\sfml-window-2.dll" "$(TargetDir)"
+xcopy /y /d "$(SolutionDir)SFML\dll\sfml-system-2.dll" "$(TargetDir)"
+xcopy /y /d "$(SolutionDir)SFML\dll\sfml-graphics-2.dll" "$(TargetDir)"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
