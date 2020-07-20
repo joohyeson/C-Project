@@ -1,11 +1,11 @@
 ## ReadMe
 
 1. Name : Daeun Jeong, Juhye Son
-  project name : CS225 PROJECT
-  course name : CS225
-  term : 2020-07-20 ~ 2020-08-07
+* project name : CS225 PROJECT
+* course name : CS225
+* term : 20-07-20 ~ 20-08-07
 
-2. The list below are incomplete about the project.
+2. The lists below are incomplete about the project.
 - [ ] [**core**] All source code, data files and project files need to build and run the project are in this repo
 - [ ] [**core**] Created a ReadMe markdown file with all of the needed information
 - [ ] [**core**] Created a CoreTopics markdown file with all of the needed information
@@ -38,12 +38,12 @@
 - [ ] No memory leaks detected with the CRT library, valgrind or Dr Memory.
 - [ ] All requirements that are completed are checked off here by replacing the `[ ]` with `[x]`
 
-3. The list below are complete about the project.
--
+3. The lists below are complete about the project.
+- [ ]
 
 4. This project is mini games project, that has playable classic games.
-   To build the project, ~.
-   To interact with the project, ~.
+* To build the project, ~.
+* To interact with the project, ~.
 
 5. The things that we are proud of about the project are not exist yet.
 
