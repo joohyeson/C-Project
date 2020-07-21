@@ -1,43 +1,61 @@
-#include <chrono>
-#include "GameStateManager.h"
+/*--------------------------------------------------------------
+Copyright (C) 2020 DigiPen Institute of Technology.
+Reproduction or disclosure of this file or its contents without the prior
+written consent of DigiPen Institute of Technology is prohibited.
+File Name: Engine.h
+Purpose: This is Engine header file.
+Project: CS280
+Author: Juhye Son
+Creation date: 21/07/2020
+-----------------------------------------------------------------*/
+
 #include "Engine.h"
 
-#define LIMITETIME 5
+#define LIMITE_TIME 5
 
-Engine::Engine() : gameStateManager() {};
+Engine::Engine() : mGameStateManager() {};
 
-Engine::~Engine() 
+Engine::~Engine() {}
+
+void Engine::Initialize(std::string windowName)
 {
-}
-
-void Engine::Init(std::string windowName)
-{
-    window.Init(windowName);
+    mWindow.Initialize(windowName);
 }
 
 void Engine::Shutdown()
 {
-    gameStateManager.Shutdown();
+    mGameStateManager.Shutdown();
 }
 
 void  Engine::Update()
 {
     now = std::chrono::system_clock::now();
     double dt = std::chrono::duration<double>(now - lastTick).count();
+    sf::Event event;
 
-    if (dt >= (1 / Engine::Target_FPS))
+    if (dt >= (1 / Engine::TargetFPS))
     {
         lastTick = now;
         timer += dt;
         ++frameCount;
 
-        window.Update();
-        gameStateManager.Update(dt);
+        while (mWindow.GetWindow().pollEvent(event))
+        {
+            if (event.type == sf::Event::Closed)
+            {
+                Shutdown();
+            }
+
+            mInput.Update(event);
+        }
+
+        mWindow.Update();
+        mGameStateManager.Update(dt);
     }
 
     double aveFrameRate = frameCount / timer;
 
-    if (timer >= LIMITETIME)
+    if (timer >= LIMITE_TIME)
     {
         timer = 0;
         frameCount = 0;
@@ -46,5 +64,5 @@ void  Engine::Update()
 
 bool  Engine::HasGameEnded()
 {
-    return gameStateManager.HasGameEnded();
+    return mGameStateManager.HasGameEnded();
 }

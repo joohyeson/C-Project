@@ -1,16 +1,27 @@
+/*--------------------------------------------------------------
+Copyright (C) 2020 DigiPen Institute of Technology.
+Reproduction or disclosure of this file or its contents without the prior
+written consent of DigiPen Institute of Technology is prohibited.
+File Name: GameStateManager.cpp
+Purpose: This is GameStateManager source file.
+Project: CS280
+Author: Juhye Son
+Creation date: 21/07/2020
+-----------------------------------------------------------------*/
+
 #include "Engine.h"
 #include "GameStateManager.h"
 
-GameStateManager::GameStateManager() : currGameState(nullptr), nextGameState(nullptr), state(State::START) { }
+GameStateManager::GameStateManager() : mCurrentGameState(nullptr), mNextGameState(nullptr), mState(State::START) { }
 
 void GameStateManager::AddGameState(GameState& gameState)
 {
-    gameStates.push_back(&gameState);
+    mGameStates.push_back(&gameState);
 }
 
 void GameStateManager::Update(double dt)
 {
-    switch (state)
+    switch (mState)
     {
     case GameStateManager::State::START:
         SetStartState();
@@ -39,60 +50,60 @@ void GameStateManager::Update(double dt)
 
 void GameStateManager::SetNextState(int initState)
 {
-    nextGameState = gameStates[initState];
+    mNextGameState = mGameStates[initState];
 }
 
 void GameStateManager::ReloadState()
 {
-    state = State::UNLOAD;
+    mState = State::UNLOAD;
 }
 
 void GameStateManager::Shutdown()
 {
-    state = State::UNLOAD;
-    nextGameState = nullptr;
+    mState = State::UNLOAD;
+    mNextGameState = nullptr;
 }
 
 void GameStateManager::SetStartState()
 {
-    nextGameState = gameStates[0];
-    state = State::LOAD;
+    mNextGameState = mGameStates[0];
+    mState = State::LOAD;
 }
 
 void GameStateManager::SetLoadState()
 {
-    currGameState = nextGameState;
+    mCurrentGameState = mNextGameState;
 
-    currGameState->Load();
-    state = State::RUNNING;
+    mCurrentGameState->Load();
+    mState = State::RUNNING;
 }
 
 void GameStateManager::SetRunningState(double dt)
 {
-    if (currGameState != nextGameState)
+    if (mCurrentGameState != mNextGameState)
     {
-        state = State::UNLOAD;
+        mState = State::UNLOAD;
     }
 
-    currGameState->Update(dt);
+    mCurrentGameState->Update(dt);
 
-    currGameState->Draw();
+    mCurrentGameState->Draw();
 }
 
 void GameStateManager::SetUnloadState()
 {
-    currGameState->Unload();
-    if (nextGameState == nullptr)
+    mCurrentGameState->Unload();
+    if (mNextGameState == nullptr)
     {
-        state = State::SHUTDOWN;
+        mState = State::SHUTDOWN;
     }
     else
     {
-        state = State::LOAD;
+        mState = State::LOAD;
     }
 }
 
 void GameStateManager::SetShutDownState()
 {
-    state = State::EXIT;
+    mState = State::EXIT;
 }

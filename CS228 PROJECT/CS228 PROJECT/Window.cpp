@@ -1,37 +1,46 @@
+/*--------------------------------------------------------------
+Copyright (C) 2020 DigiPen Institute of Technology.
+Reproduction or disclosure of this file or its contents without the prior
+written consent of DigiPen Institute of Technology is prohibited.
+File Name: Window.cpp
+Purpose: This is Window source file.
+Project: CS280
+Author: Juhye Son
+Creation date: 21/07/2020
+-----------------------------------------------------------------*/
 
-#include "Engine.h"			// Engine.GetWindow()
+#include "Engine.h" // Engine.GetWindow().Resize()
 #include "Window.h"
 #include <SFML\Graphics\RenderWindow.hpp>
 #include <SFML/Window/Event.hpp>
 
-sf::RenderWindow window;
-
-void Window::Init(std::string windowName)
+void Window::Initialize(std::string windowName)
 {
-    window.create(sf::VideoMode(1280, 720), windowName, sf::Style::Close | sf::Style::Resize);
-
-    /*doodle::create_window(windowName, 1140, 810);
-    doodle::set_frame_of_reference(doodle::FrameOfReference::RightHanded_OriginBottomLeft);
-    doodle::set_image_mode(doodle::RectMode::Corner);*/
+    mRenderWindow.create(sf::VideoMode(1280, 720), windowName, sf::Style::Close | sf::Style::Resize);
 }
 
-void Window::Resize(int newWidth, int newHeight) { screenSize.x = newWidth; screenSize.y = newHeight; }
+void Window::Resize(int newWidth, int newHeight) { mScreenSize.x = newWidth; mScreenSize.y = newHeight; }
 
-Vector2DInt Window::GetSize() { return screenSize; }
+Vector2DInt Window::GetSize() { return mScreenSize; }
+
+sf::RenderWindow& Window::GetWindow(void)
+{
+    return mRenderWindow;
+}
 
 void Window::Clear(sf::Color color)
 {
-    window.clear(color);
+    mRenderWindow.clear(color);
 }
 
 void Window::Draw(const sf::Drawable& drawable)
 {
-    window.draw(drawable);
+    mRenderWindow.draw(drawable);
 }
 
 void Window::Update()
 {
-    window.display();
+    mRenderWindow.display();
 }
 
 void on_window_resized(int new_width, int new_height) { Engine::GetWindow().Resize(new_width, new_height); }

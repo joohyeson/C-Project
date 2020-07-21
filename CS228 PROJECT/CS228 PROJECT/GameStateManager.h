@@ -1,6 +1,17 @@
+/*--------------------------------------------------------------
+Copyright (C) 2020 DigiPen Institute of Technology.
+Reproduction or disclosure of this file or its contents without the prior
+written consent of DigiPen Institute of Technology is prohibited.
+File Name: GameStateManager.h
+Purpose: This is GameStateManager header file.
+Project: CS280
+Author: Juhye Son
+Creation date: 21/07/2020
+-----------------------------------------------------------------*/
+
 #pragma once
-#include <vector>
-#include "GameState.h"
+#include <vector> //std::vector
+#include "GameState.h" //GameState* currGameState
 
 class GameStateManager
 {
@@ -12,7 +23,7 @@ public:
     void SetNextState(int initState);
     void Shutdown();
     void ReloadState();
-    bool HasGameEnded() { return state == State::EXIT; }
+    bool HasGameEnded() { return mState == State::EXIT; }
 
 private:
     void SetStartState();
@@ -31,9 +42,9 @@ private:
         EXIT,
     };
 
-    std::vector<GameState*> gameStates;
-    State state;
-    GameState* currGameState;
-    GameState* nextGameState;
+    std::vector<GameState*> mGameStates;
+    State mState;
+    GameState* mCurrentGameState;
+    GameState* mNextGameState;
 };
 

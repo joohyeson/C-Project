@@ -2,30 +2,29 @@
 Copyright (C) 2020 DigiPen Institute of Technology.
 Reproduction or disclosure of this file or its contents without the prior
 written consent of DigiPen Institute of Technology is prohibited.
-File Name: MainMenu.h
-Purpose: This is MainMenu header file.
+File Name: Level1.h
+Purpose: This is Level1 header file.
 Project: CS280
-Author: Juhye Son
+Author: Daeun Jeong
 Creation date: 21/07/2020
 -----------------------------------------------------------------*/
 
 #pragma once
+#include "GameState.h" //class Level1 : public GameState (Inheritance)
 #include <SFML/Graphics.hpp> //sf::Font, sf::Text
-#include "GameState.h" //class MainMenu : public GameState (Inheritance)
-#include "Levels.h" //LEVEL1
 
-class MainMenu : public GameState 
+class Level1 : public GameState 
 {
 public:
-    MainMenu();
+    Level1();
     void Load() override;
     void Update(double dt) override;
     void Unload() override;
     void Draw() override;
 
-    std::string GetName() override { return "MainMenu"; }
+    std::string GetName() override { return "Level1"; }
 
 private:
     sf::Font mFont;
-    sf::Text mMainMenuText;
+    sf::Text mLevel1Text;
 };
