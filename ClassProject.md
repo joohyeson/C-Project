@@ -59,9 +59,9 @@ The instructor will use the repo for examining the code and building the project
 
 ## Rubric
 
-- [ ] [**core**] All source code, data files and project files need to build and run the project are in this repo
-- [ ] [**core**] Created a ReadMe markdown file with all of the needed information
-- [ ] [**core**] Created a CoreTopics markdown file with all of the needed information
+- [X] [**core**] All source code, data files and project files need to build and run the project are in this repo
+- [X] [**core**] Created a ReadMe markdown file with all of the needed information
+- [X] [**core**] Created a CoreTopics markdown file with all of the needed information
 - [ ] [**core**] Make good use of pointers and arrays
 - [ ] [**core**] Use Bitwise operations to create a some kind of configuration variable where you extract values. _(Combine bit flags of varying powers of 2)_
 - [ ] [**core**] Use bitwise operations to replace Arithmetic Operations
@@ -72,7 +72,7 @@ The instructor will use the repo for examining the code and building the project
 - [ ] [**core**] Makes good use of Rule of 0
 - [ ] [**core**] Makes good use of RAII
 - [ ] [**core**] Makes good use of Templates
-- [ ] [**core**] Makes good use of STL Containers
+- [X] [**core**] Makes good use of STL Containers
 - [ ] [**core**] Makes good use of STL Iterators
 - [ ] [**core**] Makes good use of STL Algorithms
 - [ ] All source files have a proper header comment with your name, project name, course name, term.
