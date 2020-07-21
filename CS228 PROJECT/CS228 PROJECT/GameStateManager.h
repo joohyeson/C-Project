@@ -2,36 +2,38 @@
 #include <vector>
 #include "GameState.h"
 
-class GameStateManager {
+class GameStateManager
+{
 public:
-	GameStateManager();
+    GameStateManager();
 
-	void AddGameState(GameState& gameState);
-	void Update(double dt);
-	void SetNextState(int initState);
-	void Shutdown();
-	void ReloadState();
-	bool HasGameEnded() { return state == State::EXIT; }
+    void AddGameState(GameState& gameState);
+    void Update(double dt);
+    void SetNextState(int initState);
+    void Shutdown();
+    void ReloadState();
+    bool HasGameEnded() { return state == State::EXIT; }
 
 private:
-	void SetStartState();
-	void SetLoadState();
-	void SetRunningState(double dt);
-	void SetUnloadState();
-	void SetShutDownState();
+    void SetStartState();
+    void SetLoadState();
+    void SetRunningState(double dt);
+    void SetUnloadState();
+    void SetShutDownState();
 
-	enum class State {
-		START,
-		LOAD,
-		RUNNING,
-		UNLOAD,
-		SHUTDOWN,
-		EXIT,
-	};
+    enum class State
+    {
+        START,
+        LOAD,
+        RUNNING,
+        UNLOAD,
+        SHUTDOWN,
+        EXIT,
+    };
 
-	std::vector<GameState*> gameStates;
-	State state;
-	GameState* currGameState;
-	GameState* nextGameState;
+    std::vector<GameState*> gameStates;
+    State state;
+    GameState* currGameState;
+    GameState* nextGameState;
 };
 

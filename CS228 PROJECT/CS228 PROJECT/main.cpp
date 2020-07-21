@@ -5,19 +5,24 @@ int main()
 {
     Engine& engine = Engine::Instance();
 
-    try {
+    try 
+    {
         engine.Init("Week 2");
         MainMenu mainmenu;
 
         engine.GetGameStateManager().AddGameState(mainmenu);
 
-        while (engine.HasGameEnded() == false) {
+        while (engine.HasGameEnded() == false) 
+        {
             engine.Update();
         }
+
         engine.Shutdown();
+        
         return 0;
     }
-    catch (std::exception& e) {
+    catch (std::exception& e) 
+    {
         return -1;
     }
     //sf::RenderWindow window(sf::VideoMode(1280, 720), "MINI GAMES", sf::Style::Close | sf::Style::Resize);

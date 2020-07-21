@@ -1,25 +1,27 @@
 #include <chrono>
 #include "GameStateManager.h"
 #include "Engine.h"
+
 #define LIMITETIME 5
 
 Engine::Engine() : gameStateManager() {};
 
-
-Engine::~Engine() {
+Engine::~Engine() 
+{
 }
 
 void Engine::Init(std::string windowName)
 {
     window.Init(windowName);
 }
+
 void Engine::Shutdown()
 {
     gameStateManager.Shutdown();
 }
+
 void  Engine::Update()
 {
-
     now = std::chrono::system_clock::now();
     double dt = std::chrono::duration<double>(now - lastTick).count();
 
@@ -31,7 +33,6 @@ void  Engine::Update()
 
         window.Update();
         gameStateManager.Update(dt);
-        
     }
 
     double aveFrameRate = frameCount / timer;
@@ -40,10 +41,9 @@ void  Engine::Update()
     {
         timer = 0;
         frameCount = 0;
-
     }
-
 }
+
 bool  Engine::HasGameEnded()
 {
     return gameStateManager.HasGameEnded();
