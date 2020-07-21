@@ -25,8 +25,8 @@ int main()
     text.setCharacterSize(30);
     text.setStyle(sf::Text::Regular);
 
-   // sf::Sprite sprite;
-    //sprite.setTexture(texture1);
+    // sf::Sprite sprite;
+     //sprite.setTexture(texture1);
 
     while (window.isOpen())
     {
