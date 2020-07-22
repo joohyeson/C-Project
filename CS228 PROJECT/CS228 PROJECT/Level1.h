@@ -13,7 +13,7 @@ Creation date: 21/07/2020
 #include "GameState.h" //class Level1 : public GameState (Inheritance)
 #include <SFML/Graphics.hpp> //sf::Font, sf::Text
 
-class Level1 : public GameState 
+class Level1 : public GameState
 {
 public:
     Level1();
@@ -25,12 +25,7 @@ public:
     std::string GetName() override { return "Level1"; }
 
 private:
-    sf::Font mFont;
-    sf::Text mLevel1Text;
-
-    int w = 32;;
-    std::vector<std::vector<int>> grid;
-    std::vector<std::vector<int>> sgrid;
-
-    //sf::Sprite mSprite;
+    std::vector<std::vector<int>> mGrid;
+    std::vector<std::vector<int>> mShowGrid;
+    bool mShouldGameRun = true;
 };
