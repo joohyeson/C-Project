@@ -12,16 +12,6 @@ Creation date: 21/07/2020
 #include "Input.h"
 #include "Engine.h" //Engine::GetWindow().GetSize()
 
-std::bitset<sf::Keyboard::KeyCount> Input::mKeyPressed;
-std::bitset<sf::Keyboard::KeyCount> Input::mKeyReleased;
-std::bitset<sf::Keyboard::KeyCount> Input::mKeyTriggered;
-
-std::bitset<sf::Mouse::ButtonCount> Input::mMousePressed;
-std::bitset<sf::Mouse::ButtonCount> Input::mMouseReleased;
-std::bitset<sf::Mouse::ButtonCount> Input::mMouseTriggered;
-
-sf::Vector2i Input::mMouse;
-
 Input::Input()
 {
     mKeyPressed.reset();

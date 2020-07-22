@@ -11,6 +11,7 @@ Creation date: 21/07/2020
 
 #pragma once
 #include <vector> //std::vector
+#include <memory> //std::unique_ptr
 #include "GameState.h" //GameState* currGameState
 
 class GameStateManager
@@ -42,6 +43,7 @@ private:
         EXIT,
     };
 
+    //std::vector<std::unique_ptr<GameState>> mGameStates;
     std::vector<GameState*> mGameStates;
     State mState;
     GameState* mCurrentGameState;
