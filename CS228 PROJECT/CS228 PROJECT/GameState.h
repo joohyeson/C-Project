@@ -15,10 +15,12 @@ Creation date: 21/07/2020
 class GameState
 {
 public:
+    GameState() {};
     virtual void Load() = 0;
     virtual void Update(double dt) = 0;
     virtual void Unload() = 0;
     virtual void Draw() = 0;
     virtual std::string GetName() = 0;
+    virtual ~GameState() {};
 private:
 };

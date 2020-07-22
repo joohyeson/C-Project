@@ -16,6 +16,12 @@ GameStateManager::GameStateManager() : mCurrentGameState(nullptr), mNextGameStat
 
 void GameStateManager::AddGameState(GameState& gameState)
 {
+    //std::unique_ptr<GameState> pGameState(&gameState);
+    //mGameStates.push_back(pGameState);
+
+    //std::unique_ptr<GameState> pGameState = std::make_unique<GameState>(gameState);
+    //mGameStates.push_back(pGameState);
+
     mGameStates.push_back(&gameState);
 }
 
@@ -50,7 +56,8 @@ void GameStateManager::Update(double dt)
 
 void GameStateManager::SetNextState(int initState)
 {
-    mNextGameState = mGameStates[initState];
+    //mNextGameState = mGameStates.at(initState).get();
+    mNextGameState = mGameStates.at(initState);
 }
 
 void GameStateManager::ReloadState()
@@ -66,7 +73,8 @@ void GameStateManager::Shutdown()
 
 void GameStateManager::SetStartState()
 {
-    mNextGameState = mGameStates[0];
+    //mNextGameState = mGameStates.at(0).get();
+    mNextGameState = mGameStates.at(0);
     mState = State::LOAD;
 }
 
@@ -93,6 +101,7 @@ void GameStateManager::SetRunningState(double dt)
 void GameStateManager::SetUnloadState()
 {
     mCurrentGameState->Unload();
+
     if (mNextGameState == nullptr)
     {
         mState = State::SHUTDOWN;
