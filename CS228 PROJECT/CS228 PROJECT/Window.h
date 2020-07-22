@@ -25,7 +25,9 @@ public:
     void Draw(const sf::Drawable& drawable);
     void Clear(sf::Color color);
 
+    sf::RenderWindow mRenderWindow;
+
 private:
     Vector2DInt mScreenSize;
-    sf::RenderWindow mRenderWindow;
+    
 };

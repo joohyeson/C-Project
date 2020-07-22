@@ -27,4 +27,10 @@ public:
 private:
     sf::Font mFont;
     sf::Text mLevel1Text;
+
+    int w = 32;
+    int grid[12][12];
+    int sgrid[12][12]; //for showing
+
+    //sf::Sprite mSprite;
 };
