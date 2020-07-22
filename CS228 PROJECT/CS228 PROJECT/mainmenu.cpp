@@ -21,6 +21,7 @@ void MainMenu::Load()
 
 void MainMenu::Draw()
 {
+    
     mMainMenuText.setFont(mFont);
     mMainMenuText.setString("Main Menu / Press space bar to go to the level 1.");
     mMainMenuText.setPosition(sf::Vector2f(0, 0));
