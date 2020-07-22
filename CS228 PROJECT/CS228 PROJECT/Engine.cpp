@@ -53,7 +53,7 @@ void  Engine::Update()
         mGameStateManager.Update(dt);
     }
 
-    double aveFrameRate = frameCount / timer;
+   // double aveFrameRate = frameCount / timer;
 
     if (timer >= LIMITE_TIME)
     {

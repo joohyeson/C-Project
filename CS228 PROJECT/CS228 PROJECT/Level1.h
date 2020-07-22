@@ -28,9 +28,9 @@ private:
     sf::Font mFont;
     sf::Text mLevel1Text;
 
-    int w = 32;
-    int grid[12][12];
-    int sgrid[12][12]; //for showing
+    int w = 32;;
+    std::vector<std::vector<int>> grid;
+    std::vector<std::vector<int>> sgrid;
 
     //sf::Sprite mSprite;
 };

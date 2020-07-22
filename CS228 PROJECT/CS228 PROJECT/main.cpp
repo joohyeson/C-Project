@@ -17,8 +17,8 @@ int main()
 {
     Engine& engine = Engine::Instance();
 
-    try 
-    {
+    //try 
+    //{
         engine.Initialize("PROJECT");
         MainMenu mainMenu;
         Level1 level1;
@@ -34,9 +34,9 @@ int main()
         engine.Shutdown();
         
         return 0;
-    }
-    catch (std::exception& e) 
-    {
-        return -1;
-    }
+    //}
+    //catch (std::exception& e) 
+    //{
+    //    return -1;
+    //}
 }

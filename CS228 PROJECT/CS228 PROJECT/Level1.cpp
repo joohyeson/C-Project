@@ -20,7 +20,11 @@ Level1::Level1() {};
 void Level1::Load()
 {
     srand(static_cast<unsigned int>(time(0)));
-
+    std::vector <std::vector<int> > vec2D(12, std::vector<int>(12, 0));
+    std::vector <std::vector<int> > vec2D2(12, std::vector<int>(12, 0));
+    grid = vec2D;
+    sgrid = vec2D2;
+    
     for (int i = 1; i <= 10; i++)
         for (int j = 1; j <= 10; j++)
         {
