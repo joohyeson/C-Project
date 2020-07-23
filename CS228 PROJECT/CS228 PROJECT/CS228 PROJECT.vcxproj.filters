@@ -33,6 +33,9 @@
     <ClCompile Include="Level2.cpp">
       <Filter>Game</Filter>
     </ClCompile>
+    <ClCompile Include="Animation.cpp">
+      <Filter>Engine</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BasicDataTypes.h">
@@ -64,6 +67,9 @@
     </ClInclude>
     <ClInclude Include="Level2.h">
       <Filter>Game</Filter>
+    </ClInclude>
+    <ClInclude Include="Animation.h">
+      <Filter>Engine</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
