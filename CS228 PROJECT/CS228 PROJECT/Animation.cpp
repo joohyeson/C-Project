@@ -32,7 +32,7 @@ void Animation::Update()
 {
     mAnimationFrame += mAnimationSpeed;
 
-    int frameSize = mAnimationCoordinates.size();
+    int frameSize = static_cast<int>(mAnimationCoordinates.size());
     
     if (mAnimationFrame >= frameSize) 
     {

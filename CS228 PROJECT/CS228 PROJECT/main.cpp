@@ -12,6 +12,8 @@ Creation date: 21/07/2020
 #include "Engine.h" //Engine::Instance();
 #include "MainMenu.h" //MainMenu
 #include "Level1.h" //Level1
+#include "Level2.h" //Level2
+
 
 int main()
 {
@@ -21,6 +23,7 @@ int main()
 
         engine.GetGameStateManager().AddGameState<MainMenu>();
         engine.GetGameStateManager().AddGameState<Level1>();
+         engine.GetGameStateManager().AddGameState<Level2>();
 
         while (engine.HasGameEnded() == false) 
         {

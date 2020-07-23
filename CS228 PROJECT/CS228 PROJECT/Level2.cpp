@@ -12,87 +12,105 @@ Creation date: 21/07/2020
 #include "Level2.h"
 #include "Engine.h" //Engine::GetWindow()
 #include "Window.h"
-#include "SFML/Window.hpp"
-#include "Animation.h"
 
+const int W = 1280;
+const int H = 720;
 
-const int W = 1200;
-const int H = 800;
-
-float DEGTORAD = 0.017453f;
+float DEGREE_TO_RADIAN = 0.017453f;
 
 Level2::Level2() {};
 
 void Level2::Load() {}
 
-void Entity::settings(Animation& a, int X, int Y, float Angle = 0, int radius = 1)
+void GameObject::SetValues(Animation& newAnimation, float newX, float newY, float newAngle, float newRadius)
 {
-    anim = a;
-    x = X; y = Y;
-    angle = Angle;
-    R = radius;
+    animation = newAnimation;
+    x = newX;
+    y = newY;
+    angle = newAngle;
+    radius = newRadius;
 }
 
-void Entity::draw(sf::RenderWindow& app)
+void GameObject::Draw(sf::RenderWindow& window)
 {
-    anim.GetAnimationSprite().setPosition(x, y);
-    anim.GetAnimationSprite().setRotation(angle + 90);
-    app.draw(anim.GetAnimationSprite());
+    animation.GetAnimationSprite().setPosition(x, y);
+    animation.GetAnimationSprite().setRotation(angle + 90);
+    window.draw(animation.GetAnimationSprite());
 
-    sf::CircleShape circle(R);
+    sf::CircleShape circle(radius);
     circle.setFillColor(sf::Color(255, 0, 0, 170));
     circle.setPosition(x, y);
-    circle.setOrigin(R, R);
+    circle.setOrigin(radius, radius);
 }
 
-asteroid::asteroid()
+Asteroid::Asteroid()
 {
-    dx = rand() % 8 - 4;
-    dy = rand() % 8 - 4;
+    dx = rand() % 8 - 4.0f;
+    dy = rand() % 8 - 4.0f;
     name = "asteroid";
 }
 
-void asteroid::update()
+void Asteroid::Update()
 {
     x += dx;
     y += dy;
 
-    if (x > W) x = 0;  if (x < 0) x = W;
-    if (y > H) y = 0;  if (y < 0) y = H;
+    if (x > W)
+    {
+        x = 0;
+    }
+
+    if (x < 0)
+    {
+        x = W;
+    }
+
+    if (y > H)
+    {
+        y = 0;
+    }
+
+    if (y < 0)
+    {
+        y = H;
+    }
 }
 
-bullet::bullet()
+Bullet::Bullet()
 {
     name = "bullet";
 }
 
-void bullet::update()
+void Bullet::Update()
 {
-    dx = cos(angle * DEGTORAD) * 6;
-    dy = sin(angle * DEGTORAD) * 6;
+    dx = cos(angle * DEGREE_TO_RADIAN) * 6;
+    dy = sin(angle * DEGREE_TO_RADIAN) * 6;
     // angle+=rand()%7-3;  /*try this*/
     x += dx;
     y += dy;
 
-    if (x > W || x<0 || y>H || y < 0) life = 0;
+    if (x > W || x<0 || y>H || y < 0)
+    {
+        isAlive = 0;
+    }
 }
 
-player::player()
+Player::Player()
 {
     name = "player";
 }
 
-void player::update()
+void Player::Update()
 {
-    if (thrust)
+    if (isMoving)
     {
-        dx += cos(angle * DEGTORAD) * 0.2;
-        dy += sin(angle * DEGTORAD) * 0.2;
+        dx += cos(angle * DEGREE_TO_RADIAN) * 0.2f;
+        dy += sin(angle * DEGREE_TO_RADIAN) * 0.2f;
     }
     else
     {
-        dx *= 0.99;
-        dy *= 0.99;
+        dx *= 0.99f;
+        dy *= 0.99f;
     }
 
     int maxSpeed = 15;
@@ -112,9 +130,9 @@ void player::update()
     if (y > H) y = 0; if (y < 0) y = H;
 }
 
-bool IsCollide(Entity* a, Entity* b)
+bool GameObject::IsCollide(GameObject* a, GameObject* b)
 {
-    return (b->x - a->x) * (b->x - a->x) + (b->y - a->y) * (b->y - a->y) < (a->R + b->R) * (a->R + b->R);
+    return (b->x - a->x) * (b->x - a->x) + (b->y - a->y) * (b->y - a->y) < (a->radius + b->radius) * (a->radius + b->radius);
 }
 
 void Level2::Draw()
@@ -132,139 +150,145 @@ void Level2::Draw()
     text.setStyle(sf::Text::Regular);
     Engine::GetWindow().Draw(text);
 
-    srand(time(0));
+    srand(static_cast<unsigned int>(time(0)));
 
     Engine::GetWindow().GetWindow().setFramerateLimit(60);
 
-    sf::Texture t1, t2, t3, t4, t5, t6, t7;
-    t1.loadFromFile("images/spaceship.png");
-    t2.loadFromFile("images/background.jpg");
-    t3.loadFromFile("images/explosions/type_C.png");
-    t4.loadFromFile("images/rock.png");
-    t5.loadFromFile("images/fire_blue.png");
-    t6.loadFromFile("images/rock_small.png");
-    t7.loadFromFile("images/explosions/type_B.png");
+    sf::Texture shipTexture, backgroundTexture, explosionTexture, rockTexture, bulletTexture, smallRockTexture, explosionShipTexture;
 
-    t1.setSmooth(true);
-    t2.setSmooth(true);
+    shipTexture.loadFromFile("../Assets/Art/spaceship.png");
+    backgroundTexture.loadFromFile("../Assets/Art/background.jpg");
+    explosionTexture.loadFromFile("../Assets/Art/explosions/type_C.png");
+    rockTexture.loadFromFile("../Assets/Art/rock.png");
+    bulletTexture.loadFromFile("../Assets/Art/fire_blue.png");
+    smallRockTexture.loadFromFile("../Assets/Art/rock_small.png");
+    explosionShipTexture.loadFromFile("../Assets/Art/explosions/type_B.png");
 
-    sf::Sprite background(t2);
+    shipTexture.setSmooth(true);
+    backgroundTexture.setSmooth(true);
 
-    Animation sExplosion(t3, 0, 0, 256, 256, 48, 0.5);
-    Animation sRock(t4, 0, 0, 64, 64, 16, 0.2);
-    Animation sRock_small(t6, 0, 0, 64, 64, 16, 0.2);
-    Animation sBullet(t5, 0, 0, 32, 64, 16, 0.8);
-    Animation sPlayer(t1, 40, 0, 40, 40, 1, 0);
-    Animation sPlayer_go(t1, 40, 40, 40, 40, 1, 0);
-    Animation sExplosion_ship(t7, 0, 0, 192, 192, 64, 0.5);
+    sf::Sprite backgroundSprite(backgroundTexture);
 
-
-    std::list<Entity*> entities;
+    Animation explosionAnimation(explosionTexture, W / 2, H / 2, 256, 256, 48, 0.5f);
+    Animation rockAnimation(rockTexture, W / 2, H / 2, 64, 64, 16, 0.2f);
+    Animation smallRockAnimation(smallRockTexture, W / 2, H / 2, 64, 64, 16, 0.2f);
+    mBulletAnimation = Animation(bulletTexture, W / 2, H / 2, 32, 64, 16, 0.8f);
+    Animation playerAnimation(shipTexture, 40, W / 2, 40, 40, 1, 0.0f);
+    Animation playerMoveAnimation(shipTexture, 40, 40, 40, 40, 1, 0.0f);
+    Animation explosionShipAnimation(explosionShipTexture, W / 2, H / 2, 192, 192, 64, 0.5f);
 
     for (int i = 0; i < 15; i++)
     {
-        asteroid* a = new asteroid();
-        a->settings(sRock, rand() % W, rand() % H, rand() % 360, 25);
-        entities.push_back(a);
+        Asteroid* asteroid = new Asteroid();
+        asteroid->SetValues(rockAnimation, static_cast<float>(rand() % W), static_cast<float>(rand() % H), static_cast<float>(rand() % 360), 25.0f);
+        mEntityList.push_back(asteroid);
     }
 
-    p = new player();
+    mPlayer = new Player();
 
-    p->settings(sPlayer, 200, 200, 0, 20);
+    mPlayer->SetValues(playerAnimation, 200, 200, 0, 20);
 
-    entities.push_back(p);
+    mEntityList.push_back(mPlayer);
 
-    for (auto a : entities)
+    for (auto entityA : mEntityList)
     {
-        for (auto b : entities)
+        for (auto entityB : mEntityList)
         {
-            if (a->name == "asteroid" && b->name == "bullet")
+            if (entityA->name == "asteroid" && entityB->name == "bullet")
             {
-                if (IsCollide(a, b))
+                if (IsCollide(entityA, entityB))
                 {
-                    a->life = false;
-                    b->life = false;
+                    entityA->isAlive = false;
+                    entityB->isAlive = false;
 
-                    Entity* e = new Entity();
-                    e->settings(sExplosion, a->x, a->y);
-                    e->name = "explosion";
-                    entities.push_back(e);
-
+                    GameObject* explosion = new GameObject();
+                    explosion->SetValues(explosionAnimation, entityA->x, entityA->y);
+                    explosion->name = "explosion";
+                    mEntityList.push_back(explosion);
 
                     for (int i = 0; i < 2; i++)
                     {
-                        if (a->R == 15) continue;
-                        Entity* e = new asteroid();
-                        e->settings(sRock_small, a->x, a->y, rand() % 360, 15);
-                        entities.push_back(e);
-                    }
+                        if (entityA->radius == 15)
+                        {
+                            continue;
+                        }
 
+                        GameObject* entity = new Asteroid();
+                        entity->SetValues(smallRockAnimation, entityA->x, entityA->y, static_cast<float>(rand() % 360), 15.0f);
+                        mEntityList.push_back(entity);
+                    }
                 }
             }
 
-            if (a->name == "player" && b->name == "asteroid")
+            if (entityA->name == "player" && entityB->name == "asteroid")
             {
-                if (IsCollide(a, b))
+                if (IsCollide(entityA, entityB))
                 {
-                    b->life = false;
+                    entityB->isAlive = false;
 
-                    Entity* e = new Entity();
-                    e->settings(sExplosion_ship, a->x, a->y);
+                    GameObject* e = new GameObject();
+                    e->SetValues(explosionShipAnimation, entityA->x, entityA->y);
                     e->name = "explosion";
-                    entities.push_back(e);
+                    mEntityList.push_back(e);
 
-                    p->settings(sPlayer, W / 2, H / 2, 0, 20);
-                    p->dx = 0; p->dy = 0;
+                    mPlayer->SetValues(playerAnimation, W / 2, H / 2, 0, 20);
+                    mPlayer->dx = 0;
+                    mPlayer->dy = 0;
                 }
             }
         }
     }
 
-
-    if (p->thrust)
+    if (mPlayer->isMoving)
     {
-        p->anim = sPlayer_go;
+        mPlayer->animation = playerMoveAnimation;
     }
     else
     {
-        p->anim = sPlayer;
+        mPlayer->animation = playerAnimation;
     }
 
-
-    for (auto e : entities)
+    for (auto explosion : mEntityList)
     {
-        if (e->name == "explosion")
+        if (explosion->name == "explosion")
         {
-            if (e->anim.IsAnimationEnded())
+            if (explosion->animation.IsAnimationEnded())
             {
-                e->life = 0;
+                explosion->isAlive = 0;
             }
         }
     }
 
     if (rand() % 150 == 0)
     {
-        asteroid* a = new asteroid();
-        a->settings(sRock, 0, rand() % H, rand() % 360, 25);
-        entities.push_back(a);
+        Asteroid* asteroid = new Asteroid();
+        asteroid->SetValues(rockAnimation, 0.0f, static_cast<float>(rand() % H), static_cast<float>(rand() % 360), 25.0f);
+        mEntityList.push_back(asteroid);
     }
 
-    for (auto i = entities.begin(); i != entities.end();)
+    for (auto entityIterator = mEntityList.begin(); entityIterator != mEntityList.end();)
     {
-        Entity* e = *i;
+        GameObject* entity = *entityIterator;
 
-        e->update();
-        e->anim.Update();
+        entity->Update();
+        entity->animation.Update();
 
-        if (e->life == false) { i = entities.erase(i); delete e; }
-        else i++;
+        if (entity->isAlive == false)
+        {
+            entityIterator = mEntityList.erase(entityIterator);
+            delete entity;
+        }
+        else
+        {
+            entityIterator++;
+        }
     }
 
-    Engine::GetWindow().Draw(background);
+    Engine::GetWindow().Draw(backgroundSprite);
 
-    for (auto i : entities)
+    for (auto entity : mEntityList)
     {
-        i->draw(Engine::GetWindow().GetWindow());
+        entity->Draw(Engine::GetWindow().GetWindow());
     }
 
     if (mShouldGameRun == false)
@@ -281,26 +305,28 @@ void Level2::Update([[maybe_unused]] double dt)
     {
         if (Engine::GetInput().IsKeyPressed(sf::Keyboard::Space))
         {
-            bullet* b = new bullet();
-            b->settings(sBullet, p->x, p->y, p->angle, 10);
-            entities.push_back(b);
+            Bullet* bullet = new Bullet();
+            bullet->SetValues(mBulletAnimation, mPlayer->x, mPlayer->y, mPlayer->angle, 10.0f);
+            mEntityList.push_back(bullet);
         }
 
         if (Engine::GetInput().IsKeyPressed(sf::Keyboard::Right))
         {
-            p->angle += 3;
+            mPlayer->angle += 3;
         }
+
         if (Engine::GetInput().IsKeyPressed(sf::Keyboard::Left))
         {
-            p->angle -= 3;
+            mPlayer->angle -= 3;
         }
+
         if (Engine::GetInput().IsKeyPressed(sf::Keyboard::Up))
         {
-            p->thrust = true;
+            mPlayer->isMoving = true;
         }
         else
         {
-            p->thrust = false;
+            mPlayer->isMoving = false;
         }
     }
 

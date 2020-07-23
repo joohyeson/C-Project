@@ -11,47 +11,48 @@ Creation date: 21/07/2020
 
 #pragma once
 #include "GameState.h" //class Level2 : public GameState (Inheritance)
+#include "SFML/Window.hpp" //sf::RenderWindow
+#include "Animation.h" //Animation
 #include <list> //std::list
 
-class Entity
+class GameObject
 {
 public:
-    Entity() {};
-    void settings(Animation& a, int X, int Y, float Angle = 0, int radius = 1);
-    virtual void update() {};
-    void draw(sf::RenderWindow& app);
-    virtual ~Entity() {};
+    GameObject() {};
+    void SetValues(Animation& newAnimation, float newX, float newY, float newAngle = 0, float newRadius = 1);
+    virtual void Update() {};
+    void Draw(sf::RenderWindow& window);
+    bool IsCollide(GameObject* a, GameObject* b);
+    virtual ~GameObject() {};
 
-    float x, y, dx, dy, R, angle;
-    bool life = true;
+    float x, y, dx, dy, radius, angle;
+    bool isAlive = true;
     std::string name;
-    Animation anim;
+    Animation animation;
 };
 
-class asteroid : public Entity
+class Asteroid : public GameObject
 {
 public:
-    asteroid();
-    void update() override;
+    Asteroid();
+    void Update() override;
 };
 
-class bullet : public Entity
+class Bullet : public GameObject
 {
 public:
-    bullet();
-    void  update() override;
+    Bullet();
+    void  Update() override;
 };
 
-
-class player : public Entity
+class Player : public GameObject
 {
 public:
-    player();
-    void update() override;
-    bool thrust;
+    Player();
+    void Update() override;
+    bool isMoving;
 };
 
-bool IsCollide(Entity* a, Entity* b);
 
 class Level2 : public GameState
 {
@@ -66,7 +67,7 @@ public:
 
 private:
     bool mShouldGameRun = true;
-    player* p;
-    std::list<Entity*> entities;
-    Animation sBullet;
+    Player* mPlayer;
+    std::list<GameObject*> mEntityList;
+    Animation mBulletAnimation;
 };
