@@ -19,36 +19,36 @@ public:
     Input();
     ~Input();
 
-    static void Update(sf::Event inputEvent);
+    void Update(sf::Event inputEvent);
 
-    static bool IsKeyPressed(sf::Keyboard::Key scancode);
-    static bool IsKeyReleased(sf::Keyboard::Key scancode);
-    static bool IsKeyTriggered(sf::Keyboard::Key scancode);
+    bool IsKeyPressed(sf::Keyboard::Key scancode);
+    bool IsKeyReleased(sf::Keyboard::Key scancode);
+    bool IsKeyTriggered(sf::Keyboard::Key scancode);
 
-    static bool IsMousePressed(sf::Mouse::Button mouseButton);
-    static bool IsMouseReleased(sf::Mouse::Button mouseButton);
-    static bool IsMouseTriggered(sf::Mouse::Button mouseButton);
+    bool IsMousePressed(sf::Mouse::Button mouseButton);
+    bool IsMouseReleased(sf::Mouse::Button mouseButton);
+    bool IsMouseTriggered(sf::Mouse::Button mouseButton);
 
-    static sf::Vector2i GetMousePosition(void);
+    void SetPressedKey(sf::Keyboard::Key scancode);
+    void SetReleasedKey(sf::Keyboard::Key scancode);
 
-    static void Reset();
+    void SetPressedMouse(sf::Mouse::Button mouseButton);
+    void SetReleasedMouse(sf::Mouse::Button mouseButton);
+
+    void SetMousePosition(sf::Vector2i position);
+
+    sf::Vector2i GetMousePosition(void);
+
+    void Reset();
 
 private:
-    static void SetPressedKey(sf::Keyboard::Key scancode);
-    static void SetReleasedKey(sf::Keyboard::Key scancode);
+    std::bitset<sf::Keyboard::KeyCount> mKeyPressed;
+    std::bitset<sf::Keyboard::KeyCount> mKeyReleased;
+    std::bitset<sf::Keyboard::KeyCount> mKeyTriggered;
 
-    static void SetPressedMouse(sf::Mouse::Button mouseButton);
-    static void SetReleasedMouse(sf::Mouse::Button mouseButton);
+    std::bitset<sf::Mouse::ButtonCount> mMousePressed;
+    std::bitset<sf::Mouse::ButtonCount> mMouseReleased;
+    std::bitset<sf::Mouse::ButtonCount> mMouseTriggered;
 
-    static void SetMousePosition(sf::Vector2i position);
-
-    static std::bitset<sf::Keyboard::KeyCount> mKeyPressed;
-    static std::bitset<sf::Keyboard::KeyCount> mKeyReleased;
-    static std::bitset<sf::Keyboard::KeyCount> mKeyTriggered;
-
-    static std::bitset<sf::Mouse::ButtonCount> mMousePressed;
-    static std::bitset<sf::Mouse::ButtonCount> mMouseReleased;
-    static std::bitset<sf::Mouse::ButtonCount> mMouseTriggered;
-
-    static sf::Vector2i mMouse;
+    sf::Vector2i mMouse;
 };

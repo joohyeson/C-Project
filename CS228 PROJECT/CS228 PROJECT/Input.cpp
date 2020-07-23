@@ -12,16 +12,6 @@ Creation date: 21/07/2020
 #include "Input.h"
 #include "Engine.h" //Engine::GetWindow().GetSize()
 
-std::bitset<sf::Keyboard::KeyCount> Input::mKeyPressed;
-std::bitset<sf::Keyboard::KeyCount> Input::mKeyReleased;
-std::bitset<sf::Keyboard::KeyCount> Input::mKeyTriggered;
-
-std::bitset<sf::Mouse::ButtonCount> Input::mMousePressed;
-std::bitset<sf::Mouse::ButtonCount> Input::mMouseReleased;
-std::bitset<sf::Mouse::ButtonCount> Input::mMouseTriggered;
-
-sf::Vector2i Input::mMouse;
-
 Input::Input()
 {
     mKeyPressed.reset();
@@ -35,9 +25,7 @@ Input::Input()
     mMouse = sf::Vector2i(0, 0);
 }
 
-Input::~Input()
-{
-}
+Input::~Input() {}
 
 void Input::Update(sf::Event inputEvent)
 {
@@ -130,8 +118,8 @@ void Input::SetReleasedMouse(sf::Mouse::Button mouseButton)
 
 void Input::SetMousePosition(sf::Vector2i position)
 {
-    mMouse.x = position.x - Engine::GetWindow().GetSize().x / 2.f;
-    mMouse.y = -(position.y - Engine::GetWindow().GetSize().y / 2.f);
+    mMouse.x = position.x - Engine::GetWindow().GetSize().x / 2;
+    mMouse.y = -(position.y - Engine::GetWindow().GetSize().y / 2);
 }
 
 void Input::Reset()

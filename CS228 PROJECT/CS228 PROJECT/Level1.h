@@ -13,18 +13,19 @@ Creation date: 21/07/2020
 #include "GameState.h" //class Level1 : public GameState (Inheritance)
 #include <SFML/Graphics.hpp> //sf::Font, sf::Text
 
-class Level1 : public GameState 
+class Level1 : public GameState
 {
 public:
     Level1();
     void Load() override;
-    void Update(double dt) override;
+    void Update([[maybe_unused]]double dt) override;
     void Unload() override;
     void Draw() override;
 
     std::string GetName() override { return "Level1"; }
 
 private:
-    sf::Font mFont;
-    sf::Text mLevel1Text;
+    std::vector<std::vector<int>> mGrid;
+    std::vector<std::vector<int>> mShowGrid;
+    bool mShouldGameRun = true;
 };

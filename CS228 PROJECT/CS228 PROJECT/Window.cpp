@@ -9,10 +9,11 @@ Author: Juhye Son
 Creation date: 21/07/2020
 -----------------------------------------------------------------*/
 
-#include "Engine.h" // Engine.GetWindow().Resize()
-#include "Window.h"
 #include <SFML\Graphics\RenderWindow.hpp>
 #include <SFML/Window/Event.hpp>
+#include "Engine.h" // Engine.GetWindow().Resize()
+#include "Window.h"
+
 
 void Window::Initialize(std::string windowName)
 {
