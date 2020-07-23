@@ -15,10 +15,10 @@ Creation date: 21/07/2020
 #include "SFML/Window.hpp"
 #include <time.h>
 
-const int FLAG = 11;
-const int MINE = 9;
-const int EMPTY = 0;
-const int TILE = 10;
+constexpr int FLAG = 11;
+constexpr int MINE = 9;
+constexpr int EMPTY = 0;
+constexpr int TILE = 10;
 
 Level1::Level1() {};
 
@@ -173,7 +173,7 @@ void Level1::Draw()
     }
 }
 
-void Level1::Update(double/* dt*/)
+void Level1::Update([[maybe_unused]]double dt)
 {
     sf::Vector2i mousePosition = sf::Mouse::getPosition(Engine::GetWindow().GetWindow());
 

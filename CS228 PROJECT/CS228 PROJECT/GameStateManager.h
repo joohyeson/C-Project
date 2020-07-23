@@ -17,9 +17,9 @@ Creation date: 21/07/2020
 class GameStateManager
 {
 public:
-    GameStateManager();
-
-    void AddGameState(GameState& gameState);
+    void AddGameState(std::unique_ptr<GameState> gameState);
+    template<typename GAME_STATE>
+    void AddGameState();
     void Update(double dt);
     void SetNextState(int initState);
     void Shutdown();
@@ -43,10 +43,16 @@ private:
         EXIT,
     };
 
-    //std::vector<std::unique_ptr<GameState>> mGameStates;
-    std::vector<GameState*> mGameStates;
-    State mState;
-    GameState* mCurrentGameState;
-    GameState* mNextGameState;
+    std::vector<std::unique_ptr<GameState>> mGameStates{};
+
+    State mState = State::START;
+    GameState* mCurrentGameState = nullptr;
+    GameState* mNextGameState = nullptr;
 };
+
+template <typename GAME_STATE>
+void GameStateManager::AddGameState()
+{
+    mGameStates.push_back(std::make_unique<GAME_STATE>());
+}
 

@@ -25,9 +25,7 @@ Input::Input()
     mMouse = sf::Vector2i(0, 0);
 }
 
-Input::~Input()
-{
-}
+Input::~Input() {}
 
 void Input::Update(sf::Event inputEvent)
 {

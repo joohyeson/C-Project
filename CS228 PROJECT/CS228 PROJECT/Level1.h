@@ -18,7 +18,7 @@ class Level1 : public GameState
 public:
     Level1();
     void Load() override;
-    void Update(double dt) override;
+    void Update([[maybe_unused]]double dt) override;
     void Unload() override;
     void Draw() override;
 

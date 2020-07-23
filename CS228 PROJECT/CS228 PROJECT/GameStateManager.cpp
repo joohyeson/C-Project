@@ -12,17 +12,9 @@ Creation date: 21/07/2020
 #include "Engine.h"
 #include "GameStateManager.h"
 
-GameStateManager::GameStateManager() : mCurrentGameState(nullptr), mNextGameState(nullptr), mState(State::START) { }
-
-void GameStateManager::AddGameState(GameState& gameState)
+void GameStateManager::AddGameState(std::unique_ptr<GameState> gameState)
 {
-    //std::unique_ptr<GameState> pGameState(&gameState);
-    //mGameStates.push_back(pGameState);
-
-    //std::unique_ptr<GameState> pGameState = std::make_unique<GameState>(gameState);
-    //mGameStates.push_back(pGameState);
-
-    mGameStates.push_back(&gameState);
+    mGameStates.push_back(std::move(gameState));
 }
 
 void GameStateManager::Update(double dt)
@@ -56,8 +48,7 @@ void GameStateManager::Update(double dt)
 
 void GameStateManager::SetNextState(int initState)
 {
-    //mNextGameState = mGameStates.at(initState).get();
-    mNextGameState = mGameStates.at(initState);
+    mNextGameState = mGameStates.at(initState).get();
 }
 
 void GameStateManager::ReloadState()
@@ -73,8 +64,7 @@ void GameStateManager::Shutdown()
 
 void GameStateManager::SetStartState()
 {
-    //mNextGameState = mGameStates.at(0).get();
-    mNextGameState = mGameStates.at(0);
+    mNextGameState = mGameStates.at(0).get();
     mState = State::LOAD;
 }
 

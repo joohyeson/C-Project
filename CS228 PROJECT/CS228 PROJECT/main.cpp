@@ -17,14 +17,10 @@ int main()
 {
     Engine& engine = Engine::Instance();
 
-    //try 
-    //{
         engine.Initialize("PROJECT");
-        MainMenu mainMenu;
-        Level1 level1;
 
-        engine.GetGameStateManager().AddGameState(mainMenu);
-        engine.GetGameStateManager().AddGameState(level1);
+        engine.GetGameStateManager().AddGameState<MainMenu>();
+        engine.GetGameStateManager().AddGameState<Level1>();
 
         while (engine.HasGameEnded() == false) 
         {
@@ -34,9 +30,4 @@ int main()
         engine.Shutdown();
         
         return 0;
-    //}
-    //catch (std::exception& e) 
-    //{
-    //    return -1;
-    //}
 }
