@@ -39,11 +39,17 @@
     <ClCompile Include="GameObject.cpp">
       <Filter>Game</Filter>
     </ClCompile>
+    <ClCompile Include="Asteroid.cpp">
+      <Filter>Game</Filter>
+    </ClCompile>
+    <ClCompile Include="Player.cpp">
+      <Filter>Game</Filter>
+    </ClCompile>
+    <ClCompile Include="Bullet.cpp">
+      <Filter>Game</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="BasicDataTypes.h">
-      <Filter>Engine</Filter>
-    </ClInclude>
     <ClInclude Include="Engine.h">
       <Filter>Engine</Filter>
     </ClInclude>
@@ -73,6 +79,18 @@
     </ClInclude>
     <ClInclude Include="Animation.h">
       <Filter>Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="GameObject.h">
+      <Filter>Game</Filter>
+    </ClInclude>
+    <ClInclude Include="Asteroid.h">
+      <Filter>Game</Filter>
+    </ClInclude>
+    <ClInclude Include="Player.h">
+      <Filter>Game</Filter>
+    </ClInclude>
+    <ClInclude Include="Bullet.h">
+      <Filter>Game</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

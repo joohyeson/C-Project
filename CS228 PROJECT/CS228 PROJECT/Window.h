@@ -10,7 +10,6 @@ Creation date: 21/07/2020
 -----------------------------------------------------------------*/
 
 #pragma once
-#include "BasicDataTypes.h"
 #include <SFML\Graphics\Color.hpp>
 #include <SFML\Graphics\RenderWindow.hpp>
 
@@ -20,14 +19,11 @@ public:
     void Initialize(std::string windowName);
     void Update();
     void Resize(int newWidth, int newHeight);
-    Vector2DInt GetSize();
+    sf::Vector2u GetSize();
     sf::RenderWindow& GetWindow(void);
     void Draw(const sf::Drawable& drawable);
     void Clear(sf::Color color);
 
-    sf::RenderWindow mRenderWindow;
-
 private:
-    Vector2DInt mScreenSize;
-    
+    sf::RenderWindow mRenderWindow;
 };

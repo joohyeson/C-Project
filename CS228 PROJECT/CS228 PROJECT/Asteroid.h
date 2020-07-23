@@ -2,25 +2,19 @@
 Copyright (C) 2020 DigiPen Institute of Technology.
 Reproduction or disclosure of this file or its contents without the prior
 written consent of DigiPen Institute of Technology is prohibited.
-File Name: BasicDataTypes.h
-Purpose: This is BasicDataTypes source file.
+File Name: Asteroid.h
+Purpose: This is Asteroid header file.
 Project: CS280
-Author: Juhye Son
+Author: Daeun Jeong
 Creation date: 21/07/2020
 -----------------------------------------------------------------*/
 
 #pragma once
+#include "GameObject.h"
 
-struct Vector2D
+class Asteroid : public GameObject
 {
-    float x;
-    float y;
+public:
+    Asteroid();
+    void Update() override;
 };
-
-struct Vector2DInt
-{
-    int x;
-    int y;
-};
-
-typedef unsigned Color;

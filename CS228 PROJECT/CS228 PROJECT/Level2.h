@@ -11,48 +11,9 @@ Creation date: 21/07/2020
 
 #pragma once
 #include "GameState.h" //class Level2 : public GameState (Inheritance)
-#include "SFML/Window.hpp" //sf::RenderWindow
-#include "Animation.h" //Animation
+#include "GameObject.h"
+#include "Player.h"
 #include <list> //std::list
-
-class GameObject
-{
-public:
-    GameObject() {};
-    void SetValues(Animation& newAnimation, float newX, float newY, float newAngle = 0, float newRadius = 1);
-    virtual void Update() {};
-    void Draw(sf::RenderWindow& window);
-    bool IsCollide(GameObject* a, GameObject* b);
-    virtual ~GameObject() {};
-
-    float x, y, dx, dy, radius, angle;
-    bool isAlive = true;
-    std::string name;
-    Animation animation;
-};
-
-class Asteroid : public GameObject
-{
-public:
-    Asteroid();
-    void Update() override;
-};
-
-class Bullet : public GameObject
-{
-public:
-    Bullet();
-    void  Update() override;
-};
-
-class Player : public GameObject
-{
-public:
-    Player();
-    void Update() override;
-    bool isMoving;
-};
-
 
 class Level2 : public GameState
 {
@@ -68,6 +29,12 @@ public:
 private:
     bool mShouldGameRun = true;
     Player* mPlayer;
-    std::list<GameObject*> mEntityList;
+    std::list<GameObject*> mGameObjectList;
     Animation mBulletAnimation;
+    Animation playerMoveAnimation;
+    Animation playerAnimation;
+    Animation explosionAnimation;
+    Animation smallRockAnimation;
+    Animation explosionShipAnimation;
+    Animation rockAnimation;
 };
