@@ -19,18 +19,18 @@ int main()
 {
     Engine& engine = Engine::Instance();
 
-        engine.Initialize("PROJECT");
+    engine.Initialize("PROJECT");
 
-        engine.GetGameStateManager().AddGameState<MainMenu>();
-        engine.GetGameStateManager().AddGameState<Level1>();
-         engine.GetGameStateManager().AddGameState<Level2>();
+    engine.GetGameStateManager().AddGameState<MainMenu>();
+    engine.GetGameStateManager().AddGameState<Level1>();
+    engine.GetGameStateManager().AddGameState<Level2>();
 
-        while (engine.HasGameEnded() == false) 
-        {
-            engine.Update();
-        }
+    while (engine.HasGameEnded() == false)
+    {
+        engine.Update();
+    }
 
-        engine.Shutdown();
-        
-        return 0;
+    engine.Shutdown();
+
+    return 0;
 }
