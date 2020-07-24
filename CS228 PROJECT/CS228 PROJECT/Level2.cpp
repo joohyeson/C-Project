@@ -14,9 +14,13 @@ Creation date: 21/07/2020
 #include "Asteroid.h"
 #include "Bullet.h"
 
+constexpr int NUMBER_OF_ASTEROID = 15;
+constexpr int RADIUS_OF_ASTEROID = 15;
+constexpr float MOVING_ANGLE = 3.0f;
+
 Level2::Level2()
 {
-    for (int i = 0; i < 15; i++)
+    for (int i = 0; i < NUMBER_OF_ASTEROID; i++)
     {
         Asteroid* asteroid = new Asteroid();
         asteroid->SetValues(rockAnimation, static_cast<float>(rand() % Engine::GetWindow().GetSize().x), static_cast<float>(rand() % Engine::GetWindow().GetSize().y), static_cast<float>(rand() % 360), 25.0f);
@@ -41,8 +45,6 @@ void Level2::Load() {}
 
 void Level2::Draw()
 {
-    Engine::GetWindow().Clear(sf::Color(51, 153, 218, 255));
-
     sf::Font font;
     font.loadFromFile("../Assets/Font/UhBee Se_hyun.ttf");
 
@@ -102,7 +104,7 @@ void Level2::Update([[maybe_unused]] double dt)
     {
         for (auto objectA : mGameObjectList)
         {
-            for (auto objectB : mGameObjectList)
+            for (auto objectB = objectA + 1; objectB != mGameObjectList.back(); ++objectB)
             {
                 if (objectA->name == "asteroid" && objectB->name == "bullet")
                 {
@@ -118,7 +120,7 @@ void Level2::Update([[maybe_unused]] double dt)
 
                         for (int i = 0; i < 2; i++)
                         {
-                            if (objectA->radius == 15)
+                            if (objectA->radius == RADIUS_OF_ASTEROID)
                             {
                                 continue;
                             }
@@ -157,7 +159,7 @@ void Level2::Update([[maybe_unused]] double dt)
             {
                 if (explosion->animation.IsAnimationEnded())
                 {
-                    explosion->isAlive = 0;
+                    explosion->isAlive = false;
                 }
             }
         }
@@ -198,12 +200,12 @@ void Level2::Update([[maybe_unused]] double dt)
 
         if (Engine::GetInput().IsKeyPressed(sf::Keyboard::Right))
         {
-            mPlayer->angle += 3;
+            mPlayer->angle += MOVING_ANGLE;
         }
 
         if (Engine::GetInput().IsKeyPressed(sf::Keyboard::Left))
         {
-            mPlayer->angle -= 3;
+            mPlayer->angle -= MOVING_ANGLE;
         }
 
         if (Engine::GetInput().IsKeyPressed(sf::Keyboard::Up))
