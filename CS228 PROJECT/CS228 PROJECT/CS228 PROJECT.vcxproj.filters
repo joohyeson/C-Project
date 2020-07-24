@@ -7,6 +7,12 @@
     <Filter Include="Game">
       <UniqueIdentifier>{c8846af5-631f-4191-83ec-548e8c563902}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Game\Level1">
+      <UniqueIdentifier>{fa09d27c-a4cd-4cec-9d31-fefb3b8855fe}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Level2">
+      <UniqueIdentifier>{1158b375-f38e-4092-a79b-684283b70033}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -27,26 +33,26 @@
     <ClCompile Include="Input.cpp">
       <Filter>Engine</Filter>
     </ClCompile>
-    <ClCompile Include="Level1.cpp">
-      <Filter>Game</Filter>
-    </ClCompile>
-    <ClCompile Include="Level2.cpp">
-      <Filter>Game</Filter>
-    </ClCompile>
     <ClCompile Include="Animation.cpp">
       <Filter>Engine</Filter>
     </ClCompile>
     <ClCompile Include="GameObject.cpp">
       <Filter>Game</Filter>
     </ClCompile>
-    <ClCompile Include="Asteroid.cpp">
-      <Filter>Game</Filter>
+    <ClCompile Include="Level1.cpp">
+      <Filter>Game\Level1</Filter>
     </ClCompile>
-    <ClCompile Include="Player.cpp">
-      <Filter>Game</Filter>
+    <ClCompile Include="Asteroid.cpp">
+      <Filter>Game\Level2</Filter>
     </ClCompile>
     <ClCompile Include="Bullet.cpp">
-      <Filter>Game</Filter>
+      <Filter>Game\Level2</Filter>
+    </ClCompile>
+    <ClCompile Include="Level2.cpp">
+      <Filter>Game\Level2</Filter>
+    </ClCompile>
+    <ClCompile Include="Player.cpp">
+      <Filter>Game\Level2</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -68,13 +74,7 @@
     <ClInclude Include="Input.h">
       <Filter>Engine</Filter>
     </ClInclude>
-    <ClInclude Include="Level1.h">
-      <Filter>Game</Filter>
-    </ClInclude>
     <ClInclude Include="Levels.h">
-      <Filter>Game</Filter>
-    </ClInclude>
-    <ClInclude Include="Level2.h">
       <Filter>Game</Filter>
     </ClInclude>
     <ClInclude Include="Animation.h">
@@ -83,17 +83,29 @@
     <ClInclude Include="GameObject.h">
       <Filter>Game</Filter>
     </ClInclude>
-    <ClInclude Include="Asteroid.h">
-      <Filter>Game</Filter>
-    </ClInclude>
-    <ClInclude Include="Player.h">
-      <Filter>Game</Filter>
-    </ClInclude>
-    <ClInclude Include="Bullet.h">
-      <Filter>Game</Filter>
-    </ClInclude>
     <ClInclude Include="Colors.h">
       <Filter>Game</Filter>
+    </ClInclude>
+    <ClInclude Include="Level1.h">
+      <Filter>Game\Level1</Filter>
+    </ClInclude>
+    <ClInclude Include="Asteroid.h">
+      <Filter>Game\Level2</Filter>
+    </ClInclude>
+    <ClInclude Include="Bullet.h">
+      <Filter>Game\Level2</Filter>
+    </ClInclude>
+    <ClInclude Include="Level2.h">
+      <Filter>Game\Level2</Filter>
+    </ClInclude>
+    <ClInclude Include="Player.h">
+      <Filter>Game\Level2</Filter>
+    </ClInclude>
+    <ClInclude Include="List.h">
+      <Filter>Game\Level2</Filter>
+    </ClInclude>
+    <ClInclude Include="List.hpp">
+      <Filter>Game\Level2</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
