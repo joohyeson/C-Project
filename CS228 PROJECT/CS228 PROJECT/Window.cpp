@@ -14,15 +14,17 @@ Creation date: 21/07/2020
 #include "Engine.h" // Engine.GetWindow().Resize()
 #include "Window.h"
 
-
 void Window::Initialize(std::string windowName)
 {
     mRenderWindow.create(sf::VideoMode(1280, 720), windowName, sf::Style::Close | sf::Style::Resize);
 }
 
-void Window::Resize(int newWidth, int newHeight) { mScreenSize.x = newWidth; mScreenSize.y = newHeight; }
+void Window::Resize(int newWidth, int newHeight) 
+{
+    mRenderWindow.setSize(sf::Vector2u(newWidth, newHeight));
+}
 
-Vector2DInt Window::GetSize() { return mScreenSize; }
+sf::Vector2u Window::GetSize() { return mRenderWindow.getSize(); }
 
 sf::RenderWindow& Window::GetWindow(void)
 {

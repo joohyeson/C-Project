@@ -11,7 +11,7 @@ Creation date: 21/07/2020
 
 #pragma once
 #include "GameState.h" //class Level1 : public GameState (Inheritance)
-#include <SFML/Graphics.hpp> //sf::Font, sf::Text
+#include <vector> //std::vector
 
 class Level1 : public GameState
 {

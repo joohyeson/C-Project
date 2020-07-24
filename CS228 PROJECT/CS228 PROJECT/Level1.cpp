@@ -14,6 +14,7 @@ Creation date: 21/07/2020
 #include "Window.h"
 #include "SFML/Window.hpp"
 #include <time.h>
+#include "Levels.h"
 
 constexpr int FLAG = 11;
 constexpr int MINE = 9;
@@ -173,7 +174,7 @@ void Level1::Draw()
     }
 }
 
-void Level1::Update([[maybe_unused]]double dt)
+void Level1::Update([[maybe_unused]] double dt)
 {
     sf::Vector2i mousePosition = sf::Mouse::getPosition(Engine::GetWindow().GetWindow());
 
@@ -203,6 +204,11 @@ void Level1::Update([[maybe_unused]]double dt)
     {
         Engine::GetGameStateManager().ReloadState();
         mShouldGameRun = true;
+    }
+
+    if (Engine::GetInput().IsKeyPressed(sf::Keyboard::Space))
+    {
+        //Engine::GetGameStateManager().SetNextState(LEVEL2);
     }
 }
 
