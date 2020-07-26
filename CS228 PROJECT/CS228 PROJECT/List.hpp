@@ -25,7 +25,22 @@ List<T>::~List()
 template<typename T>
 void List<T>::push_front(T value)
 {
+    if (pHead == nullptr)
+    {
+        pHead = MakeNode(value);
+    }
+    else
+    {
+        Node* pTemp = pTail;
+        
+        while (pTemp == nullptr)
+        {
+            pTemp ->pNext = pTemp;
+            pTemp = pTemp->pPrev;
+        }
 
+        pTemp->data = value;
+    }
 }
 
 template<typename T>
@@ -46,12 +61,20 @@ void List<T>::push_back(T value)
 template<typename T>
 T List<T>::pop_front(void)
 {
-
+    Node* pTemp = pHead;
+        
+    while (pTemp == nullptr)
+    {
+        pTemp->pNext->pPrev = nullptr;
+        pTemp = pTemp->pNext;
+    }
 }
+
 template<typename T>
 T List<T>::pop_back(void)
 {
-
+    pTail->pPrev->pNext = nullptr;
+    pTail = nullptr;
 }
 
 template<typename T>
