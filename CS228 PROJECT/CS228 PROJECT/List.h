@@ -22,14 +22,14 @@ private:
         Node* pPrev;
     };
 
-    Node* MakeNode(T data) 
-    { 
-        Node* pNewNode = new Node; 
-        pNewNode->data = data; 
-        pNewNode->pNext = nullptr; 
-  
-        return pNewNode; 
-    } 
+    Node* MakeNode(T data)
+    {
+        Node* pNewNode = new Node;
+        pNewNode->data = data;
+        pNewNode->pNext = nullptr;
+
+        return pNewNode;
+    }
 
 public:
     class Iterator

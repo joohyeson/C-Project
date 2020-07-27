@@ -43,10 +43,10 @@ void List<T>::push_front(T value)
     else
     {
         Node* pTemp = pTail;
-        
+
         while (pTemp == nullptr)
         {
-            pTemp ->pNext = pTemp;
+            pTemp->pNext = pTemp;
             pTemp = pTemp->pPrev;
         }
 
@@ -73,19 +73,26 @@ template<typename T>
 T List<T>::pop_front(void)
 {
     Node* pTemp = pHead;
-        
+    T poppedValue = pTemp->value;
+
     while (pTemp == nullptr)
     {
         pTemp->pNext->pPrev = nullptr;
         pTemp = pTemp->pNext;
     }
+
+    return T;
 }
 
 template<typename T>
 T List<T>::pop_back(void)
 {
+    T poppedValue = pTail->value;
+
     pTail->pPrev->pNext = nullptr;
     pTail = nullptr;
+
+    return poppedValue;
 }
 
 template<typename T>
@@ -142,6 +149,7 @@ template <typename T>
 typename List<T>::Iterator& List<T>::Iterator::operator++()//pre++
 {
     nodePtr = nodePtr->pNext;
+
     return *this;
 }
 
@@ -149,7 +157,9 @@ template <typename T>
 typename List<T>::Iterator List<T>::Iterator::operator++(int)//post ++
 {
     Iterator temp = *this;
+
     ++(*this);
+
     return temp;
 }
 
@@ -165,7 +175,9 @@ template <typename T>
 typename List<T>::Iterator List<T>::Iterator::operator--(int)//post --
 {
     Iterator temp = *this;
+
     --(*this);
+
     return temp;
 }
 
