@@ -15,6 +15,7 @@ Creation date: 21/07/2020
 #include "SFML/Window.hpp"
 #include <time.h>
 #include "Levels.h"
+#include "Colors.h"
 
 constexpr int FLAG = 11;
 constexpr int MINE = 9;
@@ -121,7 +122,7 @@ void Level1::Load()
 
 void Level1::Draw()
 {
-    Engine::GetWindow().Clear(sf::Color(51, 153, 218, 255));
+    Engine::GetWindow().Clear(sf::Color(LIGHT_BLUE));
 
     sf::Font font;
     font.loadFromFile("../Assets/Font/UhBee Se_hyun.ttf");

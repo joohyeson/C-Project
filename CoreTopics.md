@@ -2,58 +2,122 @@
 
 1. Pointers + Arrays
 - A pointers are variables that indicate the location of another variable. If you put the value in the pointer, you can have an address value for that variable. And Using pointer, reference to the memory address makes it easy to access and manipulate various data types variables.
+
 - Arrays are lists of data of the same type as one variable. You can decide how much you want to use, then initialize the array, and use it. Arrays are sized according to the data type when declaring, so the index access is fast. So arrays are useful when the indices are important.
 
 2. Bit operations
-- Bit operations are calculating the bits using bit operators. It is using bit operations like '<<' to left shift. The bit operations are useful because the 8 bits to be written to one byte bool variable, which can save memory.
+- Using bitwise operators, such as 'AND &', 'OR |' like the logical operators, 'Left shift <<', manipulating bitwise information.
+Bit operations can improve the CPU performance, because '4/2' is the same as '4>>1' but, using '>>' is less expensive behavior.
 
 3. Operator Overloading
 - Operator overloading is to redefine existing =,-,*, etc. operators. In this way, you can use operators like class+class and class*class.
-- It can be used by redefining the operator within the function.
+- It can be used by redefining the operator within the function. The code below is how I used 'Operator Overloading' for this project.
 ```
-Point& operator+(const Point& Ref){};
+template <typename T>
+typename List<T>::Iterator& List<T>::Iterator::operator++()
+{
+    nodePtr = nodePtr->pNext;
+
+    return *this;
+}
 ```
 
 4. Return Value Optimization
-- The return value optimization is literally to store the return value in one memory to optimize the return value. For example, if you give a constructor a copy constructor, the constructor will not be called twice. Only the constructor is called once and no temporary objects are created. The return optimization can be useful, such as operator overloading by using memory efficiently.
+- The return value optimization is literally to store the return value in caller's memory to optimize the return value. For example, if you give a constructor a copy constructor, the constructor will not be called twice. Only the constructor is called once and no temporary objects are created. The code below is how I used 'Return Value Optimization' for this project.
+```
+template<typename T>
+List<T>::Iterator List<T>::end(void)
+{
+    return Iterator(&data[mSize], mSize);
+}
+```
 
 5. Inheritance + Polymorphism
 
 **Inheritance**
 - What is Inheritance? 
-
   - Inheritance has base class (superclass) and derived class (subclass). As the name suggests, it is inheriting another class or struct. 
-- Why is it important?
 
-  - The first advantage of using Inheritance is that it reduces the amount of code. The second advantage is that if classes with similar roles exist as independent classes rather than inheritance, it takes a lot of time to modify the code, but using Inheritance only requires modification of the base class.
+- Why is it important?
+  - The first reason inheritance is important is that the polymorphism described below can be implemented when using inheritance. The inheritance class used when implementing polymorphism is an abstract class, that is, a class in which at least one pure virtual function is declared. Functions declared as pure virtual functions in the abstract class must be overridden in all classes derived from this class. In this way we can implement polymorphism in inheritance.
+
+  - The second advantage is that if classes with similar roles exist as independent classes rather than inheritance, it takes a lot of time to modify the code, but using Inheritance only requires modification of the base class.
 
 - How does it work?
   - After creating the base class, when creating the class to inherit, specify the base class next to the class name.
 
 ```
-class base{};
-class derived:public base{};
-```
+**Inheritance Example: GameState.h&Level1.h**
 
+class GameState
+{
+public:
+    GameState() {};
+    virtual void Load() = 0;
+    virtual void Update(double dt) = 0;
+    virtual void Unload() = 0;
+    virtual void Draw() = 0;
+    virtual std::string GetName() = 0;
+    virtual ~GameState() {};
+private:
+};
+
+class Level1 : public GameState
+{
+public:
+    Level1();
+    void Load() override;
+    void Update(double dt) override;
+    void Unload() override;
+    void Draw() override;
+
+    std::string GetName() override { return "Level1"; }
+
+private:
+    std::vector<std::vector<int>> mGrid;
+    std::vector<std::vector<int>> mShowGrid;
+    bool mShouldGameRun = true;
+};
+
+
+```
 
  **Polymorphism**
 - What is Polymorphism? 
-
   - It is one of the important concepts in OOP (Object Oriented Programming). Simply put, different objects respond to the same message in their own way. For example, if you have a shape class and a circle, square, and triangle that inherits the shape class, you can think of each class' Draw() function causing different results.
 
 - Why is it important?
 
-  - It's easy to reuse code, and you only need to modify the class.
+  - Polymorphism is important because we can put different objects together as one common. If polymorphism is used properly, it can provide a consistent usage method to users regardless of the contents of the function.
 
 - How does it work?
 
 ```
-class base{
-   Draw(){};
-};
-class derived:public base{
-   Draw(){};
-};
+**Inheritance Example: Level1::Draw().h&Level2::Draw()**
+
+void Level1::Draw()
+{
+    Engine::GetWindow().Clear(sf::Color(LIGHT_BLUE));
+
+    sf::Font font;
+    font.loadFromFile("../Assets/Font/UhBee Se_hyun.ttf");
+
+    sf::Text text;
+    text.setFont(font);
+    text.setString("Minesweeper");
+    ...
+ }
+
+ void Level2::Draw()
+{
+    sf::Font font;
+    font.loadFromFile("../Assets/Font/UhBee Se_hyun.ttf");
+
+    sf::Text text;
+    text.setFont(font);
+    text.setString("Asteroid");
+    ...
+}
 ```
 
 6. Rule of 5, RAII, r-value references/Move Semantics
@@ -61,14 +125,11 @@ class derived:public base{
  **Rule of 5**
 - Along with Rule of 3 (copy constructor, assignment operator, assignment destructor), move constructor and move assignment operator are also rules that must be defined in the class. This rule is important because it has a lot to do with optimization.
 
-
  **RAII**
 - C++ has a risk of memory leak because the programmer has to free it manually. RAII (Resource Acquisition is Initialization) is used to eliminate the possibility of memory leak. Simply put, This is a programming concept where the initialize (constructor) the thing is done, and then it releases automatically in it's destructor. If you use std::lock_guard, std::scoped_lock, std::unique_lock, etc, you can easily lock and unlock the memory. 
 
-
  **r-value references/Move Semantics**
 - The r-value is what makes the move possible, not a copy of the memory. Here, r-value is the value to the right of the expression. The r-value does not exist when the expression ends. For r-value reference, use operator &&.
-
 
 7. Templates
 - A template is a frame created so that a class or function once created can be used in multiple data types. The advantage of using a template is that the code is shortened and easy to modify because there is no need to rewrite the code multiple times.
