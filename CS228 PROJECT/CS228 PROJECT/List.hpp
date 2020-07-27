@@ -36,7 +36,7 @@ void List<T>::push_front(T value)
     if (pHead == nullptr)
     {
         pHead = MakeNode(value);
-        
+
         if (pTail == nullptr)
         {
             pTail = pHead;
@@ -49,7 +49,7 @@ void List<T>::push_front(T value)
         pHead->pPrev = pTemp;
         pHead = pTemp;
     }
-    
+
     ++mSize;
 }
 
@@ -72,7 +72,7 @@ void List<T>::push_back(T value)
         pTemp->pPrev = pTail;
         pTail = pTemp;
     }
-    
+
     ++mSize;
 }
 
@@ -81,7 +81,7 @@ T List<T>::pop_front(void)
 {
     T poppedValue = pHead->data;
 
-    if(pHead == pTail)
+    if (pHead == pTail)
     {
         pHead = nullptr;
         pTail = nullptr;
@@ -110,7 +110,7 @@ T List<T>::pop_back(void)
     {
         pTail = pTail->pPrev;
     }
-    
+
     --mSize;
 
     return poppedValue;
@@ -128,10 +128,45 @@ typename List<T>::Iterator List<T>::end(void)
     return Iterator(pTail);
 }
 
-//template<typename T>
-//List<T>::Iterator List<T>::erase(List<T>::Iterator target)
-//{
-//}
+template<typename T>
+typename List<T>::Iterator List<T>::erase(typename List<T>::Iterator target)
+{
+    typename List<T>::Iterator current =this->begin();
+  
+    //Node* current = head;
+    //Node* previous = head;
+
+    // Find the node
+    while (current != target)
+    {
+        current = (*current)->pNext;
+    }
+
+    // Assume node was found.
+    typename List<T>::Iterator after = (*current)->pNext;
+
+    // Make previous point to the node after the current.
+    if ((*current)->pPrev != nullptr)
+    {
+        (*current)->pPrev->pNext = (*after);
+    }
+
+    // Make the node after the current node point to the previous.
+    if (after != nullptr)
+    {
+        (*after)->pPrev = (*current)->pPrev;
+    }
+    else
+    {
+        this->pHead = nullptr;
+        this->pTail = nullptr;
+    }
+
+    // Delete the current node.
+    delete (*current);
+    mSize--;
+    return current;
+}
 
 template<typename T>
 T List<T>::back(void)
@@ -238,7 +273,7 @@ bool List<T>::Iterator::operator>(const Iterator& rhs) const
 }
 
 template <typename T>
-typename List<T>::Node& List<T>::Iterator::operator*()
+typename List<T>::Node* List<T>::Iterator::operator*()
 {
     if (nodePtr == nullptr)
     {
