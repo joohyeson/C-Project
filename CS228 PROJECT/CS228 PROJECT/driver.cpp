@@ -12,66 +12,74 @@ Creation date: 21/07/2020
 #include <iostream> //std::cout, std::endl
 #include "List.h"
 
+constexpr int NUM_OF_NODES = 5;
+
 void test1() //Test 'push_back', 'pop_back', 'back', 'size', 'empty'
 {
+    std::cout << "Test#1 - 'push_back', 'pop_back', 'back', 'size', 'empty'" << std::endl;
+
     List<int> list;
 
-    for (int i = 1; i <= 20; i++)
+    for (int i = 1; i <= NUM_OF_NODES; i++)
     {
         list.push_back(i);
-        std::cout << "Current Size: " << list.size() << std::endl;
-        std::cout << "Current Tail: " << list.back() << std::endl;
+        std::cout << "Size: " << list.size() << ", " << "Tail: " << list.back() << std::endl;
     }
 
-    for (int i = 1; i <= 20; i++)
+    for (int i = 1; i <= NUM_OF_NODES - 1; i++)
     {
         list.pop_back();
-        std::cout << "Current Size: " << list.size() << std::endl;
-        std::cout << "Current Tail: " << list.back() << std::endl;
+        std::cout << "Size: " << list.size() << ", " << "Tail: " << list.back() << std::endl;
     }
 
-    if(list.empty() == true)
+    list.pop_back();
+    std::cout << "One more pop_back, Size: " << list.size() << std::endl;
+
+    if (list.empty() == true)
     {
-        std::cout << "Current List is empty." << std::endl;
+        std::cout << "List is empty." << std::endl;
     }
     else
     {
-        std::cout << "Current List is not empty." << std::endl;
+        std::cout << "List is not empty." << std::endl;
     }
 }
 
 void test2() //Test 'push_front', 'pop_front', 'front', 'size', 'empty'
 {
+    std::cout << "Test#1 - 'push_front', 'pop_front', 'front', 'size', 'empty'" << std::endl;
+
     List<int> list;
 
-    for (int i = 1; i <= 20; i++)
+    for (int i = 1; i <= NUM_OF_NODES; i++)
     {
         list.push_front(i);
-        std::cout << "Current Size: " << list.size() << std::endl;
-        std::cout << "Current Head: " << list.front() << std::endl;
+        std::cout << "Size: " << list.size() << ", " << "Head: " << list.front() << std::endl;
     }
 
-    for (int i = 1; i <= 20; i++)
+    for (int i = 1; i <= NUM_OF_NODES - 1; i++)
     {
         list.pop_front();
-        std::cout << "Current Size: " << list.size() << std::endl;
-        std::cout << "Current Head: " << list.front() << std::endl;
+        std::cout << "Size: " << list.size() << ", " << "Head: " << list.front() << std::endl;
     }
 
-    if(list.empty() == true)
+    list.pop_front();
+    std::cout << "One more pop_back, Size: " << list.size() << std::endl;
+
+    if (list.empty() == true)
     {
-        std::cout << "Current List is empty." << std::endl;
+        std::cout << "List is empty." << std::endl;
     }
     else
     {
-        std::cout << "Current List is not empty." << std::endl;
+        std::cout << "List is not empty." << std::endl;
     }
 }
 
 void test3()
 {
     std::cout << "TEST#3" << std::endl;
-    
+
     List<int> list;
 
     for (int i = 1; i <= 20; i++)
@@ -80,11 +88,11 @@ void test3()
     }
 
     List<int>::Iterator sum = list.begin();
-    
+
     for (int i = 1; i <= 20; i++)
     {
         sum++;
-       // std::cout << "Current Iterator: " << *sum.front() << std::endl;
+        // std::cout << "Current Iterator: " << *sum.front() << std::endl;
     }
 }
 //
@@ -156,17 +164,17 @@ int main(int argc, char** argv)
         test1();
         test2();
         test3();
-       // test4();
-       // test5();
-       // test6();
-       // test7();
-        //test8();
-        //test9();
+        // test4();
+        // test5();
+        // test6();
+        // test7();
+         //test8();
+         //test9();
     }
     else
     {
         typedef void(*Test)(void);
-        Test Tests[] = { test1, test2, test3,/* test4, test5, test6, test7, test8, test9*/};
+        Test Tests[] = { test1, test2, test3,/* test4, test5, test6, test7, test8, test9*/ };
 
         Tests[testNum - 1]();
     }

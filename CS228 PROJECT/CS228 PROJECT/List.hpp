@@ -36,24 +36,21 @@ void List<T>::push_front(T value)
     if (pHead == nullptr)
     {
         pHead = MakeNode(value);
-
-        if(pTail == nullptr)
+        
+        if (pTail == nullptr)
         {
             pTail = pHead;
         }
     }
     else
     {
-        Node* pTemp = pTail;
-
-        while (pTemp == nullptr)
-        {
-            pTemp->pNext = pTemp;
-            pTemp = pTemp->pPrev;
-        }
-
-        pTemp->data = value;
+        Node* pTemp = MakeNode(value);
+        pTemp->pNext = pHead;
+        pHead->pPrev = pTemp;
+        pHead = pTemp;
     }
+    
+    ++mSize;
 }
 
 template<typename T>
@@ -63,30 +60,38 @@ void List<T>::push_back(T value)
     {
         pTail = MakeNode(value);
 
-        if(pHead == nullptr)
+        if (pHead == nullptr)
         {
             pHead = pTail;
-            }
+        }
     }
     else
     {
         Node* pTemp = MakeNode(value);
         pTail->pNext = pTemp;
-        pTail = pTail->pNext;
+        pTemp->pPrev = pTail;
+        pTail = pTemp;
     }
+    
+    ++mSize;
 }
 
 template<typename T>
 T List<T>::pop_front(void)
 {
-    Node* pTemp = pHead;
-    T poppedValue = pTemp->data;
+    T poppedValue = pHead->data;
 
-    while (pTemp == nullptr)
+    if(pHead == pTail)
     {
-        pTemp->pNext->pPrev = nullptr;
-        pTemp = pTemp->pNext;
+        pHead = nullptr;
+        pTail = nullptr;
     }
+    else
+    {
+        pHead = pHead->pNext;
+    }
+
+    --mSize;
 
     return poppedValue;
 }
@@ -96,14 +101,23 @@ T List<T>::pop_back(void)
 {
     T poppedValue = pTail->data;
 
-    pTail->pPrev->pNext = nullptr;
-    pTail = nullptr;
+    if (pTail == pHead)
+    {
+        pTail = nullptr;
+        pHead = nullptr;
+    }
+    else
+    {
+        pTail = pTail->pPrev;
+    }
+    
+    --mSize;
 
     return poppedValue;
 }
 
 template<typename T>
- typename List<T>::Iterator List<T>::begin(void)
+typename List<T>::Iterator List<T>::begin(void)
 {
     return Iterator(pHead);
 }
@@ -117,7 +131,6 @@ typename List<T>::Iterator List<T>::end(void)
 //template<typename T>
 //List<T>::Iterator List<T>::erase(List<T>::Iterator target)
 //{
-//
 //}
 
 template<typename T>
@@ -150,7 +163,7 @@ int List<T>::size(void)
 }
 
 template <typename T>
-List<T>::Iterator::Iterator(typename List<T>::Node* newValue) :nodePtr(newValue){};
+List<T>::Iterator::Iterator(typename List<T>::Node* newValue) :nodePtr(newValue) {};
 
 template <typename T>
 typename List<T>::Iterator& List<T>::Iterator::operator++()//pre++

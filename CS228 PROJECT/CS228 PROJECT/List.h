@@ -69,7 +69,7 @@ public:
     Iterator begin(void);
     Iterator end(void);
 
-    //Iterator erase(Iterator target);
+    Iterator erase(Iterator target);
 
     T back(void);
     T front(void);
@@ -83,4 +83,4 @@ private:
     int mSize;
 };
 
-#include "List.hpp" //template list usage
+#include "List.hpp" //Template list usage
