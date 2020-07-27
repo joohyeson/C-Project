@@ -141,9 +141,7 @@ List<T>::Iterator::Iterator(T* newValue, int newIndex) : value(newValue), index(
 template <typename T>
 typename List<T>::Iterator& List<T>::Iterator::operator++()//pre++
 {
-    ++index;
-    ++(value);
-
+    nodePtr = nodePtr->pNext;
     return *this;
 }
 
@@ -151,15 +149,13 @@ template <typename T>
 typename List<T>::Iterator List<T>::Iterator::operator++(int)//post ++
 {
     Iterator temp = *this;
-    nodePtr = nodePtr->pNext;
-
+    ++(*this);
     return temp;
 }
 
 template <typename T>
 typename List<T>::Iterator& List<T>::Iterator::operator--()//pre --
 {
-    Iterator temp = *this;
     nodePtr = nodePtr->pPrev;
 
     return temp;
@@ -168,75 +164,56 @@ typename List<T>::Iterator& List<T>::Iterator::operator--()//pre --
 template <typename T>
 typename List<T>::Iterator List<T>::Iterator::operator--(int)//post --
 {
-    --index;
-    --(value);
-
-    return Iterator(value, index);
+    Iterator temp = *this;
+    --(*this);
+    return temp;
 }
 
 template <typename T>
 bool List<T>::Iterator::operator!=(const Iterator& rhs) const
 {
-    return (index != rhs.index);
+    return nodePtr != rhs.nodePtr;
 }
 
 template <typename T>
 bool List<T>::Iterator::operator==(const Iterator& rhs) const
 {
-    return (index == rhs.index);
+    return nodePtr == rhs.nodePtr;
 }
 
 template <typename T>
 bool List<T>::Iterator::operator<=(const Iterator& rhs) const
 {
-    return (index <= rhs.index);
+    return nodePtr <= rhs.nodePtr;
 }
 
 template <typename T>
 bool List<T>::Iterator::operator>=(const Iterator& rhs) const
 {
-    return (index >= rhs.index);
+    return nodePtr >= rhs.nodePtr;
 }
 
 template <typename T>
 bool List<T>::Iterator::operator<(const Iterator& rhs) const
 {
-    return (index < rhs.index);
+    return nodePtr < rhs.nodePtr;
 }
 
 template <typename T>
 bool List<T>::Iterator::operator>(const Iterator& rhs) const
 {
-    return (index > rhs.index);
+    return nodePtr > rhs.nodePtr;
 }
 
 template <typename T>
 T& List<T>::Iterator::operator*()
 {
-    if (value == nullptr)
+    if (nodePtr == nullptr)
     {
         std::string exception = "Value is nullptr.";
 
         throw exception;
     }
 
-    return *value;
-}
-
-template <typename T>
-typename List<T>::Iterator List<T>::Iterator::operator+(int offset)
-{
-    index += offset;
-    (*value) += offset;
-
-    return *this;
-}
-
-template <typename T>
-typename List<T>::Iterator List<T>::Iterator::operator-(int offset)
-{
-    index -= offset;
-    (*value) -= offset;
-
-    return *this;
+    return *nodePtr;
 }
