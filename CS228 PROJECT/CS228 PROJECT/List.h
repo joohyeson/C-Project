@@ -4,7 +4,7 @@ Reproduction or disclosure of this file or its contents without the prior
 written consent of DigiPen Institute of Technology is prohibited.
 File Name: List.h
 Purpose: This is declaration for the List.
-Project: CS280
+Project: CS225
 Author: Daeun Jeong, Juhye Son
 Creation date: 7/24/2020
 -----------------------------------------------------------------*/

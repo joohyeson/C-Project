@@ -11,18 +11,18 @@ Creation date: 21/07/2020
 
 #pragma once
 
-#define RED 0xFF0000FF
-#define GREEN 0x00695CFF
-#define BLUE 0x0000FFFF
-#define PURPLE 0x673AB7FF
-#define DARK_BLUE 0x1A237EFF
+constexpr unsigned int RED = 0xFF0000FF;
+constexpr unsigned int  GREEN = 0x00695CFF;
+constexpr unsigned int  BLUE = 0x0000FFFF;
+constexpr unsigned int  PURPLE = 0x673AB7FF;
+constexpr unsigned int  DARK_BLUE = 0x1A237EFF;
 
-#define BABY_PINK 0xF48FB1FF
-#define LIGHT_PURPLE 0xEA80FCFF
-#define LIGHT_BLUE 0x90CAF9FF
-#define LIGHT_YELLOW 0xFFFF8DFF
-#define OLIVE 0x7CB342FF
-#define LIME 0xC6FF00FF
+constexpr unsigned int  BABY_PINK = 0xF48FB1FF;
+constexpr unsigned int  LIGHT_PURPLE = 0xEA80FCFF;
+constexpr unsigned int  LIGHT_BLUE = 0x90CAF9FF;
+constexpr unsigned int  LIGHT_YELLOW = 0xFFFF8DFF;
+constexpr unsigned int  OLIVE = 0x7CB342FF;
+constexpr unsigned int  LIME = 0xC6FF00FF;
 
-#define WHITE 0xFFFFFFFF
-#define BLACK 0x000000FF
+constexpr unsigned int  WHITE = 0xFFFFFFFF;
+constexpr unsigned int  BLACK = 0x000000FF;

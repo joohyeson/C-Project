@@ -1,3 +1,14 @@
+/*--------------------------------------------------------------
+Copyright (C) 2020 DigiPen Institute of Technology.
+Reproduction or disclosure of this file or its contents without the prior
+written consent of DigiPen Institute of Technology is prohibited.
+File Name: List.hpp
+Purpose: This is implementation for the List.
+Project: CS225
+Author: Daeun Jeong, Juhye Son
+Creation date: 7/24/2020
+-----------------------------------------------------------------*/
+
 #include "List.h"
 
 template<typename T>
