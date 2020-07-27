@@ -4,7 +4,7 @@ Reproduction or disclosure of this file or its contents without the prior
 written consent of DigiPen Institute of Technology is prohibited.
 File Name: GameObject.h
 Purpose: This is GameObject header file.
-Project: CS280
+Project: CS225
 Author: Daeun Jeong
 Creation date: 21/07/2020
 -----------------------------------------------------------------*/

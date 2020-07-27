@@ -45,15 +45,12 @@ public:
         bool operator>=(const Iterator& rhs) const;
         bool operator<(const Iterator& rhs) const;
         bool operator>(const Iterator& rhs) const;
-        T& operator*();
-        Iterator operator+(int offset);
-        Iterator operator-(int offset);
+        List<T>::Node& operator*();
 
     private:
         friend class List<T>;
-        Iterator(T* value, int index);
-        List<T>::Node nodePtr;
-
+        Iterator(List<T>::Node* value);
+        List<T>::Node* nodePtr;
     };
 
     List();
@@ -72,7 +69,7 @@ public:
     Iterator begin(void);
     Iterator end(void);
 
-    Iterator erase(Iterator target);
+    //Iterator erase(Iterator target);
 
     T back(void);
     T front(void);

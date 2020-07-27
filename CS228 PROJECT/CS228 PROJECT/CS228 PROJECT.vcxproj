@@ -101,6 +101,7 @@ xcopy /y /d "$(SolutionDir)SFML\dll\sfml-graphics-2.dll" "$(TargetDir)"</Command
     <ClCompile Include="Animation.cpp" />
     <ClCompile Include="Asteroid.cpp" />
     <ClCompile Include="Bullet.cpp" />
+    <ClCompile Include="driver.cpp" />
     <ClCompile Include="Engine.cpp" />
     <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="GameStateManager.cpp" />
