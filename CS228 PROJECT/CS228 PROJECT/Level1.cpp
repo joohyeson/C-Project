@@ -206,7 +206,7 @@ void Level1::Update([[maybe_unused]] double dt)
 
     if (Engine::GetInput().IsKeyPressed(sf::Keyboard::Space))
     {
-        //Engine::GetGameStateManager().SetNextState(LEVEL2);
+        Engine::GetGameStateManager().SetNextState(LEVEL2);
     }
 }
 

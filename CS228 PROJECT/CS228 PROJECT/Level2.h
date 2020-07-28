@@ -30,11 +30,12 @@ private:
     bool mShouldGameRun = true;
     Player* mPlayer;
     std::list<GameObject*> mGameObjectList;
-    Animation mBulletAnimation;
-    Animation playerMoveAnimation;
-    Animation playerAnimation;
-    Animation explosionAnimation;
-    Animation smallRockAnimation;
-    Animation explosionShipAnimation;
-    Animation rockAnimation;
+    
+    Animation* mBulletAnimation;
+    Animation* playerMoveAnimation;
+    Animation* playerAnimation;
+    Animation* explosionAnimation;
+    Animation* smallRockAnimation;
+    Animation* explosionShipAnimation;
+    Animation* rockAnimation;
 };
