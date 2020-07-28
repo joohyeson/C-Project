@@ -50,7 +50,7 @@ bool Animation::IsAnimationEnded()
     return mAnimationFrame + mAnimationSpeed >= mAnimationCoordinates.size();
 }
 
-sf::Sprite Animation::GetAnimationSprite()
+sf::Sprite& Animation::GetAnimationSprite()
 {
     return mAnimationSprite;
 }
