@@ -101,11 +101,5 @@
     <ClInclude Include="Player.h">
       <Filter>Game\Level2</Filter>
     </ClInclude>
-    <ClInclude Include="List.h">
-      <Filter>Game\Level2</Filter>
-    </ClInclude>
-    <ClInclude Include="List.hpp">
-      <Filter>Game\Level2</Filter>
-    </ClInclude>
   </ItemGroup>
 </Project>

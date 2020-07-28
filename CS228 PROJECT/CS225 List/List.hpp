@@ -12,10 +12,7 @@ Creation date: 7/24/2020
 #include "List.h"
 
 template<typename T>
-List<T>::List()
-{
-    pHead = pTail = new Node<T>();
-}
+List<T>::List() : pHead(nullptr), pTail(nullptr), mSize(0) {}
 
 template<typename T>
 List<T>::~List()
@@ -39,19 +36,21 @@ void List<T>::push_front(T value)
     if (pHead == nullptr)
     {
         pHead = MakeNode(value);
+
+        if (pTail == nullptr)
+        {
+            pTail = pHead;
+        }
     }
     else
     {
-        Node* pTemp = pTail;
-
-        while (pTemp == nullptr)
-        {
-            pTemp->pNext = pTemp;
-            pTemp = pTemp->pPrev;
-        }
-
-        pTemp->data = value;
+        Node* pTemp = MakeNode(value);
+        pTemp->pNext = pHead;
+        pHead->pPrev = pTemp;
+        pHead = pTemp;
     }
+
+    ++mSize;
 }
 
 template<typename T>
@@ -60,69 +59,125 @@ void List<T>::push_back(T value)
     if (pTail == nullptr)
     {
         pTail = MakeNode(value);
+
+        if (pHead == nullptr)
+        {
+            pHead = pTail;
+        }
     }
     else
     {
         Node* pTemp = MakeNode(value);
         pTail->pNext = pTemp;
-        pTail = pTail->pNext;
+        pTemp->pPrev = pTail;
+        pTail = pTemp;
     }
+
+    ++mSize;
 }
 
 template<typename T>
 T List<T>::pop_front(void)
 {
-    Node* pTemp = pHead;
-    T poppedValue = pTemp->value;
+    T poppedValue = pHead->data;
 
-    while (pTemp == nullptr)
+    if (pHead == pTail)
     {
-        pTemp->pNext->pPrev = nullptr;
-        pTemp = pTemp->pNext;
+        pHead = nullptr;
+        pTail = nullptr;
+    }
+    else
+    {
+        pHead = pHead->pNext;
     }
 
-    return T;
-}
-
-template<typename T>
-T List<T>::pop_back(void)
-{
-    T poppedValue = pTail->value;
-
-    pTail->pPrev->pNext = nullptr;
-    pTail = nullptr;
+    --mSize;
 
     return poppedValue;
 }
 
 template<typename T>
-List<T>::Iterator List<T>::begin(void)
+T List<T>::pop_back(void)
 {
-    return Iterator(&data[0], 0);
+    T poppedValue = pTail->data;
+
+    if (pTail == pHead)
+    {
+        pTail = nullptr;
+        pHead = nullptr;
+    }
+    else
+    {
+        pTail = pTail->pPrev;
+    }
+
+    --mSize;
+
+    return poppedValue;
 }
 
 template<typename T>
-List<T>::Iterator List<T>::end(void)
+typename List<T>::Iterator List<T>::begin(void)
 {
-    return Iterator(&data[mSize], mSize);
+    return Iterator(pHead);
 }
 
 template<typename T>
-List<T>::Iterator List<T>::erase(List<T>::Iterator target)
+typename List<T>::Iterator List<T>::end(void)
 {
+    return Iterator(pTail);
+}
 
+template<typename T>
+typename List<T>::Iterator List<T>::erase(typename List<T>::Iterator target)
+{
+    typename List<T>::Iterator current =this->begin();
+  
+    //Node* current = head;
+    //Node* previous = head;
+
+    // Find the node
+    while (current != target)
+    {
+        current = (*current)->pNext;
+    }
+
+    // Assume node was found.
+    typename List<T>::Iterator after = (*current)->pNext;
+
+    // Make previous point to the node after the current.
+    if ((*current)->pPrev != nullptr)
+    {
+        (*current)->pPrev->pNext = (*after);
+    }
+
+    // Make the node after the current node point to the previous.
+    if (after != nullptr)
+    {
+        (*after)->pPrev = (*current)->pPrev;
+    }
+    else
+    {
+        this->pHead = nullptr;
+        this->pTail = nullptr;
+    }
+
+    // Delete the current node.
+    delete (*current);
+    mSize--;
+    return current;
 }
 
 template<typename T>
 T List<T>::back(void)
 {
-    return pTail.value;
+    return pTail->data;
 }
 
 template<typename T>
 T List<T>::front(void)
 {
-    return pHead.value;
+    return pHead->data;
 }
 
 template<typename T>
@@ -143,7 +198,7 @@ int List<T>::size(void)
 }
 
 template <typename T>
-List<T>::Iterator::Iterator(T* newValue, int newIndex) : value(newValue), index(newIndex) {}
+List<T>::Iterator::Iterator(typename List<T>::Node* newValue) :nodePtr(newValue) {};
 
 template <typename T>
 typename List<T>::Iterator& List<T>::Iterator::operator++()//pre++
@@ -168,7 +223,7 @@ typename List<T>::Iterator& List<T>::Iterator::operator--()//pre --
 {
     nodePtr = nodePtr->pPrev;
 
-    return temp;
+    return *this;
 }
 
 template <typename T>
@@ -218,7 +273,7 @@ bool List<T>::Iterator::operator>(const Iterator& rhs) const
 }
 
 template <typename T>
-T& List<T>::Iterator::operator*()
+typename List<T>::Node* List<T>::Iterator::operator*()
 {
     if (nodePtr == nullptr)
     {
@@ -227,5 +282,5 @@ T& List<T>::Iterator::operator*()
         throw exception;
     }
 
-    return *nodePtr;
+    return nodePtr;
 }

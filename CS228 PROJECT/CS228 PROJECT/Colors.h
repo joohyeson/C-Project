@@ -4,7 +4,7 @@ Reproduction or disclosure of this file or its contents without the prior
 written consent of DigiPen Institute of Technology is prohibited.
 File Name: Colors.h
 Purpose: This is Colors header file.
-Project: CS280
+Project: CS225
 Author: Daeun Jeong, Juhye Son
 Creation date: 21/07/2020
 -----------------------------------------------------------------*/

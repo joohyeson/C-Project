@@ -27,7 +27,7 @@ private:
         Node* pNewNode = new Node;
         pNewNode->data = data;
         pNewNode->pNext = nullptr;
-
+        pNewNode->pPrev = nullptr;
         return pNewNode;
     }
 
@@ -45,15 +45,12 @@ public:
         bool operator>=(const Iterator& rhs) const;
         bool operator<(const Iterator& rhs) const;
         bool operator>(const Iterator& rhs) const;
-        T& operator*();
-        Iterator operator+(int offset);
-        Iterator operator-(int offset);
+        List<T>::Node* operator*();
 
     private:
         friend class List<T>;
-        Iterator(T* value, int index);
-        List<T>::Node nodePtr;
-
+        Iterator(List<T>::Node* value);
+        List<T>::Node* nodePtr;
     };
 
     List();
@@ -86,4 +83,4 @@ private:
     int mSize;
 };
 
-#include "List.hpp" //template list usage
+#include "List.hpp" //Template list usage

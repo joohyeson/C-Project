@@ -4,7 +4,7 @@ Reproduction or disclosure of this file or its contents without the prior
 written consent of DigiPen Institute of Technology is prohibited.
 File Name: Animation.cpp
 Purpose: This is Animation source file.
-Project: CS280
+Project: CS225
 Author: Daeun Jeong
 Creation date: 23/07/2020
 -----------------------------------------------------------------*/

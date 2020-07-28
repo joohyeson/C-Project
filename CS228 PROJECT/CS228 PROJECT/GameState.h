@@ -4,7 +4,7 @@ Reproduction or disclosure of this file or its contents without the prior
 written consent of DigiPen Institute of Technology is prohibited.
 File Name: GameState.h
 Purpose: This is GameState header file.
-Project: CS280
+Project: CS225
 Author: Juhye Son
 Creation date: 21/07/2020
 -----------------------------------------------------------------*/

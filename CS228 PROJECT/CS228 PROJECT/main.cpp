@@ -4,7 +4,7 @@ Reproduction or disclosure of this file or its contents without the prior
 written consent of DigiPen Institute of Technology is prohibited.
 File Name: main.cpp
 Purpose: This is main source file.
-Project: CS280
+Project: CS225
 Author: Daeun Jeong, Juhye Son
 Creation date: 21/07/2020
 -----------------------------------------------------------------*/
@@ -13,7 +13,6 @@ Creation date: 21/07/2020
 #include "MainMenu.h" //MainMenu
 #include "Level1.h" //Level1
 #include "Level2.h" //Level2
-
 
 int main()
 {
