@@ -8,11 +8,9 @@
 2. The lists below are incomplete about the project.
 - [ ] [**core**] Use Bitwise operations to create a some kind of configuration variable where you extract values. _(Combine bit flags of varying powers of 2)_
 - [ ] [**core**] Use bitwise operations to replace Arithmetic Operations
-- [ ] [**core**] Makes good use of operator overloading
 - [ ] [**core**] Has examples of Return Value Optimization
 - [ ] [**core**] Makes good use of Rule of 5
 - [ ] [**core**] Makes good use of RAII
-- [ ] [**core**] Makes good use of Templates
 - [ ] [**core**] Makes good use of STL Iterators
 - [ ] [**core**] Makes good use of STL Algorithms
 - [ ] Reused functions as much as possible.
@@ -28,6 +26,10 @@
 * MainMenu is using inheritance GameState. (And other states will use it too.)
 - [X] [**core**] Makes good use of Rule of 0
 * Level1(Mine sweeper) did not use the double pointer. We used vector<vector<int>> to avoid using Rule of 5.
+- [X] [**core**] Makes good use of operator overloading
+* in List.h and List.hpp.
+- [X] [**core**] Makes good use of Templates
+* Use Templates in List.h and List.hpp.
 - [X] [**core**] Makes good use of STL Containers
 * Input use std::bitset for the keyboard and the mouse, state manager use std::vector to get all game states.
 - [X] All source files compile without warnings and without errors

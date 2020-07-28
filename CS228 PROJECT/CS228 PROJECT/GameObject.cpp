@@ -1,8 +1,8 @@
 #include "GameObject.h"
 
-void GameObject::SetValues(Animation& newAnimation, float newX, float newY, float newAngle, float newRadius)
+void GameObject::SetValues(Animation newAnimation, float newX, float newY, float newAngle, float newRadius)
 {
-    animation = newAnimation;
+    animation = &newAnimation;
     x = newX;
     y = newY;
     angle = newAngle;
@@ -11,9 +11,9 @@ void GameObject::SetValues(Animation& newAnimation, float newX, float newY, floa
 
 void GameObject::Draw(sf::RenderWindow& window)
 {
-    animation.GetAnimationSprite().setPosition(x, y);
-    animation.GetAnimationSprite().setRotation(angle + 90);
-    window.draw(animation.GetAnimationSprite());
+    animation->GetAnimationSprite().setPosition(x, y);
+    animation->GetAnimationSprite().setRotation(angle + 90);
+    window.draw(animation->GetAnimationSprite());
 
     sf::CircleShape circle(radius);
     circle.setFillColor(sf::Color(255, 0, 0, 170));

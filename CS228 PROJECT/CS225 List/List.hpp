@@ -131,27 +131,20 @@ typename List<T>::Iterator List<T>::end(void)
 template<typename T>
 typename List<T>::Iterator List<T>::erase(typename List<T>::Iterator target)
 {
-    typename List<T>::Iterator current =this->begin();
-  
-    //Node* current = head;
-    //Node* previous = head;
+    typename List<T>::Iterator current = this->begin();
 
-    // Find the node
     while (current != target)
     {
         current = (*current)->pNext;
     }
 
-    // Assume node was found.
     typename List<T>::Iterator after = (*current)->pNext;
 
-    // Make previous point to the node after the current.
     if ((*current)->pPrev != nullptr)
     {
         (*current)->pPrev->pNext = (*after);
     }
 
-    // Make the node after the current node point to the previous.
     if (after != nullptr)
     {
         (*after)->pPrev = (*current)->pPrev;
@@ -162,9 +155,10 @@ typename List<T>::Iterator List<T>::erase(typename List<T>::Iterator target)
         this->pTail = nullptr;
     }
 
-    // Delete the current node.
     delete (*current);
+
     mSize--;
+
     return current;
 }
 
