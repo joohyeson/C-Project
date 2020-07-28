@@ -45,11 +45,8 @@ void Level2::Load() {}
 
 void Level2::Draw()
 {
-    sf::Font font;
-    font.loadFromFile("../Assets/Font/UhBee Se_hyun.ttf");
-
     sf::Text text;
-    text.setFont(font);
+    text.setFont(Engine::GetGameStateManager().GetFont());
     text.setString("Asteroid");
     text.setPosition(sf::Vector2f(0, 0));
     text.setCharacterSize(30);
