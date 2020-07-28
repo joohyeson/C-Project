@@ -54,7 +54,6 @@
     <ClCompile Include="Player.cpp">
       <Filter>Game\Level2</Filter>
     </ClCompile>
-    <ClCompile Include="driver.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine.h">
@@ -100,12 +99,6 @@
       <Filter>Game\Level2</Filter>
     </ClInclude>
     <ClInclude Include="Player.h">
-      <Filter>Game\Level2</Filter>
-    </ClInclude>
-    <ClInclude Include="List.h">
-      <Filter>Game\Level2</Filter>
-    </ClInclude>
-    <ClInclude Include="List.hpp">
       <Filter>Game\Level2</Filter>
     </ClInclude>
   </ItemGroup>
