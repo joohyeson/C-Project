@@ -90,7 +90,6 @@ void Level2::Update([[maybe_unused]] double dt)
 {
     if (mShouldGameRun == true)
     {
-
         for (auto objectAIterator = mGameObjectList.begin(); objectAIterator != mGameObjectList.end(); ++objectAIterator)
         {
             auto objectBIterator = objectAIterator;
@@ -99,92 +98,45 @@ void Level2::Update([[maybe_unused]] double dt)
 
             for (; objectBIterator != mGameObjectList.end(); ++objectBIterator)
             {
-                GameObject* objectA = *objectAIterator;
-                GameObject* objectB = *objectBIterator;
+                auto objectA = *objectAIterator;
+                auto objectB = *objectBIterator;
 
-                if (objectA->name == "asteroid" && objectB->name == "bullet")
+                if (objectA->data->name == "asteroid" && objectB->data->name == "bullet")
                 {
-                    if (objectA->IsCollideWith(objectB))
+                    if (objectA->data->IsCollideWith(objectB->data))
                     {
-                        objectA->isAlive = false;
-                        objectB->isAlive = false;
+                        objectA->data->isAlive = false;
+                        objectB->data->isAlive = false;
 
                         GameObject* explosion = new GameObject();
-                        explosion->SetValues(explosionAnimation, objectA->x, objectA->y);
+                        explosion->SetValues(explosionAnimation, objectA->data->x, objectA->data->y);
                         explosion->name = "explosion";
                         mGameObjectList.push_back(explosion);
 
                         for (int i = 0; i < 2; i++)
                         {
-                            if (objectA->radius == RADIUS_OF_ASTEROID)
+                            if (objectA->data->radius == RADIUS_OF_ASTEROID)
                             {
                                 continue;
                             }
                             else
                             {
                                 GameObject* asteroid = new Asteroid();
-                                asteroid->SetValues(smallRockAnimation, objectA->x, objectA->y, static_cast<float>(rand() % 360), 15.0f);
+                                asteroid->SetValues(smallRockAnimation, objectA->data->x, objectA->data->y, static_cast<float>(rand() % 360), 15.0f);
                                 mGameObjectList.push_back(asteroid);
                             }
                         }
                     }
                 }
 
-                if (objectB->name == "asteroid" && objectA->name == "bullet")
+                if (objectA->data->name == "player" && objectB->data->name == "asteroid")
                 {
-                    if (objectB->IsCollideWith(objectA))
+                    if (objectA->data->IsCollideWith(objectB->data))
                     {
-                        objectB->isAlive = false;
-                        objectA->isAlive = false;
+                        objectB->data->isAlive = false;
 
                         GameObject* explosion = new GameObject();
-                        explosion->SetValues(explosionAnimation, objectB->x, objectB->y);
-                        explosion->name = "explosion";
-                        mGameObjectList.push_back(explosion);
-
-                        for (int i = 0; i < 2; i++)
-                        {
-                            if (objectB->radius == RADIUS_OF_ASTEROID)
-                            {
-                                continue;
-                            }
-                            else
-                            {
-                                GameObject* asteroid = new Asteroid();
-                                asteroid->SetValues(smallRockAnimation, objectB->x, objectB->y, static_cast<float>(rand() % 360), 15.0f);
-                                mGameObjectList.push_back(asteroid);
-                            }
-                        }
-                    }
-                }
-
-                if (objectA->name == "player" && objectB->name == "asteroid")
-                {
-                    if (objectA->IsCollideWith(objectB))
-                    {
-                        objectB->isAlive = false;
-
-                        GameObject* explosion = new GameObject();
-                        explosion->SetValues(explosionAnimation, objectA->x, objectA->y);
-                        explosion->name = "explosion";
-                        mGameObjectList.push_back(explosion);
-
-                        mPlayer->SetValues(playerAnimation, Engine::GetWindow().GetSize().x / 2.0f, Engine::GetWindow().GetSize().y / 2.0f, 0, 20);
-                        mPlayer->dx = 0;
-                        mPlayer->dy = 0;
-
-                        mShouldGameRun = false;
-                    }
-                }
-
-                if (objectB->name == "player" && objectA->name == "asteroid")
-                {
-                    if (objectB->IsCollideWith(objectA))
-                    {
-                        objectA->isAlive = false;
-
-                        GameObject* explosion = new GameObject();
-                        explosion->SetValues(explosionAnimation, objectB->x, objectB->y);
+                        explosion->SetValues(explosionAnimation, objectA->data->x, objectA->data->y);
                         explosion->name = "explosion";
                         mGameObjectList.push_back(explosion);
 
@@ -200,12 +152,12 @@ void Level2::Update([[maybe_unused]] double dt)
 
         for (auto object : mGameObjectList)
         {
-            object->Draw(Engine::GetWindow().GetWindow());
+            object->data->Draw(Engine::GetWindow().GetWindow());
         }
 
         for (auto objectIterator = mGameObjectList.begin(); objectIterator != mGameObjectList.end();)
         {
-            GameObject* object = *objectIterator;
+            GameObject* object = (*objectIterator)->data;
 
             object->Update();
             object->animation.Update();
@@ -232,11 +184,11 @@ void Level2::Update([[maybe_unused]] double dt)
 
         for (auto explosion : mGameObjectList)
         {
-            if (explosion->name == "explosion")
+            if (explosion->data->name == "explosion")
             {
-                if (explosion->animation.IsAnimationEnded())
+                if (explosion->data->animation.IsAnimationEnded())
                 {
-                    explosion->isAlive = false;
+                    explosion->data->isAlive = false;
                 }
             }
         }
@@ -279,5 +231,6 @@ void Level2::Update([[maybe_unused]] double dt)
 void Level2::Unload()
 {
     mGameObjectList.clear();
+
     mPlayer = nullptr;
 }

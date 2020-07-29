@@ -144,22 +144,49 @@ typename List<T>::Iterator List<T>::erase(typename List<T>::Iterator target)
     {
         (*current)->pPrev->pNext = (*after);
     }
+    else //Head
+    {
+        if (after != nullptr)
+        {
+            pHead = *after;
+        }
+        else
+        {
+            pHead = nullptr;
+        }
+    }
 
     if (after != nullptr)
     {
         (*after)->pPrev = (*current)->pPrev;
     }
-    else
+    else //Tail
     {
-        this->pHead = nullptr;
-        this->pTail = nullptr;
+        pTail = nullptr;
     }
 
     delete (*current);
 
     mSize--;
 
-    return current;
+    return after;
+}
+
+template<typename T>
+void List<T>::clear()
+{
+    auto pTemp = pHead;
+
+    while (pTemp == pTail)
+    {
+        pTemp = pTemp->pNext;
+        delete pTemp->pPrev;
+        pTemp->pPrev = nullptr;
+        --mSize;
+    }
+
+    pHead = nullptr;
+    pTail = nullptr;
 }
 
 template<typename T>

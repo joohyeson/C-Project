@@ -13,7 +13,7 @@ Creation date: 21/07/2020
 #include "GameState.h" //class Level2 : public GameState (Inheritance)
 #include "GameObject.h"
 #include "Player.h"
-#include <list> //std::list
+#include "../CS225 List/List.h"
 
 class Level2 : public GameState
 {
@@ -29,7 +29,7 @@ public:
 private:
     bool mShouldGameRun = true;
     Player* mPlayer;
-    std::list<GameObject*> mGameObjectList;
+    List<GameObject*> mGameObjectList;
     Animation mBulletAnimation;
     Animation playerMoveAnimation;
     Animation playerAnimation;
