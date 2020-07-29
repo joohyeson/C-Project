@@ -38,7 +38,5 @@ private:
     Animation explosionShipAnimation;
     Animation rockAnimation;
 
-    sf::Texture shipTexture, explosionTexture, rockTexture, bulletTexture, smallRockTexture, explosionShipTexture;
-
-
+    sf::Texture shipTexture, explosionTexture, rockTexture, bulletTexture, smallRockTexture, explosionShipTexture, backgroundTexture;
 };
