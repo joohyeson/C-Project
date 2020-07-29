@@ -70,6 +70,7 @@ public:
     Iterator end(void);
 
     Iterator erase(Iterator target);
+    void clear();
 
     T back(void);
     T front(void);
