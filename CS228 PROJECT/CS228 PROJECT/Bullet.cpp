@@ -23,13 +23,13 @@ void Bullet::Update()
 {
     dx = cos(angle * DEGREE_TO_RADIAN) * 6;
     dy = sin(angle * DEGREE_TO_RADIAN) * 6;
-    // angle+=rand()%7-3;  /*try this*/
+    
     x += dx;
     y += dy;
 
     if (x > Engine::GetWindow().GetSize().x || x < 0 ||
         y > Engine::GetWindow().GetSize().y || y < 0)
     {
-        isAlive = 0;
+        isAlive = false;
     }
 }

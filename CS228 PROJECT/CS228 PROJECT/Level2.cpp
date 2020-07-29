@@ -78,7 +78,7 @@ void Level2::Draw()
         Engine::GetWindow().Draw(text);
     }
 
-    if (mGameObjectList.size() == 1 && mGameObjectList.front()->name == "player")
+    if (mIsGameCleared == true)
     {
         text.setString("Level Clear!");
         text.setPosition(sf::Vector2f(Engine::GetWindow().GetSize().x / 2.0f, Engine::GetWindow().GetSize().y / 2.0f));
@@ -190,6 +190,16 @@ void Level2::Update([[maybe_unused]] double dt)
                 {
                     explosion->data->isAlive = false;
                 }
+            }
+        }
+
+        mIsGameCleared = true;
+
+        for (auto asteroid : mGameObjectList)
+        {
+            if (asteroid->data->name == "asteroid")
+            {
+                mIsGameCleared = false;
             }
         }
 

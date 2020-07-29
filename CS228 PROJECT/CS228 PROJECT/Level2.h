@@ -28,6 +28,7 @@ public:
 
 private:
     bool mShouldGameRun = true;
+    bool mIsGameCleared = false;
     Player* mPlayer;
     List<GameObject*> mGameObjectList;
     Animation mBulletAnimation;

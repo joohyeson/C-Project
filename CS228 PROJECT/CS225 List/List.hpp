@@ -20,7 +20,7 @@ List<T>::~List()
     Node* temp = NULL;
     Node* nodeptr = pHead;
 
-    while (nodeptr != pTail)
+    while (nodeptr != nullptr)
     {
         temp = nodeptr->pNext;
         delete nodeptr;
@@ -28,6 +28,37 @@ List<T>::~List()
     }
 
     delete temp;
+}
+
+//copy constructor
+template<typename T>
+List<T>::List(const List<T>& rhs) : pHead(rhs.pHead), pTail(rhs.pTail), mSize(rhs.mSize) {}
+
+//move constructor
+template<typename T>
+List<T>::List(List<T>&& rhs) 
+{
+    pHead = std::move(rhs.pHead);
+    pTail = std::move(rhs.pTail);
+    mSize = std::move(rhs.mSize);
+}
+
+//copy assignment operator
+template<typename T>
+List<T>& List<T>::operator=(const List<T>& rhs)
+{
+    return *this = List(rhs);
+}
+
+//move assignmnet operator
+template<typename T>
+List<T>& List<T>::operator=(List<T>&& rhs)
+{
+    pHead = std::move(rhs.pHead);
+    pTail = std::move(rhs.pTail);
+    mSize = std::move(rhs.mSize);
+
+    return *this;
 }
 
 template<typename T>
@@ -144,7 +175,7 @@ typename List<T>::Iterator List<T>::erase(typename List<T>::Iterator target)
     {
         (*current)->pPrev->pNext = (*after);
     }
-    else //Head
+    else //current target is Head.
     {
         if (after != nullptr)
         {
@@ -152,6 +183,7 @@ typename List<T>::Iterator List<T>::erase(typename List<T>::Iterator target)
         }
         else
         {
+            pHead->pNext = nullptr;
             pHead = nullptr;
         }
     }
@@ -160,9 +192,10 @@ typename List<T>::Iterator List<T>::erase(typename List<T>::Iterator target)
     {
         (*after)->pPrev = (*current)->pPrev;
     }
-    else //Tail
+    else //current target is Tail.
     {
         pTail = nullptr;
+        pTail->pPrev = nullptr;
     }
 
     delete (*current);
