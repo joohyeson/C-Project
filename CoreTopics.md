@@ -6,8 +6,39 @@
 - Arrays are lists of data of the same type as one variable. You can decide how much you want to use, then initialize the array, and use it. Arrays are sized according to the data type when declaring, so the index access is fast. So arrays are useful when the indices are important.
 
 2. Bit operations
-- Using bitwise operators, such as 'AND &', 'OR |' like the logical operators, 'Left shift <<', manipulating bitwise information.
+- Bit is the smallest unit that computer can use, to save the binary digits like '1011'.
+Bit operations are the operations that applied in bits for the binary digits.
 Bit operations can improve the CPU performance, because '4/2' is the same as '4>>1' but, using '>>' is less expensive behavior.
+Below codes are the examples for the bit operations.
+
+```
+/*The NOT operation is an operation that reverses the value of each digit.
+This operation can be used effectively to obtain remuneration for any value.*/
+NOT(~) 0111
+     = 1000
+
+/*The OR operation compares the number of digits in each of the two values and calculates 1 if any of them have one, or 0.*/
+      0101
+OR(|) 0011
+    = 0111
+
+/*The XOR operation compares the number of digits in each of the two values and calculates 0 if the value is equal to 0, 0 if the value is equal to 1, and 1 if different.*/
+       0101
+XOR(^) 0011
+     = 0110
+
+/*The AND operation compares the digits of each of the two values, calculating 1 only when there is 1 in both values and 0 in the remaining cases.*/
+       0101
+AND(&) 0011
+     = 0001
+
+/*The SHIFT operation moves the values for some digits, and put 0 or 1 in the empty places.*/
+ 0000'1011 RIGHT SHIFT(>>) 2
+              = 0000'0010
+
+ 1011'0000 LEFT SHIFT(<<) 2
+             = 1100'0000
+```
 
 3. Operator Overloading
 - Operator overloading is to redefine existing =,-,*, etc. operators. In this way, you can use operators like class+class and class*class.
