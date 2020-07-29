@@ -13,6 +13,7 @@ Creation date: 21/07/2020
 #include <vector> //std::vector
 #include <memory> //std::unique_ptr
 #include "GameState.h" //GameState* currGameState
+#include "SFML/Graphics.hpp" //sf::Font
 
 class GameStateManager
 {
@@ -25,6 +26,7 @@ public:
     void Shutdown();
     void ReloadState();
     bool HasGameEnded() { return mState == State::EXIT; }
+    sf::Font& GetFont(void);
 
 private:
     void SetStartState();
@@ -48,6 +50,8 @@ private:
     State mState = State::START;
     GameState* mCurrentGameState = nullptr;
     GameState* mNextGameState = nullptr;
+
+    sf::Font mFont;
 };
 
 template <typename GAME_STATE>
@@ -55,4 +59,3 @@ void GameStateManager::AddGameState()
 {
     mGameStates.push_back(std::make_unique<GAME_STATE>());
 }
-

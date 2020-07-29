@@ -24,8 +24,4 @@ public:
     void Draw() override;
 
     std::string GetName() override { return "MainMenu"; }
-
-private:
-    sf::Font mFont;
-    sf::Text mMainMenuText;
 };

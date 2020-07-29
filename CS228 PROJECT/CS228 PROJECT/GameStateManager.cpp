@@ -56,6 +56,11 @@ void GameStateManager::ReloadState()
     mState = State::UNLOAD;
 }
 
+sf::Font& GameStateManager::GetFont(void)
+{
+    return mFont;
+}
+
 void GameStateManager::Shutdown()
 {
     mState = State::UNLOAD;
@@ -65,6 +70,7 @@ void GameStateManager::Shutdown()
 void GameStateManager::SetStartState()
 {
     mNextGameState = mGameStates.at(0).get();
+    mFont.loadFromFile("../Assets/Font/UhBee Se_hyun.ttf");
     mState = State::LOAD;
 }
 

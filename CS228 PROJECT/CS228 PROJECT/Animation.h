@@ -20,7 +20,7 @@ public:
     Animation(sf::Texture& texture, int x, int y, int w, int h, int count, float Speed);
     void Update();
     bool IsAnimationEnded();
-    sf::Sprite GetAnimationSprite();
+    sf::Sprite& GetAnimationSprite();
 
 private:
     sf::Sprite mAnimationSprite;

@@ -12,10 +12,10 @@ Creation date: 21/07/2020
 #include "Level1.h"
 #include "Engine.h" //Engine::GetWindow()
 #include "Window.h"
-#include "SFML/Window.hpp"
-#include <time.h>
 #include "Levels.h"
 #include "Colors.h"
+#include "SFML/Window.hpp"
+#include <time.h>
 
 constexpr int FLAG = 11;
 constexpr int MINE = 9;
@@ -124,11 +124,8 @@ void Level1::Draw()
 {
     Engine::GetWindow().Clear(sf::Color(LIGHT_BLUE));
 
-    sf::Font font;
-    font.loadFromFile("../Assets/Font/UhBee Se_hyun.ttf");
-
     sf::Text text;
-    text.setFont(font);
+    text.setFont(Engine::GetGameStateManager().GetFont());
     text.setString("Minesweeper");
     text.setPosition(sf::Vector2f(0, 0));
     text.setCharacterSize(30);
@@ -209,7 +206,7 @@ void Level1::Update([[maybe_unused]] double dt)
 
     if (Engine::GetInput().IsKeyPressed(sf::Keyboard::Space))
     {
-        //Engine::GetGameStateManager().SetNextState(LEVEL2);
+        Engine::GetGameStateManager().SetNextState(LEVEL2);
     }
 }
 

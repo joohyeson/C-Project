@@ -16,20 +16,19 @@ MainMenu::MainMenu() {};
 
 void MainMenu::Load()
 {
-    mFont.loadFromFile("../Assets/Font/UhBee Se_hyun.ttf");
 }
 
 void MainMenu::Draw()
 {
-    
-    mMainMenuText.setFont(mFont);
-    mMainMenuText.setString("Main Menu / Press space bar to go to the level 1.");
-    mMainMenuText.setPosition(sf::Vector2f(0, 0));
-    mMainMenuText.setCharacterSize(30);
-    mMainMenuText.setStyle(sf::Text::Regular);
+    sf::Text mainMenuText;
+    mainMenuText.setFont(Engine::GetGameStateManager().GetFont());
+    mainMenuText.setString("Main Menu / Press space bar to go to the level 1.");
+    mainMenuText.setPosition(sf::Vector2f(0, 0));
+    mainMenuText.setCharacterSize(30);
+    mainMenuText.setStyle(sf::Text::Regular);
 
     Engine::GetWindow().Clear(sf::Color(51, 153, 218, 255));
-    Engine::GetWindow().Draw(mMainMenuText);
+    Engine::GetWindow().Draw(mainMenuText);
 }
 
 void MainMenu::Update(double/* dt*/)
