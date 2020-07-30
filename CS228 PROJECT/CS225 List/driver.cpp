@@ -9,6 +9,14 @@ Author: Juhye Son, Daeun Jeong
 Creation date: 21/07/2020
 -----------------------------------------------------------------*/
 
+#if defined(_DEBUG)
+#define _CRTDBG_MAP_ALLOC
+#define new new(_NORMAL_BLOCK, __FILE__, __LINE__)
+#endif
+
+#include <crtdbg.h> // debug memory tracking
+#include <cstdlib> // system()\
+
 #include <iostream> //std::cout, std::endl
 #include <iomanip>
 #include "List.h"
@@ -415,6 +423,12 @@ void test9()
 
 int main(int argc, char** argv)
 {
+#if defined(_DEBUG)
+    {
+        _CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
+    }
+#endif
+
     int testNum = -1;
 
     if (argc > 1)

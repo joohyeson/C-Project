@@ -9,6 +9,14 @@ Author: Daeun Jeong, Juhye Son
 Creation date: 21/07/2020
 -----------------------------------------------------------------*/
 
+#if defined(_DEBUG)
+#define _CRTDBG_MAP_ALLOC
+#define new new(_NORMAL_BLOCK, __FILE__, __LINE__)
+#endif
+
+#include <crtdbg.h> // debug memory tracking
+#include <cstdlib> // system()
+
 #include "Engine.h" //Engine::Instance();
 #include "MainMenu.h" //MainMenu
 #include "Level1.h" //Level1
@@ -16,6 +24,12 @@ Creation date: 21/07/2020
 
 int main()
 {
+#if defined(_DEBUG)
+    {
+        _CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
+    }
+#endif
+
     Engine& engine = Engine::Instance();
 
     engine.Initialize("PROJECT");
