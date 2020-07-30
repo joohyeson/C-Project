@@ -20,7 +20,9 @@ void test1() //Test 'push_back', 'pop_back', 'back', 'size', 'empty'
     std::cout << "Test#1 - 'push_back', 'pop_back', 'back', 'size', 'empty', 'erase'" << std::endl;
 
     List<int> list;
+
     std::cout << "\n#PUSH_BACK" << std::endl;
+
     for (int i = 1; i <= NUM_OF_NODES; i++)
     {
         list.push_back(i);
@@ -28,6 +30,7 @@ void test1() //Test 'push_back', 'pop_back', 'back', 'size', 'empty'
     }
 
     std::cout << "\n#POP_BACK" << std::endl;
+
     for (int i = 1; i <= NUM_OF_NODES - 1; i++)
     {
         list.pop_back();
@@ -35,6 +38,7 @@ void test1() //Test 'push_back', 'pop_back', 'back', 'size', 'empty'
     }
 
     std::cout << "\n#ERASE LAST VALUE" << std::endl;
+
     List<int>::Iterator begin = list.begin();
     list.erase(begin);
     std::cout << "Size: " << list.size() << std::endl;
@@ -96,23 +100,26 @@ void test3()
     List<int>::Iterator sum = list.begin();
     List<int>::Iterator preInc = list.begin();
     List<int>::Iterator postInc = list.begin();
+
     std::cout << "\n#PRE_INCREMENT ++" << std::endl;
+
     for (int i = 0; i < NUM_OF_NODES; i++)
     {
         preInc = ++sum;
 
-        std::cout << "Current: " << std::setw(2) << (*sum)->data << ", Pre: " << std::setw(2) << (*preInc)->data << std::endl;
+        std::cout << "Current: " << std::setw(2) << *sum << ", Pre: " << std::setw(2) << *preInc << std::endl;
     }
 
     std::cout << "\n#POST_INCREMNET ++" << std::endl;
+
     sum = list.begin();
+
     for (int i = 0; i < NUM_OF_NODES; i++)
     {
         postInc = sum++;
 
-        std::cout << "Current: " << std::setw(2) << (*sum)->data << ", Post: " << std::setw(2) << (*postInc)->data << std::endl;
+        std::cout << "Current: " << std::setw(2) << *sum << ", Post: " << std::setw(2) << *postInc << std::endl;
     }
-
 }
 
 void test4()
@@ -129,23 +136,25 @@ void test4()
     List<int>::Iterator sum = list.end();
     List<int>::Iterator predec = list.end();
     List<int>::Iterator postdec = list.end();
+
     std::cout << "\n#PRE_DECREMENT --" << std::endl;
+
     for (int i = NUM_OF_NODES; i > 0; i--)
     {
         predec = --sum;
 
-        std::cout << "Current: " << std::setw(2) << (*sum)->data << ", Pre: " << std::setw(2) << (*predec)->data << std::endl;
+        std::cout << "Current: " << std::setw(2) << *sum << ", Pre: " << std::setw(2) << *predec << std::endl;
     }
 
     std::cout << "\n#POST_DECREMENT --" << std::endl;
     sum = list.end();
+
     for (int i = NUM_OF_NODES; i > 0; i--)
     {
         postdec = sum--;
 
-        std::cout << "Current: " << std::setw(2) << (*sum)->data << ", Post: " << std::setw(2) << (*postdec)->data << std::endl;
+        std::cout << "Current: " << std::setw(2) << *sum << ", Post: " << std::setw(2) << *postdec << std::endl;
     }
-
 }
 
 void test5()
@@ -162,7 +171,7 @@ void test5()
 
     std::cout << "\n#OPERATOR ==" << std::endl;
 
-    std::cout << (*leftValue)->data << "  VS  " << (*rightValue)->data << std::endl;
+    std::cout << *leftValue << "  VS  " << *rightValue << std::endl;
 
     if (leftValue == rightValue)
     {
@@ -177,7 +186,7 @@ void test5()
 
     std::cout << "\n#OPERATOR !=" << std::endl;
 
-    std::cout << (*leftValue)->data << "  VS  " << (*rightValue)->data << std::endl;
+    std::cout << *leftValue << "  VS  " << *rightValue << std::endl;
 
     if (leftValue == rightValue)
     {
@@ -204,7 +213,7 @@ void test6()
 
     std::cout << "\n#OPERATOR <=" << std::endl;
 
-    std::cout << (*leftValue)->data << "  VS  " << (*rightValue)->data << std::endl;
+    std::cout << (*leftValue) << "  VS  " << *rightValue << std::endl;
 
     if (leftValue <= rightValue)
     {
@@ -219,7 +228,7 @@ void test6()
 
     std::cout << "\n#OPERATOR <" << std::endl;
 
-    std::cout << (*leftValue)->data << "  VS  " << (*rightValue)->data << std::endl;
+    std::cout << (*leftValue) << "  VS  " << (*rightValue) << std::endl;
 
     if (leftValue < rightValue)
     {
@@ -246,7 +255,7 @@ void test7()
 
     std::cout << "\n#OPERATOR <=" << std::endl;
 
-    std::cout << (*leftValue)->data << "  VS  " << (*rightValue)->data << std::endl;
+    std::cout << (*leftValue) << "  VS  " << (*rightValue) << std::endl;
 
     if (leftValue >= rightValue)
     {
@@ -261,7 +270,7 @@ void test7()
 
     std::cout << "\n#OPERATOR <" << std::endl;
 
-    std::cout << (*leftValue)->data << "  VS  " << (*rightValue)->data << std::endl;
+    std::cout << (*leftValue) << "  VS  " << (*rightValue) << std::endl;
 
     if (leftValue > rightValue)
     {
@@ -271,7 +280,54 @@ void test7()
     {
         std::cout << "Right value is bigger than left value" << std::endl;
     }
+}
 
+void test8()
+{
+    List<int> listA;
+
+    for (int i = 1; i <= NUM_OF_NODES; i++)
+    {
+        listA.push_back(i);
+    }
+
+    std::cout << "\n#MOVE CONSTRUCTOR" << std::endl;
+    List<int> listB = std::move(listA); // move ctor
+
+    for (auto node : listB)
+    {
+        std::cout << "Value : " << node << std::endl;
+        std::cout << "Value : " << &node << std::endl;
+    }
+
+    std::cout << "\n#MOVE ASSIGNMENT OPERATOR" << std::endl;
+    List<int> listC;
+    listC = std::move(listB); //move assign
+
+    for (auto node : listC)
+    {
+        std::cout << "Value : " << node << std::endl;
+        std::cout << "Value : " << &node << std::endl;
+    }
+
+    std::cout << "\n#COPY CONSTRUCTOR" << std::endl;
+    List<int> listE(listC); //copy ctor
+
+    for (auto node : listE)
+    {
+        std::cout << "Value : " << node << std::endl;
+        std::cout << "Value : " << &node << std::endl;
+    }
+
+    std::cout << "\n#COPY ASSIGNMENT OPERATOR" << std::endl;
+    List<int> listD;
+    listD = listE; //copy assign
+
+    for (auto node : listD)
+    {
+        std::cout << "Value : " << node << std::endl;
+        std::cout << "Value : " << &node << std::endl;
+    }
 }
 
 int main(int argc, char** argv)
@@ -290,14 +346,14 @@ int main(int argc, char** argv)
         test3();
         test4();
         test5();
-         test6();
-         test7();
-    
+        test6();
+        test7();
+        test8();
     }
     else
     {
         typedef void(*Test)(void);
-        Test Tests[] = { test1, test2, test3, test4, test5, test6, test7 };
+        Test Tests[] = { test1, test2, test3, test4, test5, test6, test7, test8 };
 
         Tests[testNum - 1]();
     }

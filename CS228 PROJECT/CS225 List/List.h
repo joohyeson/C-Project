@@ -24,10 +24,11 @@ private:
 
     Node* MakeNode(T data)
     {
-        Node* pNewNode = new Node;
+        Node* pNewNode = new Node();
         pNewNode->data = data;
         pNewNode->pNext = nullptr;
         pNewNode->pPrev = nullptr;
+
         return pNewNode;
     }
 
@@ -45,7 +46,7 @@ public:
         bool operator>=(const Iterator& rhs) const;
         bool operator<(const Iterator& rhs) const;
         bool operator>(const Iterator& rhs) const;
-        List<T>::Node* operator*();
+        T operator*();
 
     private:
         friend class List<T>;
@@ -56,9 +57,10 @@ public:
     List();
     ~List();
 
-    List(const List<T>& rhs) = delete;
-    List<T>& operator=(const List<T>& rhs) = delete;
-    List<T>& operator=(List<T>&& rhs) = delete;
+    List(const List<T>& rhs); // copy constructor
+    List(List<T>&& rhs); // move constructor
+    List<T>& operator=(const List<T>& rhs); // copy assignment
+    List<T>& operator=(List<T>&& rhs); //move assignment
 
     void push_front(T value);
     void push_back(T value);
@@ -70,6 +72,7 @@ public:
     Iterator end(void);
 
     Iterator erase(Iterator target);
+    void clear();
 
     T back(void);
     T front(void);

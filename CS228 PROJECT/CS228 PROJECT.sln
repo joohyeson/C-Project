@@ -6,6 +6,9 @@ MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "CS228 PROJECT", "CS228 PROJECT\CS228 PROJECT.vcxproj", "{58052B9D-D121-41FB-861C-F37173B9832C}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "CS225 List", "CS225 List\CS225 List.vcxproj", "{79B6031D-FCA6-4D7E-AD96-7C95ACCD2D87}"
+	ProjectSection(ProjectDependencies) = postProject
+		{58052B9D-D121-41FB-861C-F37173B9832C} = {58052B9D-D121-41FB-861C-F37173B9832C}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

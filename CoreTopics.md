@@ -64,23 +64,13 @@ List<T>::Iterator List<T>::end(void)
 ```
 
 5. Inheritance + Polymorphism
-
-**Inheritance**
-- What is Inheritance? 
-  - Inheritance has base class (superclass) and derived class (subclass). As the name suggests, it is inheriting another class or struct. 
-
-- Why is it important?
-  - The first reason inheritance is important is that the polymorphism described below can be implemented when using inheritance. The inheritance class used when implementing polymorphism is an abstract class, that is, a class in which at least one pure virtual function is declared. Functions declared as pure virtual functions in the abstract class must be overridden in all classes derived from this class. In this way we can implement polymorphism in inheritance.
-
-  - The second advantage is that if classes with similar roles exist as independent classes rather than inheritance, it takes a lot of time to modify the code, but using Inheritance only requires modification of the base class.
-
-- How does it work?
-  - After creating the base class, when creating the class to inherit, specify the base class next to the class name.
+- Polymorphism and inheritance are important concepts of OOP(Object Oriented Programming). If we use polymorphism well, it can provide a consistent usage method to users regardless of the contents of the function. Polymorphism with this advantage can be implemented using inheritance. First of all, inheritance has base class (superclass) and derived class (subclass). If you create at least one function declared as pure virtual in a super class, all subclasses must override that function. We can implement polymorphism in inheritance through this method.
+//More explanatation about Inheritance(duplicating in a new class?) and then Polymorphism(virtual table).
 
 ```
 **Inheritance Example: GameState.h&Level1.h**
 
-class GameState
+class GameState//base class
 {
 public:
     GameState() {};
@@ -91,9 +81,9 @@ public:
     virtual std::string GetName() = 0;
     virtual ~GameState() {};
 private:
-};
+};//pure virtual functions
 
-class Level1 : public GameState
+class Level1 : public GameState//derived class
 {
 public:
     Level1();
@@ -110,45 +100,24 @@ private:
     bool mShouldGameRun = true;
 };
 
+**Polymorphism Example: Level1::Draw().h&Level2::Draw()**
 
-```
-
- **Polymorphism**
-- What is Polymorphism? 
-  - It is one of the important concepts in OOP (Object Oriented Programming). Simply put, different objects respond to the same message in their own way. For example, if you have a shape class and a circle, square, and triangle that inherits the shape class, you can think of each class' Draw() function causing different results.
-
-- Why is it important?
-
-  - Polymorphism is important because we can put different objects together as one common. If polymorphism is used properly, it can provide a consistent usage method to users regardless of the contents of the function.
-
-- How does it work?
-
-```
-**Inheritance Example: Level1::Draw().h&Level2::Draw()**
-
-void Level1::Draw()
+void Level1::Draw()//override Game State's pure virtual function
 {
     Engine::GetWindow().Clear(sf::Color(LIGHT_BLUE));
-
-    sf::Font font;
-    font.loadFromFile("../Assets/Font/UhBee Se_hyun.ttf");
-
-    sf::Text text;
-    text.setFont(font);
     text.setString("Minesweeper");
     ...
  }
 
  void Level2::Draw()
 {
-    sf::Font font;
-    font.loadFromFile("../Assets/Font/UhBee Se_hyun.ttf");
-
-    sf::Text text;
-    text.setFont(font);
+    Engine::GetWindow().Clear(sf::Color(BLACK));
     text.setString("Asteroid");
     ...
 }
+
+//Another Draw function that use reference base class?
+//Calling draw function?
 ```
 
 6. Rule of 5, RAII, r-value references/Move Semantics
@@ -166,14 +135,14 @@ void Level1::Draw()
 - A template is a frame created so that a class or function once created can be used in multiple data types. The advantage of using a template is that the code is shortened and easy to modify because there is no need to rewrite the code multiple times.
 
 8. STL Container + Iterators + Algorithms
-- STL containers provide classes of data storage objects provided by STL.
-As STL container is a template, you must set the type of variable when declare the STL container.
-STL containers have various types and each has its pros and cons. So datas can be managed in a useful way if needed.
+//refer to cs22519kr moodle page.
+- STL containers provide various types of template classes. STL Container is useful because programmer can choose what to use for the purpose, as each container has its own pros and cons.
 
-- STL Iterator is a repeater who can read and move the data memory address stored in the previous container.
-Similarly, since it is a template, you must set the type of variable and use it after receiving the container value that you want to access.
+- STL Iterator is a repeater who can read and move the data memory address stored in the previous container. 
+And iterator is an interface, that make the container and algorithm work as one.
 When using STL algorithms and other functions are also useful because iterators are easy to access the elements of the container.
 
-- STL Algorithm is a function that can be used using the container and repeater in front.
-You can include the <algorithm> library and use the functions in it.
-It is useful to have iterators in containers and to perform various tasks easily.
+- STL Algorithm is a function that is defined in the <algorithm> library.
+There are lots of different functions like 'find', 'erase' and so on.
+It is useful because programmer can perform various complex tasks, using iterators and containers with algorithm functions.
+//one algorithm function to all containers.

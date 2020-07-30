@@ -78,7 +78,7 @@ void Level2::Draw()
         Engine::GetWindow().Draw(text);
     }
 
-    if (mGameObjectList.size() == 1 && mGameObjectList.front()->name == "player")
+    if (mIsGameCleared == true)
     {
         text.setString("Level Clear!");
         text.setPosition(sf::Vector2f(Engine::GetWindow().GetSize().x / 2.0f, Engine::GetWindow().GetSize().y / 2.0f));
@@ -90,7 +90,6 @@ void Level2::Update([[maybe_unused]] double dt)
 {
     if (mShouldGameRun == true)
     {
-
         for (auto objectAIterator = mGameObjectList.begin(); objectAIterator != mGameObjectList.end(); ++objectAIterator)
         {
             auto objectBIterator = objectAIterator;
@@ -99,8 +98,8 @@ void Level2::Update([[maybe_unused]] double dt)
 
             for (; objectBIterator != mGameObjectList.end(); ++objectBIterator)
             {
-                GameObject* objectA = *objectAIterator;
-                GameObject* objectB = *objectBIterator;
+                auto objectA = *objectAIterator;
+                auto objectB = *objectBIterator;
 
                 if (objectA->name == "asteroid" && objectB->name == "bullet")
                 {
@@ -130,34 +129,6 @@ void Level2::Update([[maybe_unused]] double dt)
                     }
                 }
 
-                if (objectB->name == "asteroid" && objectA->name == "bullet")
-                {
-                    if (objectB->IsCollideWith(objectA))
-                    {
-                        objectB->isAlive = false;
-                        objectA->isAlive = false;
-
-                        GameObject* explosion = new GameObject();
-                        explosion->SetValues(explosionAnimation, objectB->x, objectB->y);
-                        explosion->name = "explosion";
-                        mGameObjectList.push_back(explosion);
-
-                        for (int i = 0; i < 2; i++)
-                        {
-                            if (objectB->radius == RADIUS_OF_ASTEROID)
-                            {
-                                continue;
-                            }
-                            else
-                            {
-                                GameObject* asteroid = new Asteroid();
-                                asteroid->SetValues(smallRockAnimation, objectB->x, objectB->y, static_cast<float>(rand() % 360), 15.0f);
-                                mGameObjectList.push_back(asteroid);
-                            }
-                        }
-                    }
-                }
-
                 if (objectA->name == "player" && objectB->name == "asteroid")
                 {
                     if (objectA->IsCollideWith(objectB))
@@ -166,25 +137,6 @@ void Level2::Update([[maybe_unused]] double dt)
 
                         GameObject* explosion = new GameObject();
                         explosion->SetValues(explosionAnimation, objectA->x, objectA->y);
-                        explosion->name = "explosion";
-                        mGameObjectList.push_back(explosion);
-
-                        mPlayer->SetValues(playerAnimation, Engine::GetWindow().GetSize().x / 2.0f, Engine::GetWindow().GetSize().y / 2.0f, 0, 20);
-                        mPlayer->dx = 0;
-                        mPlayer->dy = 0;
-
-                        mShouldGameRun = false;
-                    }
-                }
-
-                if (objectB->name == "player" && objectA->name == "asteroid")
-                {
-                    if (objectB->IsCollideWith(objectA))
-                    {
-                        objectA->isAlive = false;
-
-                        GameObject* explosion = new GameObject();
-                        explosion->SetValues(explosionAnimation, objectB->x, objectB->y);
                         explosion->name = "explosion";
                         mGameObjectList.push_back(explosion);
 
@@ -241,6 +193,16 @@ void Level2::Update([[maybe_unused]] double dt)
             }
         }
 
+        mIsGameCleared = true;
+
+        for (auto asteroid : mGameObjectList)
+        {
+            if (asteroid->name == "asteroid")
+            {
+                mIsGameCleared = false;
+            }
+        }
+
         //Release
         if (Engine::GetInput().IsKeyPressed(sf::Keyboard::Space))
         {
@@ -279,5 +241,6 @@ void Level2::Update([[maybe_unused]] double dt)
 void Level2::Unload()
 {
     mGameObjectList.clear();
+
     mPlayer = nullptr;
 }
