@@ -30,12 +30,26 @@ List<T>::~List()
     delete temp;
 }
 
-//copy constructor
+//copy constructor(deep copy)
 template<typename T>
 List<T>::List(const List<T>& rhs)
 {
-    pHead = rhs.pHead;
-    pTail = rhs.pTail;
+    if (rhs.pHead != nullptr)
+    {
+        pHead = MakeNode(rhs.pHead->data, rhs.pHead->pNext, nullptr);
+
+        Node* mTemp = pHead;
+        Node* rhsTemp = rhs.pHead->pNext;
+
+        while (rhsTemp != nullptr)
+        {
+            mTemp->pNext = MakeNode(rhsTemp->data, rhsTemp->pNext, mTemp);
+            mTemp = mTemp->pNext;
+            rhsTemp = rhsTemp->pNext;
+        }
+        pTail = mTemp;
+    }
+   
     mSize = rhs.mSize;
 }
 
@@ -59,10 +73,27 @@ List<T>& List<T>::operator=(const List<T>& rhs)
     if (this != &rhs)
     {
         delete pHead;
-        delete pTail;
+        pHead = nullptr;
 
-        pHead = rhs.pHead;
-        pTail = rhs.pTail;
+        delete pTail;
+        pTail = nullptr;
+
+        if (rhs.pHead != nullptr)
+        {
+            pHead = MakeNode(rhs.pHead->data, rhs.pHead->pNext, nullptr);
+
+            Node* mTemp = pHead;
+            Node* rhsTemp = rhs.pHead->pNext;
+
+            while (rhsTemp != nullptr)
+            {
+                mTemp->pNext = MakeNode(rhsTemp->data, rhsTemp->pNext, mTemp);
+                mTemp = mTemp->pNext;
+                rhsTemp = rhsTemp->pNext;
+            }
+            pTail = mTemp;
+        }
+
         mSize = rhs.mSize;
     }
 
@@ -237,14 +268,17 @@ template<typename T>
 void List<T>::clear()
 {
     auto pTemp = pHead;
-
-    while (pTemp == pTail)
+    if (pHead != nullptr)
     {
-        pTemp = pTemp->pNext;
-        delete pTemp->pPrev;
-        pTemp->pPrev = nullptr;
-        --mSize;
+        while (pTemp == nullptr)
+        {
+            pTemp = pTemp->pNext;
+            delete pTemp->pPrev;
+            pTemp->pPrev = nullptr;
+            --mSize;
+        }
     }
+    
 
     pHead = nullptr;
     pTail = nullptr;
