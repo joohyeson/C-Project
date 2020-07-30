@@ -284,6 +284,8 @@ void test7()
 
 void test8()
 {
+
+    std::cout << "\nTEST#8 Rule of 5" << std::endl;
     List<int> listA;
 
     for (int i = 1; i <= NUM_OF_NODES; i++)
@@ -294,40 +296,121 @@ void test8()
     std::cout << "\n#MOVE CONSTRUCTOR" << std::endl;
     List<int> listB = std::move(listA); // move ctor
 
+    std::cout << "\n#ListA" << std::endl;
+    for (auto node : listA)
+    {
+        std::cout << "Value : " << node << std::endl;
+    }
+    std::cout << "Address ListA :" << &listA << std::endl;
+
+    std::cout << "\n#ListB" << std::endl;
     for (auto node : listB)
     {
         std::cout << "Value : " << node << std::endl;
-        std::cout << "Value : " << &node << std::endl;
     }
+
+    std::cout << "Address ListB:" << &listB << std::endl;
 
     std::cout << "\n#MOVE ASSIGNMENT OPERATOR" << std::endl;
     List<int> listC;
     listC = std::move(listB); //move assign
 
+    std::cout << "\n#ListA" << std::endl;
+    for (auto node : listB)
+    {
+        std::cout << "Value : " << node << std::endl;
+    }
+
+    std::cout << "Address ListA :" << &listB << std::endl;
+
+    std::cout << "\n#ListB" << std::endl;
     for (auto node : listC)
     {
         std::cout << "Value : " << node << std::endl;
-        std::cout << "Value : " << &node << std::endl;
     }
+
+    std::cout << "Address ListB :" << &listC << std::endl;
 
     std::cout << "\n#COPY CONSTRUCTOR" << std::endl;
     List<int> listE(listC); //copy ctor
 
+    std::cout << "\n#ListA" << std::endl;
+    for (auto node : listC)
+    {
+        std::cout << "Value : " << node << std::endl;
+    }
+
+    std::cout << "Address ListA :" << &listC << std::endl;
+
+    std::cout << "\n#ListB" << std::endl;
     for (auto node : listE)
     {
         std::cout << "Value : " << node << std::endl;
-        std::cout << "Value : " << &node << std::endl;
     }
+    std::cout << "Address ListB :" << &listB << std::endl;
 
     std::cout << "\n#COPY ASSIGNMENT OPERATOR" << std::endl;
     List<int> listD;
     listD = listE; //copy assign
 
+    std::cout << "\n#ListA" << std::endl;
+    for (auto node : listE)
+    {
+        std::cout << "Value : " << node << std::endl;
+    }
+    std::cout << "Address ListA :" << &listE << std::endl;
+    std::cout << "\n#ListB" << std::endl;
     for (auto node : listD)
     {
         std::cout << "Value : " << node << std::endl;
-        std::cout << "Value : " << &node << std::endl;
     }
+    std::cout << "Address ListB :" << &listD << std::endl;
+}
+
+void test9()
+{
+    std::cout << "\nTEST#9 COPY CONSTRUCTOR DEEP COPY" << std::endl;
+    List<int> listA;
+
+    for (int i = 1; i <= NUM_OF_NODES; i++)
+    {
+        listA.push_back(i);
+    }
+
+    std::cout << "\n#COPY CONSTRUCTOR" << std::endl;
+    List<int> listB(listA); //copy ctor
+
+    std::cout << "\n#ListA" << std::endl;
+    for (auto node : listA)
+    {
+        std::cout << "Value : " << node << std::endl;
+    }
+
+    std::cout << "\n#ListB" << std::endl;
+    for (auto node : listB)
+    {
+        std::cout << "Value : " << node << std::endl;
+    }
+
+    for (int i = 1; i <= NUM_OF_NODES; i++)
+    {
+        listB.push_back(i);
+    }
+
+    std::cout << "\n===========AFTER PUSH_BACK TO LISTB===========" << std::endl;
+
+    std::cout << "\n#ListA" << std::endl;
+    for (auto node : listA)
+    {
+        std::cout << "Value : " << node << std::endl;
+    }
+
+    std::cout << "\n#ListB" << std::endl;
+    for (auto node : listB)
+    {
+        std::cout << "Value : " << node << std::endl;
+    }
+
 }
 
 int main(int argc, char** argv)
@@ -349,11 +432,12 @@ int main(int argc, char** argv)
         test6();
         test7();
         test8();
+        test9();
     }
     else
     {
         typedef void(*Test)(void);
-        Test Tests[] = { test1, test2, test3, test4, test5, test6, test7, test8 };
+        Test Tests[] = { test1, test2, test3, test4, test5, test6, test7, test8, test9 };
 
         Tests[testNum - 1]();
     }
