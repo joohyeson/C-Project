@@ -47,13 +47,14 @@ List<T>::List(const List<T>& rhs)
             mTemp = mTemp->pNext;
             rhsTemp = rhsTemp->pNext;
         }
+
         pTail = mTemp;
     }
    
     mSize = rhs.mSize;
 }
 
-//move constructor (OK)
+//move constructor 
 template<typename T>
 List<T>::List(List<T>&& rhs)
 {
@@ -91,6 +92,7 @@ List<T>& List<T>::operator=(const List<T>& rhs)
                 mTemp = mTemp->pNext;
                 rhsTemp = rhsTemp->pNext;
             }
+
             pTail = mTemp;
         }
 

@@ -19,7 +19,18 @@ constexpr int NUMBER_OF_ASTEROID = 7;
 constexpr int RADIUS_OF_ASTEROID = 15;
 constexpr float MOVING_ANGLE = 3.0f;
 
-Level2::Level2() {}
+Level2::Level2() 
+{
+    mPlayer = new Player();
+
+    mShouldGameRun = true;
+    mIsGameCleared = false;
+}
+
+Level2::~Level2()
+{
+    delete mPlayer;
+}
 
 void Level2::Load()
 {
@@ -42,7 +53,11 @@ void Level2::Load()
     playerMoveAnimation = Animation(shipTexture, 40, 40, 40, 40, 1, 0.f);
     explosionShipAnimation = Animation(explosionShipTexture, 0, 0, 192, 192, 64, 0.5f);
 
-    mPlayer = new Player();
+    if (mPlayer == nullptr)
+    {
+        mPlayer = new Player();
+    }
+
     mPlayer->SetValues(playerAnimation, Engine::GetWindow().GetSize().x / 2.0f, Engine::GetWindow().GetSize().y / 2.0f, 0, 20);
     mGameObjectList.push_back(mPlayer);
 
@@ -241,6 +256,16 @@ void Level2::Update([[maybe_unused]] double dt)
 void Level2::Unload()
 {
     mGameObjectList.clear();
+
+    //if (mGameObjectList.size() != 0)
+    //{
+    //    for (auto objectIterator = mGameObjectList.begin(); objectIterator != mGameObjectList.end(); ++objectIterator)
+    //    {
+    //        GameObject* object = *objectIterator;
+    //        mGameObjectList.erase(objectIterator);
+    //        delete object;
+    //    }
+    //}
 
     mPlayer = nullptr;
 }

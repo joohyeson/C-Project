@@ -19,6 +19,7 @@ class Level2 : public GameState
 {
 public:
     Level2();
+    ~Level2();
     void Load() override;
     void Update(double dt) override;
     void Unload() override;
@@ -27,10 +28,13 @@ public:
     std::string GetName() override { return "Level2"; }
 
 private:
-    bool mShouldGameRun = true;
-    bool mIsGameCleared = false;
+    bool mShouldGameRun;
+    bool mIsGameCleared;
+    
     Player* mPlayer;
+
     List<GameObject*> mGameObjectList;
+    
     Animation mBulletAnimation;
     Animation playerMoveAnimation;
     Animation playerAnimation;
