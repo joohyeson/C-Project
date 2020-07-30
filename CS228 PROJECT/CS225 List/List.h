@@ -36,18 +36,9 @@ private:
     {
         Node* pNewNode = new Node();
         pNewNode->data = data;
-        if (next == nullptr)
-        {
-            pNewNode->pNext = next;
-        }
-        else
-        {
-            pNewNode->pNext = new Node();
-            pNewNode->pNext->data = next->data;
-        }
 
+        pNewNode->pNext = next;
         pNewNode->pPrev = prev;
-
 
         return pNewNode;
     }

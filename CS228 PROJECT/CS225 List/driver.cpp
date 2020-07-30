@@ -15,7 +15,6 @@ Creation date: 21/07/2020
 #endif
 
 #include <crtdbg.h> // debug memory tracking
-#include <cstdlib> // system()\
 
 #include <iostream> //std::cout, std::endl
 #include <iomanip>

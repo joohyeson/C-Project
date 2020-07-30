@@ -36,6 +36,7 @@ List<T>::List(const List<T>& rhs)
 {
     if (rhs.pHead != nullptr)
     {
+        delete pHead;
         pHead = MakeNode(rhs.pHead->data, rhs.pHead->pNext, nullptr);
 
         Node* mTemp = pHead;
@@ -48,6 +49,7 @@ List<T>::List(const List<T>& rhs)
             rhsTemp = rhsTemp->pNext;
         }
 
+        delete pTail;
         pTail = mTemp;
     }
    
@@ -171,16 +173,19 @@ void List<T>::push_back(T value)
 template<typename T>
 T List<T>::pop_front(void)
 {
-    T poppedValue = pHead->data;
-
+T poppedValue = pHead->data;
+    Node* temp = pHead;
     if (pHead == pTail)
     {
+        delete pHead;
         pHead = nullptr;
         pTail = nullptr;
+
     }
     else
     {
-        pHead = pHead->pNext;
+        pHead = temp->pNext;
+        delete temp; 
     }
 
     --mSize;

@@ -15,7 +15,6 @@ Creation date: 21/07/2020
 #endif
 
 #include <crtdbg.h> // debug memory tracking
-#include <cstdlib> // system()
 
 #include "Engine.h" //Engine::Instance();
 #include "MainMenu.h" //MainMenu
