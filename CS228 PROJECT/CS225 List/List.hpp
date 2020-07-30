@@ -36,27 +36,36 @@ List<T>::List(const List<T>& rhs) : pHead(rhs.pHead), pTail(rhs.pTail), mSize(rh
 
 //move constructor
 template<typename T>
-List<T>::List(List<T>&& rhs) 
+List<T>::List(List<T>&& rhs)
 {
-    pHead = std::move(rhs.pHead);
-    pTail = std::move(rhs.pTail);
-    mSize = std::move(rhs.mSize);
+    pHead = rhs.pHead;
+    pTail = rhs.pTail;
+    mSize = rhs.mSize;
+
+    rhs.pHead = nullptr;
+    rhs.pTail = nullptr;
+    rhs.mSize = 0;
 }
 
 //copy assignment operator
 template<typename T>
 List<T>& List<T>::operator=(const List<T>& rhs)
 {
-    return *this = List(rhs);
+    delete pHead;
+    delete pTail;
+
+    pHead = rhs.pHead;
+    pTail = rhs.pTail;
+    mSize = rhs.mSize;
+
+    return *this;
 }
 
 //move assignmnet operator
 template<typename T>
 List<T>& List<T>::operator=(List<T>&& rhs)
 {
-    pHead = std::move(rhs.pHead);
-    pTail = std::move(rhs.pTail);
-    mSize = std::move(rhs.mSize);
+    //std::swap?
 
     return *this;
 }
