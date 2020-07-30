@@ -28,6 +28,7 @@ private:
         pNewNode->data = data;
         pNewNode->pNext = nullptr;
         pNewNode->pPrev = nullptr;
+
         return pNewNode;
     }
 
@@ -45,7 +46,7 @@ public:
         bool operator>=(const Iterator& rhs) const;
         bool operator<(const Iterator& rhs) const;
         bool operator>(const Iterator& rhs) const;
-        List<T>::Node* operator*();
+        T operator*();
 
     private:
         friend class List<T>;

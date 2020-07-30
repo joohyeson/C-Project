@@ -107,7 +107,7 @@ void test3()
     {
         preInc = ++sum;
 
-        std::cout << "Current: " << std::setw(2) << (*sum)->data << ", Pre: " << std::setw(2) << (*preInc)->data << std::endl;
+        std::cout << "Current: " << std::setw(2) << *sum << ", Pre: " << std::setw(2) << *preInc << std::endl;
     }
 
     std::cout << "\n#POST_INCREMNET ++" << std::endl;
@@ -118,7 +118,7 @@ void test3()
     {
         postInc = sum++;
 
-        std::cout << "Current: " << std::setw(2) << (*sum)->data << ", Post: " << std::setw(2) << (*postInc)->data << std::endl;
+        std::cout << "Current: " << std::setw(2) << *sum << ", Post: " << std::setw(2) << *postInc << std::endl;
     }
 }
 
@@ -143,7 +143,7 @@ void test4()
     {
         predec = --sum;
 
-        std::cout << "Current: " << std::setw(2) << (*sum)->data << ", Pre: " << std::setw(2) << (*predec)->data << std::endl;
+        std::cout << "Current: " << std::setw(2) << *sum << ", Pre: " << std::setw(2) << *predec << std::endl;
     }
 
     std::cout << "\n#POST_DECREMENT --" << std::endl;
@@ -153,7 +153,7 @@ void test4()
     {
         postdec = sum--;
 
-        std::cout << "Current: " << std::setw(2) << (*sum)->data << ", Post: " << std::setw(2) << (*postdec)->data << std::endl;
+        std::cout << "Current: " << std::setw(2) << *sum << ", Post: " << std::setw(2) << *postdec << std::endl;
     }
 }
 
@@ -171,7 +171,7 @@ void test5()
 
     std::cout << "\n#OPERATOR ==" << std::endl;
 
-    std::cout << (*leftValue)->data << "  VS  " << (*rightValue)->data << std::endl;
+    std::cout << *leftValue << "  VS  " << *rightValue << std::endl;
 
     if (leftValue == rightValue)
     {
@@ -186,7 +186,7 @@ void test5()
 
     std::cout << "\n#OPERATOR !=" << std::endl;
 
-    std::cout << (*leftValue)->data << "  VS  " << (*rightValue)->data << std::endl;
+    std::cout << *leftValue << "  VS  " << *rightValue << std::endl;
 
     if (leftValue == rightValue)
     {
@@ -213,7 +213,7 @@ void test6()
 
     std::cout << "\n#OPERATOR <=" << std::endl;
 
-    std::cout << (*leftValue)->data << "  VS  " << (*rightValue)->data << std::endl;
+    std::cout << (*leftValue) << "  VS  " << *rightValue << std::endl;
 
     if (leftValue <= rightValue)
     {
@@ -228,7 +228,7 @@ void test6()
 
     std::cout << "\n#OPERATOR <" << std::endl;
 
-    std::cout << (*leftValue)->data << "  VS  " << (*rightValue)->data << std::endl;
+    std::cout << (*leftValue) << "  VS  " << (*rightValue) << std::endl;
 
     if (leftValue < rightValue)
     {
@@ -255,7 +255,7 @@ void test7()
 
     std::cout << "\n#OPERATOR <=" << std::endl;
 
-    std::cout << (*leftValue)->data << "  VS  " << (*rightValue)->data << std::endl;
+    std::cout << (*leftValue) << "  VS  " << (*rightValue) << std::endl;
 
     if (leftValue >= rightValue)
     {
@@ -270,7 +270,7 @@ void test7()
 
     std::cout << "\n#OPERATOR <" << std::endl;
 
-    std::cout << (*leftValue)->data << "  VS  " << (*rightValue)->data << std::endl;
+    std::cout << (*leftValue) << "  VS  " << (*rightValue) << std::endl;
 
     if (leftValue > rightValue)
     {
@@ -289,7 +289,6 @@ void test8()
     for (int i = 1; i <= NUM_OF_NODES; i++)
     {
         listA.push_back(i);
-        std::cout << "Size: " << listA.size() << ", " << "Tail: " << listA.back() << std::endl;
     }
 
     std::cout << "\n#MOVE CONSTRUCTOR" << std::endl;
@@ -297,7 +296,8 @@ void test8()
 
     for (auto node : listB)
     {
-        std::cout << "Value : " << node->data << std::endl;
+        std::cout << "Value : " << node << std::endl;
+        std::cout << "Value : " << &node << std::endl;
     }
 
     std::cout << "\n#MOVE ASSIGNMENT OPERATOR" << std::endl;
@@ -306,7 +306,8 @@ void test8()
 
     for (auto node : listC)
     {
-        std::cout << "Value : " << node->data << std::endl;
+        std::cout << "Value : " << node << std::endl;
+        std::cout << "Value : " << &node << std::endl;
     }
 
     std::cout << "\n#COPY CONSTRUCTOR" << std::endl;
@@ -314,7 +315,8 @@ void test8()
 
     for (auto node : listE)
     {
-        std::cout << "Value : " << node->data << std::endl;
+        std::cout << "Value : " << node << std::endl;
+        std::cout << "Value : " << &node << std::endl;
     }
 
     std::cout << "\n#COPY ASSIGNMENT OPERATOR" << std::endl;
@@ -323,7 +325,8 @@ void test8()
 
     for (auto node : listD)
     {
-        std::cout << "Value : " << node->data << std::endl;
+        std::cout << "Value : " << node << std::endl;
+        std::cout << "Value : " << &node << std::endl;
     }
 }
 

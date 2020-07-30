@@ -64,7 +64,8 @@ List<T>::Iterator List<T>::end(void)
 ```
 
 5. Inheritance + Polymorphism
-Polymorphism and inheritance are important concepts of OOP(Object Oriented Programming). If we use polymorphism well, it can provide a consistent usage method to users regardless of the contents of the function. Polymorphism with this advantage can be implemented using inheritance. First of all, inheritance has base class (superclass) and derived class (subclass). If you create at least one function declared as pure virtual in a super class, all subclasses must override that function. We can implement polymorphism in inheritance through this method.
+- Polymorphism and inheritance are important concepts of OOP(Object Oriented Programming). If we use polymorphism well, it can provide a consistent usage method to users regardless of the contents of the function. Polymorphism with this advantage can be implemented using inheritance. First of all, inheritance has base class (superclass) and derived class (subclass). If you create at least one function declared as pure virtual in a super class, all subclasses must override that function. We can implement polymorphism in inheritance through this method.
+//More explanatation about Inheritance(duplicating in a new class?) and then Polymorphism(virtual table).
 
 ```
 **Inheritance Example: GameState.h&Level1.h**
@@ -114,8 +115,10 @@ void Level1::Draw()//override Game State's pure virtual function
     text.setString("Asteroid");
     ...
 }
-```
 
+//Another Draw function that use reference base class?
+//Calling draw function?
+```
 
 6. Rule of 5, RAII, r-value references/Move Semantics
 
@@ -132,6 +135,7 @@ void Level1::Draw()//override Game State's pure virtual function
 - A template is a frame created so that a class or function once created can be used in multiple data types. The advantage of using a template is that the code is shortened and easy to modify because there is no need to rewrite the code multiple times.
 
 8. STL Container + Iterators + Algorithms
+//refer to cs22519kr moodle page.
 - STL containers provide various types of template classes. STL Container is useful because programmer can choose what to use for the purpose, as each container has its own pros and cons.
 
 - STL Iterator is a repeater who can read and move the data memory address stored in the previous container. 
@@ -141,3 +145,4 @@ When using STL algorithms and other functions are also useful because iterators 
 - STL Algorithm is a function that is defined in the <algorithm> library.
 There are lots of different functions like 'find', 'erase' and so on.
 It is useful because programmer can perform various complex tasks, using iterators and containers with algorithm functions.
+//one algorithm function to all containers.

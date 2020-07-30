@@ -101,42 +101,42 @@ void Level2::Update([[maybe_unused]] double dt)
                 auto objectA = *objectAIterator;
                 auto objectB = *objectBIterator;
 
-                if (objectA->data->name == "asteroid" && objectB->data->name == "bullet")
+                if (objectA->name == "asteroid" && objectB->name == "bullet")
                 {
-                    if (objectA->data->IsCollideWith(objectB->data))
+                    if (objectA->IsCollideWith(objectB))
                     {
-                        objectA->data->isAlive = false;
-                        objectB->data->isAlive = false;
+                        objectA->isAlive = false;
+                        objectB->isAlive = false;
 
                         GameObject* explosion = new GameObject();
-                        explosion->SetValues(explosionAnimation, objectA->data->x, objectA->data->y);
+                        explosion->SetValues(explosionAnimation, objectA->x, objectA->y);
                         explosion->name = "explosion";
                         mGameObjectList.push_back(explosion);
 
                         for (int i = 0; i < 2; i++)
                         {
-                            if (objectA->data->radius == RADIUS_OF_ASTEROID)
+                            if (objectA->radius == RADIUS_OF_ASTEROID)
                             {
                                 continue;
                             }
                             else
                             {
                                 GameObject* asteroid = new Asteroid();
-                                asteroid->SetValues(smallRockAnimation, objectA->data->x, objectA->data->y, static_cast<float>(rand() % 360), 15.0f);
+                                asteroid->SetValues(smallRockAnimation, objectA->x, objectA->y, static_cast<float>(rand() % 360), 15.0f);
                                 mGameObjectList.push_back(asteroid);
                             }
                         }
                     }
                 }
 
-                if (objectA->data->name == "player" && objectB->data->name == "asteroid")
+                if (objectA->name == "player" && objectB->name == "asteroid")
                 {
-                    if (objectA->data->IsCollideWith(objectB->data))
+                    if (objectA->IsCollideWith(objectB))
                     {
-                        objectB->data->isAlive = false;
+                        objectB->isAlive = false;
 
                         GameObject* explosion = new GameObject();
-                        explosion->SetValues(explosionAnimation, objectA->data->x, objectA->data->y);
+                        explosion->SetValues(explosionAnimation, objectA->x, objectA->y);
                         explosion->name = "explosion";
                         mGameObjectList.push_back(explosion);
 
@@ -152,12 +152,12 @@ void Level2::Update([[maybe_unused]] double dt)
 
         for (auto object : mGameObjectList)
         {
-            object->data->Draw(Engine::GetWindow().GetWindow());
+            object->Draw(Engine::GetWindow().GetWindow());
         }
 
         for (auto objectIterator = mGameObjectList.begin(); objectIterator != mGameObjectList.end();)
         {
-            GameObject* object = (*objectIterator)->data;
+            GameObject* object = *objectIterator;
 
             object->Update();
             object->animation.Update();
@@ -184,11 +184,11 @@ void Level2::Update([[maybe_unused]] double dt)
 
         for (auto explosion : mGameObjectList)
         {
-            if (explosion->data->name == "explosion")
+            if (explosion->name == "explosion")
             {
-                if (explosion->data->animation.IsAnimationEnded())
+                if (explosion->animation.IsAnimationEnded())
                 {
-                    explosion->data->isAlive = false;
+                    explosion->isAlive = false;
                 }
             }
         }
@@ -197,7 +197,7 @@ void Level2::Update([[maybe_unused]] double dt)
 
         for (auto asteroid : mGameObjectList)
         {
-            if (asteroid->data->name == "asteroid")
+            if (asteroid->name == "asteroid")
             {
                 mIsGameCleared = false;
             }

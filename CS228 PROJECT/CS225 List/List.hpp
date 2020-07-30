@@ -32,9 +32,14 @@ List<T>::~List()
 
 //copy constructor
 template<typename T>
-List<T>::List(const List<T>& rhs) : pHead(rhs.pHead), pTail(rhs.pTail), mSize(rhs.mSize) {}
+List<T>::List(const List<T>& rhs)
+{
+    pHead = rhs.pHead;
+    pTail = rhs.pTail;
+    mSize = rhs.mSize;
+}
 
-//move constructor
+//move constructor (OK)
 template<typename T>
 List<T>::List(List<T>&& rhs)
 {
@@ -70,8 +75,7 @@ List<T>& List<T>::operator=(List<T>&& rhs)
 {
     if (this != &rhs)
     {
-        delete pHead;
-        delete pTail;
+        clear();
 
         pHead = rhs.pHead;
         pTail = rhs.pTail;
@@ -186,24 +190,24 @@ typename List<T>::Iterator List<T>::end(void)
 template<typename T>
 typename List<T>::Iterator List<T>::erase(typename List<T>::Iterator target)
 {
-    typename List<T>::Iterator current = this->begin();
+    auto current = begin().nodePtr;
 
-    while (current != target)
+    while (current != target.nodePtr)
     {
-        current = (*current)->pNext;
+        current = current->pNext;
     }
 
-    typename List<T>::Iterator after = (*current)->pNext;
+    auto after = current->pNext;
 
-    if ((*current)->pPrev != nullptr)
+    if (current->pPrev != nullptr)
     {
-        (*current)->pPrev->pNext = (*after);
+        current->pPrev->pNext = after;
     }
     else //current target is Head.
     {
         if (after != nullptr)
         {
-            pHead = *after;
+            pHead = after;
         }
         else
         {
@@ -214,7 +218,7 @@ typename List<T>::Iterator List<T>::erase(typename List<T>::Iterator target)
 
     if (after != nullptr)
     {
-        (*after)->pPrev = (*current)->pPrev;
+        after->pPrev = current->pPrev;
     }
     else //current target is Tail.
     {
@@ -222,7 +226,7 @@ typename List<T>::Iterator List<T>::erase(typename List<T>::Iterator target)
         pTail->pPrev = nullptr;
     }
 
-    delete (*current);
+    delete current;
 
     mSize--;
 
@@ -351,7 +355,7 @@ bool List<T>::Iterator::operator>(const Iterator& rhs) const
 }
 
 template <typename T>
-typename List<T>::Node* List<T>::Iterator::operator*()
+T List<T>::Iterator::operator*()
 {
     if (nodePtr == nullptr)
     {
@@ -360,5 +364,5 @@ typename List<T>::Node* List<T>::Iterator::operator*()
         throw exception;
     }
 
-    return nodePtr;
+    return nodePtr->data;
 }
