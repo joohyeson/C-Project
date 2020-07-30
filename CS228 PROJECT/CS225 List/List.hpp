@@ -51,12 +51,15 @@ List<T>::List(List<T>&& rhs)
 template<typename T>
 List<T>& List<T>::operator=(const List<T>& rhs)
 {
-    delete pHead;
-    delete pTail;
+    if (this != &rhs)
+    {
+        delete pHead;
+        delete pTail;
 
-    pHead = rhs.pHead;
-    pTail = rhs.pTail;
-    mSize = rhs.mSize;
+        pHead = rhs.pHead;
+        pTail = rhs.pTail;
+        mSize = rhs.mSize;
+    }
 
     return *this;
 }
@@ -65,7 +68,19 @@ List<T>& List<T>::operator=(const List<T>& rhs)
 template<typename T>
 List<T>& List<T>::operator=(List<T>&& rhs)
 {
-    //std::swap?
+    if (this != &rhs)
+    {
+        delete pHead;
+        delete pTail;
+
+        pHead = rhs.pHead;
+        pTail = rhs.pTail;
+        mSize = rhs.mSize;
+
+        rhs.pHead = nullptr;
+        rhs.pTail = nullptr;
+        rhs.mSize = 0;
+    }
 
     return *this;
 }

@@ -300,10 +300,9 @@ void test8()
         std::cout << "Value : " << node->data << std::endl;
     }
 
-    //테스트가 잘못 된 것 같음
     std::cout << "\n#MOVE ASSIGNMENT OPERATOR" << std::endl;
-    List<int> listC, listD;
-    listC = std::move(listD); //move assign
+    List<int> listC;
+    listC = std::move(listB); //move assign
 
     for (auto node : listC)
     {
@@ -311,7 +310,7 @@ void test8()
     }
 
     std::cout << "\n#COPY CONSTRUCTOR" << std::endl;
-    List<int> listE(listA); //copy ctor
+    List<int> listE(listC); //copy ctor
 
     for (auto node : listE)
     {
@@ -319,7 +318,8 @@ void test8()
     }
 
     std::cout << "\n#COPY ASSIGNMENT OPERATOR" << std::endl;
-    listD = listB; //copy assign
+    List<int> listD;
+    listD = listE; //copy assign
 
     for (auto node : listD)
     {
