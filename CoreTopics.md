@@ -132,14 +132,12 @@ void Level1::Draw()//override Game State's pure virtual function
 - A template is a frame created so that a class or function once created can be used in multiple data types. The advantage of using a template is that the code is shortened and easy to modify because there is no need to rewrite the code multiple times.
 
 8. STL Container + Iterators + Algorithms
-- STL containers provide classes of data storage objects provided by STL.
-As STL container is a template, you must set the type of variable when declare the STL container.
-STL containers have various types and each has its pros and cons. So datas can be managed in a useful way if needed.
+- STL containers provide various types of template classes. STL Container is useful because programmer can choose what to use for the purpose, as each container has its own pros and cons.
 
-- STL Iterator is a repeater who can read and move the data memory address stored in the previous container.
-Similarly, since it is a template, you must set the type of variable and use it after receiving the container value that you want to access.
+- STL Iterator is a repeater who can read and move the data memory address stored in the previous container. 
+And iterator is an interface, that make the container and algorithm work as one.
 When using STL algorithms and other functions are also useful because iterators are easy to access the elements of the container.
 
-- STL Algorithm is a function that can be used using the container and repeater in front.
-You can include the <algorithm> library and use the functions in it.
-It is useful to have iterators in containers and to perform various tasks easily.
+- STL Algorithm is a function that is defined in the <algorithm> library.
+There are lots of different functions like 'find', 'erase' and so on.
+It is useful because programmer can perform various complex tasks, using iterators and containers with algorithm functions.
