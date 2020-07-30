@@ -32,6 +32,26 @@ private:
         return pNewNode;
     }
 
+    Node* MakeNode(T data, Node* next, Node* prev)
+    {
+        Node* pNewNode = new Node();
+        pNewNode->data = data;
+        if (next == nullptr)
+        {
+            pNewNode->pNext = next;
+        }
+        else
+        {
+            pNewNode->pNext = new Node();
+            pNewNode->pNext->data = next->data;
+        }
+
+        pNewNode->pPrev = prev;
+
+
+        return pNewNode;
+    }
+
 public:
     class Iterator
     {
