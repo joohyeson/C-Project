@@ -37,6 +37,12 @@ void MainMenu::Update(double/* dt*/)
     {
         Engine::GetGameStateManager().SetNextState(LEVEL1);
     }
+
+    if (Engine::GetInput().IsKeyTriggered(sf::Keyboard::F))
+    {
+        std::cout << "F" << std::endl;
+       // Engine::GetWindow().SetFullScreen();
+    }
 }
 
 void MainMenu::Unload()
