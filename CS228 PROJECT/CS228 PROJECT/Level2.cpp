@@ -30,6 +30,8 @@ Level2::Level2()
 Level2::~Level2()
 {
     delete mPlayer;
+
+    Unload();
 }
 
 void Level2::Load()
@@ -256,16 +258,6 @@ void Level2::Update([[maybe_unused]] double dt)
 void Level2::Unload()
 {
     mGameObjectList.clear();
-
-    //if (mGameObjectList.size() != 0)
-    //{
-    //    for (auto objectIterator = mGameObjectList.begin(); objectIterator != mGameObjectList.end(); ++objectIterator)
-    //    {
-    //        GameObject* object = *objectIterator;
-    //        mGameObjectList.erase(objectIterator);
-    //        delete object;
-    //    }
-    //}
 
     mPlayer = nullptr;
 }

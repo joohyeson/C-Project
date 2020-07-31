@@ -95,6 +95,8 @@ private:
     Node* pHead;
     Node* pTail;
     int mSize;
+
+    void deep_copy(const List<T>& rhs);
 };
 
 #include "List.hpp" //Template list usage

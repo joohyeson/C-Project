@@ -67,9 +67,9 @@ List<T>::Iterator List<T>::end(void)
 
 **Inheritance**
 
-- Inheritance is one of the important concepts of OOP (Object Oriented Programming) along with polymorphism and encapsulation. Inheritance has a base class (superclass) and derived class (subclass). The advantage of inheritance is that you can reuse functions. If you create a function or variable in the base class, you can use the same content as in the base class without declaring the same content in the derived class.
+- Inheritance is one of the important concepts of OOP (Object Oriented Programming) along with polymorphism and encapsulation. Inheritance has a base class (superclass) and derived class (subclass). The advantage of inheritance is that you can reuse code. If you create a function or variable in the base class, you can use the same content as in the base class without declaring the same content in the derived class.
 
-**Inheritance Example: GameState.h&Level1.h**
+**Inheritance Example: GameState.h&Level1.h** //This is more polymorphism, instead, GameObject will be better.
 ```c++
 class GameState//base class
 {
@@ -133,10 +133,17 @@ void GameStateManager::SetRunningState(double dt)
 
 6. Rule of 5, RAII, r-value references/Move Semantics
 
+ **RAII**
+- C++ has a risk of memory leak because the programmer has to free it manually. So RAII (Resource Acquisition Is Initialization) is used to eliminate the possibility of memory leak. Simply put, This is a programming concept where the initialize (constructor) the thing is done, and then it releases automatically in its destructor.
+So using RAII is useful because there will be no possible memory leak, so the code is more stable.
+```c++
+//RAII example here!
+```
+
  **Rule of 5**
 - Not like the rule of 0, that avoids defining default operations and does not allocate and deallocate. Rule of 5 has, along with Rule of 3 (copy constructor, assignment operator, assignment destructor), move constructor, and move assignment operator.
 Using the rule of 5 is important because the programmer can safely and efficiently implement RAII to manage dynamically allocated resources.
-
+//수동적으로 관리해야하는 할당같은 new도 같이 보여주기 manually manage the allocated resource.
 ```c++
     ~List();
 
@@ -146,26 +153,20 @@ Using the rule of 5 is important because the programmer can safely and efficient
     List<T>& operator=(List<T>&& rhs); //move assignment
 ```
 
- **RAII**
-- C++ has a risk of memory leak because the programmer has to free it manually. So RAII (Resource Acquisition Is Initialization) is used to eliminate the possibility of memory leak. Simply put, This is a programming concept where the initialize (constructor) the thing is done, and then it releases automatically in its destructor.
-So using RAII is useful because there will be no possible memory leak, so the code is more stable.
-```c++
-//RAII example here!
-```
-
  **r-value references/Move Semantics**
-- The r-value is what makes the move possible, not a copy of the memory to avoid unneeded copy. Here, the r-value is the value to the right of the expression. The r-value does not exist when the expression ends. For r-value reference, use operator &&.
+- The r-value is what makes the move possible, to avoid unneeded copy. Here, the r-value is the value to the right of the expression. The r-value does not exist when the expression ends. For r-value reference, use '&&'.
 ```c++
 //r-value example here!
 ```
 
 7. Templates
-- A template is a frame created so that a class or function once created can be used in multiple data types. The advantage of using a template is that the code is shortened and easy to modify because there is no need to rewrite the code multiple times.
+- A template is a frame created so that a class or function once created can be used with multiple data types. The advantage of using a template is that the code is shortened and easy to modify because there is no need to rewrite the code multiple times for every possible types.
 
 - Generics is the idea to allow type (Integer, String, and user-defined types) to be a parameter to methods, classes, and interfaces. 
 As it is independent of data type, so it is very reusable and convenient. 
 And generics can be implemented in C++ using Templates, like sort(), max(), min(), print().
 
+//member function of the List. Different all types but one function do one behavior.
 ```c++
 template<typename T>
 List<T>::List() : pHead(nullptr), pTail(nullptr), mSize(0) {}
@@ -186,7 +187,7 @@ Programmers can perform various complex tasks with algorithm functions using ite
 
 - STL Algorithm is a function that is defined in the <algorithm> library.
 There are search, sort, access, find, and so on.
-It is useful because one algorithm function can be used in all containers.
+It is useful because algorithm uses the iterator as an interface, so algorithm function can be used in all containers.
 
 ```c++
 //example here!
