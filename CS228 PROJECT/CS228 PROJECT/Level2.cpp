@@ -29,8 +29,6 @@ Level2::Level2()
 
 Level2::~Level2()
 {
-    delete mPlayer;
-
     Unload();
 }
 

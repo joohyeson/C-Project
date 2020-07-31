@@ -220,22 +220,15 @@ typename List<T>::Iterator List<T>::erase(typename List<T>::Iterator target)
 template<typename T>
 void List<T>::clear()
 {
-    for (auto iterator = begin(); iterator != end(); ++iterator)
+    Node* current = pHead;
+    Node* next;
+
+    while (current != nullptr)
     {
-        erase(iterator);
+	next = current->pNext;
+        delete next;
+        current = next;
     }
-
-    //Node* pTemp = NULL;
-    //Node* nodeptr = pHead;
-
-    //while (nodeptr != nullptr)
-    //{
-    //    pTemp = nodeptr->pNext;
-    //    delete nodeptr;
-    //    nodeptr = pTemp;
-    //}
-
-    //delete pTemp;
 }
 
 template<typename T>

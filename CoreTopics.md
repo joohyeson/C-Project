@@ -3,7 +3,15 @@
 1. Pointers + Arrays
 - Pointers are variables that indicate the location of another variable. If you put the value in the pointer, you can have an address value for that variable. And Using pointer, reference to the memory address makes it easy to access and manipulate various data types variables.
 
+```
+//example here!
+```
+
 - Arrays are lists of data of the same type as one variable. You can decide how much you want to use, then initialize the array, and use it. Arrays are sized according to the data type when declaring, so the index access is fast. So arrays are useful when the indices are important.
+
+```
+//example here!
+```
 
 2. Bit operations
 - A bit is the smallest unit that the computer can use, to save the binary digits like '1011'.
@@ -69,7 +77,7 @@ List<T>::Iterator List<T>::end(void)
 
 - Inheritance is one of the important concepts of OOP (Object Oriented Programming) along with polymorphism and encapsulation. Inheritance has a base class (superclass) and derived class (subclass). The advantage of inheritance is that you can reuse code. If you create a function or variable in the base class, you can use the same content as in the base class without declaring the same content in the derived class.
 
-**Inheritance Example: GameState.h&Level1.h** //This is more polymorphism, instead, GameObject will be better.
+**Inheritance Example: GameState.h&Level1.h**
 ```c++
 class GameState//base class
 {
@@ -109,7 +117,7 @@ private:
 
 **Polymorphism Example: Level1::Draw().h&Level2::Draw()&GameStateManager::SetRunningState()**
 ```c++
-void Level1::Draw()//override Game State's pure virtual function
+void Level1::Draw() //override Game State's pure virtual function
 {
     Engine::GetWindow().Clear(sf::Color(LIGHT_BLUE));
     text.setString("Minesweeper");
@@ -143,10 +151,19 @@ So using RAII is useful because there will be no possible memory leak, so the co
  **Rule of 5**
 - Not like the rule of 0, that avoids defining default operations and does not allocate and deallocate. Rule of 5 has, along with Rule of 3 (copy constructor, assignment operator, assignment destructor), move constructor, and move assignment operator.
 Using the rule of 5 is important because the programmer can safely and efficiently implement RAII to manage dynamically allocated resources.
-//수동적으로 관리해야하는 할당같은 new도 같이 보여주기 manually manage the allocated resource.
 ```c++
-    ~List();
+    //We have to manually manage the allocated resources, so we need rule of 5 to handle resources more safely and efficiently.
+    Node* MakeNode(T data)
+    {
+        Node* pNewNode = new Node();
+        pNewNode->data = data;
+        pNewNode->pNext = nullptr;
+        pNewNode->pPrev = nullptr;
 
+        return pNewNode;
+    }
+
+    ~List();
     List(const List<T>& rhs); // copy constructor
     List(List<T>&& rhs); // move constructor
     List<T>& operator=(const List<T>& rhs); // copy assignment
@@ -166,10 +183,30 @@ Using the rule of 5 is important because the programmer can safely and efficient
 As it is independent of data type, so it is very reusable and convenient. 
 And generics can be implemented in C++ using Templates, like sort(), max(), min(), print().
 
-//member function of the List. Different all types but one function do one behavior.
 ```c++
+// These are member functions of the List class. 
+// All the different types will do the same behavior in the template functions.
 template<typename T>
-List<T>::List() : pHead(nullptr), pTail(nullptr), mSize(0) {}
+class List
+{
+    void push_front(T value);
+    void push_back(T value);
+
+    T pop_front(void);
+    T pop_back(void);
+
+    Iterator begin(void);
+    Iterator end(void);
+
+    Iterator erase(Iterator target);
+    void clear();
+
+    T back(void);
+    T front(void);
+
+    bool empty(void);
+    int size(void);
+}
 ```
 
 8. STL Container + Iterators + Algorithms
