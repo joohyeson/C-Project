@@ -172,6 +172,75 @@ void Level1::Draw()
     }
 }
 
+bool Level1::CanVisit(void)
+{
+    if (mToVisit.empty() == true)
+    {
+        return true;
+    }
+    else
+    {
+        Vector2DInt currentLocation = mToVisit.front();
+
+        mToVisit.pop_front();
+        board->GetCell(currentLocation)->SetToImage(Images::Red);
+
+        Vector2DInt above = { currentLocation.x, currentLocation.y + 1 };
+        Vector2DInt right = { currentLocation.x + 1, currentLocation.y };
+        Vector2DInt bellow = { currentLocation.x, currentLocation.y - 1 };
+        Vector2DInt left = { currentLocation.x - 1, currentLocation.y };
+
+        if (TryToAdd(above) == true)
+        {
+            mToVisit.push_back(above);
+        }
+
+        if (TryToAdd(right) == true)
+        {
+            mToVisit.push_back(right);
+        }
+
+        if (TryToAdd(bellow) == true)
+        {
+            mToVisit.push_back(bellow);
+        }
+
+        if (TryToAdd(left) == true)
+        {
+            mToVisit.push_back(left);
+        }
+
+        return false;
+    }
+}
+
+void Level1::Selected(int x, int y)
+{
+    mToVisit.clear();
+
+
+    //mGrid->GetCell(cellLocation)->SetToImage(Images::RedX);
+
+    mToVisit.push_back(std::list<int>(x,y));
+}
+
+bool Level1::TryToAdd(int x, int y)
+{
+    if (mGrid->GetCell(cellPos) == nullptr)
+    {
+        return false;
+    }
+
+    if (mGrid->GetCell(cellPos)->GetImage() != Images::None)
+    {
+        return false;
+    }
+
+    mGrid->GetCell(cellPos)->SetToImage(Images::RedX);
+
+    return true;
+}
+
 void Level1::Update([[maybe_unused]] double dt)
 {
     sf::Vector2i mousePosition = sf::Mouse::getPosition(Engine::GetWindow().GetWindow());
@@ -194,7 +263,6 @@ void Level1::Update([[maybe_unused]] double dt)
             {
                 mShowGrid[x][y] = FLAG;
             }
-
         }
     }
 
