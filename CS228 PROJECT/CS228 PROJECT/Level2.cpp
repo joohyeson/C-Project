@@ -219,14 +219,6 @@ void Level2::Update([[maybe_unused]] double dt)
             }
         }
 
-        //Release
-        if (Engine::GetInput().IsKeyReleased(sf::Keyboard::Space))
-        {
-            Bullet* bullet = new Bullet();
-            bullet->SetValues(mBulletAnimation, mPlayer->x, mPlayer->y, mPlayer->angle, 10.0f);
-            mGameObjectList.push_back(bullet);
-        }
-
         if (Engine::GetInput().IsKeyPressed(sf::Keyboard::Right))
         {
             mPlayer->angle += MOVING_ANGLE;
@@ -244,6 +236,13 @@ void Level2::Update([[maybe_unused]] double dt)
         else
         {
             mPlayer->SetIsMoving(false);
+        }
+
+        if (Engine::GetInput().IsKeyReleased(sf::Keyboard::Space))
+        {
+            Bullet* bullet = new Bullet();
+            bullet->SetValues(mBulletAnimation, mPlayer->x, mPlayer->y, mPlayer->angle, 10.0f);
+            mGameObjectList.push_back(bullet);
         }
     }
 
