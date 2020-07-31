@@ -41,6 +41,8 @@ public:
 
     void Reset();
 
+    void ResetRelease();
+
 private:
     std::bitset<sf::Keyboard::KeyCount> mKeyPressed;
     std::bitset<sf::Keyboard::KeyCount> mKeyReleased;

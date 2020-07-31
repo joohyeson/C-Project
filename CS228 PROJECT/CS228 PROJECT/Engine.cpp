@@ -51,6 +51,7 @@ void  Engine::Update()
 
         mWindow.Update();
         mGameStateManager.Update(dt);
+        mInput.Reset();
     }
 
     if (timer >= LIMITE_TIME)

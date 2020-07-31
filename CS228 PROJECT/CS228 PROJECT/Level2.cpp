@@ -220,7 +220,7 @@ void Level2::Update([[maybe_unused]] double dt)
         }
 
         //Release
-        if (Engine::GetInput().IsKeyPressed(sf::Keyboard::Space))
+        if (Engine::GetInput().IsKeyReleased(sf::Keyboard::Space))
         {
             Bullet* bullet = new Bullet();
             bullet->SetValues(mBulletAnimation, mPlayer->x, mPlayer->y, mPlayer->angle, 10.0f);

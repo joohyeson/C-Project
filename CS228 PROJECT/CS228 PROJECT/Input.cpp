@@ -29,6 +29,7 @@ Input::~Input() {}
 
 void Input::Update(sf::Event inputEvent)
 {
+
     switch (inputEvent.type)
     {
     case sf::Event::EventType::KeyPressed:
@@ -91,14 +92,16 @@ void Input::SetPressedKey(sf::Keyboard::Key scancode)
     if (mKeyPressed[scancode] != true)
     {
         mKeyPressed[scancode] = true;
-        mKeyTriggered[scancode] = true;
     }
 }
 
 void Input::SetReleasedKey(sf::Keyboard::Key scancode)
 {
-    mKeyPressed[scancode] = false;
-    mKeyReleased[scancode] = true;
+    if (mKeyPressed[scancode] == true)
+    {
+        mKeyPressed[scancode] = false;
+        mKeyReleased[scancode] = true;
+    }
 }
 
 void Input::SetPressedMouse(sf::Mouse::Button mouseButton)
@@ -129,4 +132,9 @@ void Input::Reset()
 
     mMouseReleased.reset();
     mMouseTriggered.reset();
+}
+
+void Input::ResetRelease()
+{
+    mKeyReleased.reset();
 }
