@@ -29,7 +29,6 @@ Input::~Input() {}
 
 void Input::Update(sf::Event inputEvent)
 {
-
     switch (inputEvent.type)
     {
     case sf::Event::EventType::KeyPressed:

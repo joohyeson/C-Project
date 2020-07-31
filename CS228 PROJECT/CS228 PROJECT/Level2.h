@@ -28,8 +28,8 @@ public:
     std::string GetName() override { return "Level2"; }
 
 private:
-    bool mShouldGameRun;
-    bool mIsGameCleared;
+    unsigned char mFlags = 0;
+    int mBulletLimit = 100;
     
     Player* mPlayer;
 
