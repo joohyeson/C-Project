@@ -14,6 +14,7 @@ Creation date: 21/07/2020
 #include "Asteroid.h"
 #include "Bullet.h"
 #include "Colors.h"
+#include <iostream>
 
 constexpr int NUMBER_OF_ASTEROID = 7;
 constexpr int RADIUS_OF_ASTEROID = 15;
@@ -58,7 +59,7 @@ void Level2::Load()
         mPlayer = new Player();
     }
 
-    mPlayer->SetValues(playerAnimation, Engine::GetWindow().GetSize().x / 2.0f, Engine::GetWindow().GetSize().y / 2.0f, 0, 20);
+    mPlayer->SetValues(playerAnimation, static_cast<float>(Engine::GetWindow().GetSize().x >> 1), static_cast<float>(Engine::GetWindow().GetSize().y >> 1), 0, 20);
     mGameObjectList.push_back(mPlayer);
 
     for (int i = 0; i < NUMBER_OF_ASTEROID; i++)
@@ -89,14 +90,14 @@ void Level2::Draw()
     if (mShouldGameRun == false)
     {
         text.setString("Game Over.. Press R key to restart.");
-        text.setPosition(sf::Vector2f(Engine::GetWindow().GetSize().x / 2.0f, Engine::GetWindow().GetSize().y / 2.0f));
+        text.setPosition(sf::Vector2f(static_cast<float>(Engine::GetWindow().GetSize().x >> 1), static_cast<float>(Engine::GetWindow().GetSize().y >> 1)));
         Engine::GetWindow().Draw(text);
     }
 
     if (mIsGameCleared == true)
     {
         text.setString("Level Clear!");
-        text.setPosition(sf::Vector2f(Engine::GetWindow().GetSize().x / 2.0f, Engine::GetWindow().GetSize().y / 2.0f));
+        text.setPosition(sf::Vector2f(static_cast<float>(Engine::GetWindow().GetSize().x >> 1), static_cast<float>(Engine::GetWindow().GetSize().y >> 1)));
         Engine::GetWindow().Draw(text);
     }
 }
@@ -155,7 +156,7 @@ void Level2::Update([[maybe_unused]] double dt)
                         explosion->name = "explosion";
                         mGameObjectList.push_back(explosion);
 
-                        mPlayer->SetValues(playerAnimation, Engine::GetWindow().GetSize().x / 2.0f, Engine::GetWindow().GetSize().y / 2.0f, 0, 20);
+                        mPlayer->SetValues(playerAnimation, static_cast<float>(Engine::GetWindow().GetSize().x >> 1), static_cast<float>(Engine::GetWindow().GetSize().y >> 1), 0, 20);
                         mPlayer->dx = 0;
                         mPlayer->dy = 0;
 

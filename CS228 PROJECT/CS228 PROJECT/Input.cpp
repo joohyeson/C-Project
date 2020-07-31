@@ -118,8 +118,8 @@ void Input::SetReleasedMouse(sf::Mouse::Button mouseButton)
 
 void Input::SetMousePosition(sf::Vector2i position)
 {
-    mMouse.x = position.x - Engine::GetWindow().GetSize().x / 2;
-    mMouse.y = -(position.y - static_cast<int>(Engine::GetWindow().GetSize().y) / 2);
+    mMouse.x = position.x - static_cast<int>(Engine::GetWindow().GetSize().x >> 1);
+    mMouse.y = -(position.y - static_cast<int>(Engine::GetWindow().GetSize().y >> 1));
 }
 
 void Input::Reset()

@@ -48,6 +48,11 @@ AND(&) 0011
              = 1100'0000
 ```
 
+```c++
+//We used '>>' instead using like Engine::GetWindow().GetSize().x / 2.
+Engine::GetWindow().GetSize().x >> 1
+```
+
 3. Operator Overloading
 - Operator overloading is to redefine existing =,-,*, etc. operators. In this way, you can use operators like class+class and class*class.
 - It can be used by redefining the operator within the function. The code below is how I used 'Operator Overloading' for this project.
