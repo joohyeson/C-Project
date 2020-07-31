@@ -420,6 +420,31 @@ void test9()
 
 }
 
+void test10()
+{
+    std::cout << "\nTEST#10 CLEAR" << std::endl;
+
+    List<int> listA;
+
+    for (int i = 1; i <= NUM_OF_NODES; i++)
+    {
+        listA.push_back(i);
+    }
+
+    std::cout << "\n#ListA" << std::endl;
+    for (auto node : listA)
+    {
+        std::cout << "Value : " << node << std::endl;
+    }
+    
+    std::cout << "Size : " << listA.size() << std::endl;
+
+    listA.clear();
+    std::cout << "\n===========AFTER CLEAR===========" << std::endl;
+
+    std::cout << "Size : " << listA.size() << std::endl;
+}
+
 int main(int argc, char** argv)
 {
 #if defined(_DEBUG)
@@ -446,11 +471,12 @@ int main(int argc, char** argv)
         test7();
         test8();
         test9();
+        test10();
     }
     else
     {
         typedef void(*Test)(void);
-        Test Tests[] = { test1, test2, test3, test4, test5, test6, test7, test8, test9 };
+        Test Tests[] = { test1, test2, test3, test4, test5, test6, test7, test8, test9, test10 };
 
         Tests[testNum - 1]();
     }

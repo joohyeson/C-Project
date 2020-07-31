@@ -12,7 +12,7 @@ void GameObject::SetValues(Animation& newAnimation, float newX, float newY, floa
 void GameObject::Draw(sf::RenderWindow& window)
 {
     animation.GetAnimationSprite().setPosition(x, y);
-    animation.GetAnimationSprite().setRotation(angle + 90);
+    animation.GetAnimationSprite().setRotation(angle + 90.0f);
     window.draw(animation.GetAnimationSprite());
 
     sf::CircleShape circle(radius);

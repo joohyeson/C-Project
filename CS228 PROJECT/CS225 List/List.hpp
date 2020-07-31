@@ -211,6 +211,7 @@ typename List<T>::Iterator List<T>::erase(typename List<T>::Iterator target)
     }
 
     delete current;
+    current = nullptr;
 
     mSize--;
 
@@ -225,10 +226,14 @@ void List<T>::clear()
 
     while (current != nullptr)
     {
-	next = current->pNext;
-        delete next;
+        next = current->pNext;
+        delete current;
+        --mSize;
         current = next;
     }
+
+    pHead = nullptr;
+    pTail = nullptr;
 }
 
 template<typename T>

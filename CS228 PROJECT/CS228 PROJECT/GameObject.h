@@ -23,7 +23,7 @@ public:
     bool IsCollideWith(GameObject* object);
     virtual ~GameObject() {};
 
-    float x, y, dx, dy, radius, angle;
+    float x, y, dx, dy, angle, radius;
     bool isAlive = true;
     std::string name;
     Animation animation;
