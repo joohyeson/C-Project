@@ -11,7 +11,7 @@ Creation date: 21/07/2020
 
 #pragma once
 
-constexpr unsigned int RED = 0xFF0000FF;
+constexpr unsigned int  RED = 0xFF0000FF;
 constexpr unsigned int  GREEN = 0x00695CFF;
 constexpr unsigned int  BLUE = 0x0000FFFF;
 constexpr unsigned int  PURPLE = 0x673AB7FF;

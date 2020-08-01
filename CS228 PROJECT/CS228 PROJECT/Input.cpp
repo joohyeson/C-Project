@@ -51,6 +51,12 @@ void Input::Update(sf::Event inputEvent)
     }
 }
 
+void Input::KeyUpdate()
+{
+    mKeyReleased = mKeyPressed;
+    mMouseReleased = mMousePressed;
+}
+
 bool Input::IsKeyPressed(sf::Keyboard::Key scancode)
 {
     return mKeyPressed[scancode];
@@ -58,12 +64,12 @@ bool Input::IsKeyPressed(sf::Keyboard::Key scancode)
 
 bool Input::IsKeyReleased(sf::Keyboard::Key scancode)
 {
-    return mKeyReleased[scancode];
+    return mKeyPressed[scancode]==false;
 }
 
 bool Input::IsKeyTriggered(sf::Keyboard::Key scancode)
 {
-    return mKeyTriggered[scancode];
+    return mKeyPressed[scancode] == true && mKeyReleased[scancode] == false;
 }
 
 bool Input::IsMousePressed(sf::Mouse::Button mouseButton)
@@ -91,14 +97,17 @@ void Input::SetPressedKey(sf::Keyboard::Key scancode)
     if (mKeyPressed[scancode] != true)
     {
         mKeyPressed[scancode] = true;
-        mKeyTriggered[scancode] = true;
     }
 }
 
 void Input::SetReleasedKey(sf::Keyboard::Key scancode)
 {
+    if (mKeyReleased[scancode] != true)
+    {
+        mKeyReleased[scancode] = true;
+    }
     mKeyPressed[scancode] = false;
-    mKeyReleased[scancode] = true;
+
 }
 
 void Input::SetPressedMouse(sf::Mouse::Button mouseButton)
@@ -106,7 +115,6 @@ void Input::SetPressedMouse(sf::Mouse::Button mouseButton)
     if (mMousePressed[mouseButton] != true)
     {
         mMousePressed[mouseButton] = true;
-        mMouseTriggered[mouseButton] = true;
     }
 }
 
@@ -118,8 +126,8 @@ void Input::SetReleasedMouse(sf::Mouse::Button mouseButton)
 
 void Input::SetMousePosition(sf::Vector2i position)
 {
-    mMouse.x = position.x - Engine::GetWindow().GetSize().x / 2;
-    mMouse.y = -(position.y - static_cast<int>(Engine::GetWindow().GetSize().y) / 2);
+    mMouse.x = position.x - static_cast<int>(Engine::GetWindow().GetSize().x >> 1);
+    mMouse.y = -(position.y - static_cast<int>(Engine::GetWindow().GetSize().y >> 1));
 }
 
 void Input::Reset()
@@ -129,4 +137,9 @@ void Input::Reset()
 
     mMouseReleased.reset();
     mMouseTriggered.reset();
+}
+
+void Input::ResetRelease()
+{
+    mKeyReleased.reset();
 }

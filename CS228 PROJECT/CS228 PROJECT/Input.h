@@ -40,6 +40,8 @@ public:
     sf::Vector2i GetMousePosition(void);
 
     void Reset();
+    void KeyUpdate();
+    void ResetRelease();
 
 private:
     std::bitset<sf::Keyboard::KeyCount> mKeyPressed;

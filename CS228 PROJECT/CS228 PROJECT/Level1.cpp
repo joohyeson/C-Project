@@ -272,9 +272,14 @@ void Level1::Update([[maybe_unused]] double dt)
         mShouldGameRun = true;
     }
 
-    if (Engine::GetInput().IsKeyPressed(sf::Keyboard::Space))
+    if (Engine::GetInput().IsKeyReleased(sf::Keyboard::Space))
     {
         Engine::GetGameStateManager().SetNextState(LEVEL2);
+    }
+
+    if (Engine::GetInput().IsKeyTriggered(sf::Keyboard::Escape) == true)
+    {
+        Engine::GetGameStateManager().Shutdown();
     }
 }
 

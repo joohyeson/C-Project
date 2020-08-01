@@ -28,13 +28,13 @@ public:
     std::string GetName() override { return "Level2"; }
 
 private:
-    bool mShouldGameRun;
-    bool mIsGameCleared;
-    
+    unsigned char mFlags;
+    int mBulletLimit;
+
     Player* mPlayer;
 
     List<GameObject*> mGameObjectList;
-    
+
     Animation mBulletAnimation;
     Animation playerMoveAnimation;
     Animation playerAnimation;

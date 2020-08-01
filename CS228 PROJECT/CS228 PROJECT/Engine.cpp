@@ -49,8 +49,9 @@ void  Engine::Update()
             mInput.Update(event);
         }
 
-        mWindow.Update();
         mGameStateManager.Update(dt);
+        mInput.KeyUpdate();
+        mWindow.Update();
     }
 
     if (timer >= LIMITE_TIME)
