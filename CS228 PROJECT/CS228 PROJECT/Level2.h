@@ -28,8 +28,8 @@ public:
     std::string GetName() override { return "Level2"; }
 
 private:
-    unsigned char mFlags = 0;
-    int mBulletLimit = 100;
+    unsigned char mFlags;
+    int mBulletLimit;
 
     Player* mPlayer;
 

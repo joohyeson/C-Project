@@ -17,6 +17,7 @@ Creation date: 21/07/2020
 #include <iostream>
 
 constexpr int NUMBER_OF_ASTEROID = 7;
+constexpr int NUMBER_OF_BULLETS = 150;
 constexpr int RADIUS_OF_ASTEROID = 15;
 constexpr float MOVING_ANGLE = 3.0f;
 
@@ -25,6 +26,8 @@ constexpr unsigned char IS_CLEARED = 1 << 1;
 
 Level2::Level2()
 {
+    mFlags = 0;
+    mBulletLimit = NUMBER_OF_BULLETS;
     mPlayer = new Player();
 }
 
@@ -35,6 +38,9 @@ Level2::~Level2()
 
 void Level2::Load()
 {
+    mFlags = 0;
+    mBulletLimit = NUMBER_OF_BULLETS;
+
     shipTexture.loadFromFile("../Assets/Art/spaceship.png");
     backgroundTexture.loadFromFile("../Assets/Art/background.jpg");
     explosionTexture.loadFromFile("../Assets/Art/explosions/type_C.png");
@@ -105,7 +111,7 @@ void Level2::Draw()
     if (mFlags & IS_CLEARED)
     {
         text.setString("Level Clear!");
-        text.setPosition(sf::Vector2f(static_cast<float>(Engine::GetWindow().GetSize().x >> 1), static_cast<float>(Engine::GetWindow().GetSize().y >> 1)));
+        text.setPosition(sf::Vector2f(static_cast<float>(Engine::GetWindow().GetSize().x >> 1), static_cast<float>(Engine::GetWindow().GetSize().y >> 1) + 50 ));
         Engine::GetWindow().Draw(text);
     }
 
@@ -113,7 +119,7 @@ void Level2::Draw()
 
 void Level2::Update([[maybe_unused]] double dt)
 {
-    if (!mFlags & IS_GAME_OVER)
+    if (!(mFlags & IS_GAME_OVER))
     {
         for (auto objectAIterator = mGameObjectList.begin(); objectAIterator != mGameObjectList.end(); ++objectAIterator)
         {
@@ -304,13 +310,11 @@ void Level2::Update([[maybe_unused]] double dt)
             mPlayer->SetIsMoving(false);
         }
 
+        for (auto object : mGameObjectList)
+        {
+            object->Draw(Engine::GetWindow().GetWindow());
+        }
     }
-
-    for (auto object : mGameObjectList)
-    {
-        object->Draw(Engine::GetWindow().GetWindow());
-    }
-  
 
     if (Engine::GetInput().IsKeyPressed(sf::Keyboard::R))
     {
