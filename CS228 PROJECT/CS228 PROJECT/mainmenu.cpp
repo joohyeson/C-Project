@@ -33,19 +33,19 @@ void MainMenu::Draw()
 
 void MainMenu::Update(double/* dt*/)
 {
-    if (Engine::GetInput().IsKeyReleased(sf::Keyboard::Space) == true)
+    if (Engine::GetInput().IsKeyTriggered(sf::Keyboard::Space) == true)
     {
         
         Engine::GetGameStateManager().SetNextState(LEVEL1);
     }
 
-    if (Engine::GetInput().IsKeyReleased(sf::Keyboard::F))
+    if (Engine::GetInput().IsKeyTriggered(sf::Keyboard::F))
     {
        std::cout << "F" << std::endl;
-       Engine::GetWindow().SetFullScreen();
+       //Engine::GetWindow().SetFullScreen();
     }
 
-    if (Engine::GetInput().IsKeyReleased(sf::Keyboard::Escape) == true)
+    if (Engine::GetInput().IsKeyTriggered(sf::Keyboard::Escape) == true)
     {
         Engine::GetGameStateManager().Shutdown();
     }

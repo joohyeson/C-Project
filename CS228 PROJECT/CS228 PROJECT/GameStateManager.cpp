@@ -88,10 +88,11 @@ void GameStateManager::SetRunningState(double dt)
     {
         mState = State::UNLOAD;
     }
-
+    
     mCurrentGameState->Draw();
-
     mCurrentGameState->Update(dt);
+
+   
 }
 
 void GameStateManager::SetUnloadState()

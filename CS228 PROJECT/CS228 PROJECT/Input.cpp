@@ -29,7 +29,6 @@ Input::~Input() {}
 
 void Input::Update(sf::Event inputEvent)
 {
-
     switch (inputEvent.type)
     {
     case sf::Event::EventType::KeyPressed:
@@ -52,6 +51,12 @@ void Input::Update(sf::Event inputEvent)
     }
 }
 
+void Input::KeyUpdate()
+{
+    mKeyReleased = mKeyPressed;
+    mMouseReleased = mMousePressed;
+}
+
 bool Input::IsKeyPressed(sf::Keyboard::Key scancode)
 {
     return mKeyPressed[scancode];
@@ -59,12 +64,12 @@ bool Input::IsKeyPressed(sf::Keyboard::Key scancode)
 
 bool Input::IsKeyReleased(sf::Keyboard::Key scancode)
 {
-    return mKeyReleased[scancode];
+    return mKeyPressed[scancode]==false;
 }
 
 bool Input::IsKeyTriggered(sf::Keyboard::Key scancode)
 {
-    return mKeyTriggered[scancode];
+    return mKeyPressed[scancode] == true && mKeyReleased[scancode] == false;
 }
 
 bool Input::IsMousePressed(sf::Mouse::Button mouseButton)
@@ -97,11 +102,12 @@ void Input::SetPressedKey(sf::Keyboard::Key scancode)
 
 void Input::SetReleasedKey(sf::Keyboard::Key scancode)
 {
-    if (mKeyPressed[scancode] == true)
+    if (mKeyReleased[scancode] != true)
     {
-        mKeyPressed[scancode] = false;
         mKeyReleased[scancode] = true;
     }
+    mKeyPressed[scancode] = false;
+
 }
 
 void Input::SetPressedMouse(sf::Mouse::Button mouseButton)
@@ -109,7 +115,6 @@ void Input::SetPressedMouse(sf::Mouse::Button mouseButton)
     if (mMousePressed[mouseButton] != true)
     {
         mMousePressed[mouseButton] = true;
-        mMouseTriggered[mouseButton] = true;
     }
 }
 

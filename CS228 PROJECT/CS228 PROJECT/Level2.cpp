@@ -100,6 +100,8 @@ void Level2::Draw()
         text.setPosition(sf::Vector2f(static_cast<float>(Engine::GetWindow().GetSize().x >> 1), static_cast<float>(Engine::GetWindow().GetSize().y >> 1)));
         Engine::GetWindow().Draw(text);
     }
+
+
 }
 
 void Level2::Update([[maybe_unused]] double dt)
@@ -127,7 +129,7 @@ void Level2::Update([[maybe_unused]] double dt)
                         GameObject* explosion = new GameObject();
                         explosion->SetValues(explosionAnimation, objectA->x, objectA->y);
                         explosion->name = "explosion";
-                        mGameObjectList.push_back(explosion);
+                        mGameObjectList.push_front(explosion);
 
                         for (int i = 0; i < 2; i++)
                         {
@@ -139,7 +141,35 @@ void Level2::Update([[maybe_unused]] double dt)
                             {
                                 GameObject* asteroid = new Asteroid();
                                 asteroid->SetValues(smallRockAnimation, objectA->x, objectA->y, static_cast<float>(rand() % 360), 15.0f);
-                                mGameObjectList.push_back(asteroid);
+                                mGameObjectList.push_front(asteroid);
+                            }
+                        }
+                    }
+                }
+
+                if (objectA->name == "bullet" && objectB->name == "asteroid")
+                {
+                    if (objectB->IsCollideWith(objectA))
+                    {
+                        objectA->isAlive = false;
+                        objectB->isAlive = false;
+
+                        GameObject* explosion = new GameObject();
+                        explosion->SetValues(explosionAnimation, objectB->x, objectB->y);
+                        explosion->name = "explosion";
+                        mGameObjectList.push_front(explosion);
+
+                        for (int i = 0; i < 2; i++)
+                        {
+                            if (objectB->radius == RADIUS_OF_ASTEROID)
+                            {
+                                continue;
+                            }
+                            else
+                            {
+                                GameObject* asteroid = new Asteroid();
+                                asteroid->SetValues(smallRockAnimation, objectB->x, objectB->y, static_cast<float>(rand() % 360), 15.0f);
+                                mGameObjectList.push_front(asteroid);
                             }
                         }
                     }
@@ -154,7 +184,26 @@ void Level2::Update([[maybe_unused]] double dt)
                         GameObject* explosion = new GameObject();
                         explosion->SetValues(explosionAnimation, objectA->x, objectA->y);
                         explosion->name = "explosion";
-                        mGameObjectList.push_back(explosion);
+                        mGameObjectList.push_front(explosion);
+
+                        mPlayer->SetValues(playerAnimation, static_cast<float>(Engine::GetWindow().GetSize().x >> 1), static_cast<float>(Engine::GetWindow().GetSize().y >> 1), 0, 20);
+                        mPlayer->dx = 0;
+                        mPlayer->dy = 0;
+
+                        mShouldGameRun = false;
+                    }
+                }
+
+                if (objectA->name == "asteroid" && objectB->name == "player")
+                {
+                    if (objectB->IsCollideWith(objectA))
+                    {
+                        objectA->isAlive = false;
+
+                        GameObject* explosion = new GameObject();
+                        explosion->SetValues(explosionAnimation, objectB->x, objectB->y);
+                        explosion->name = "explosion";
+                        mGameObjectList.push_front(explosion);
 
                         mPlayer->SetValues(playerAnimation, static_cast<float>(Engine::GetWindow().GetSize().x >> 1), static_cast<float>(Engine::GetWindow().GetSize().y >> 1), 0, 20);
                         mPlayer->dx = 0;
@@ -164,11 +213,6 @@ void Level2::Update([[maybe_unused]] double dt)
                     }
                 }
             }
-        }
-
-        for (auto object : mGameObjectList)
-        {
-            object->Draw(Engine::GetWindow().GetWindow());
         }
 
         for (auto objectIterator = mGameObjectList.begin(); objectIterator != mGameObjectList.end();)
@@ -238,13 +282,19 @@ void Level2::Update([[maybe_unused]] double dt)
             mPlayer->SetIsMoving(false);
         }
 
-        if (Engine::GetInput().IsKeyReleased(sf::Keyboard::Space))
+        if (Engine::GetInput().IsKeyTriggered(sf::Keyboard::Space))
         {
             Bullet* bullet = new Bullet();
             bullet->SetValues(mBulletAnimation, mPlayer->x, mPlayer->y, mPlayer->angle, 10.0f);
-            mGameObjectList.push_back(bullet);
+            mGameObjectList.push_front(bullet);
         }
     }
+
+    for (auto object : mGameObjectList)
+    {
+        object->Draw(Engine::GetWindow().GetWindow());
+    }
+  
 
     if (Engine::GetInput().IsKeyPressed(sf::Keyboard::R))
     {
