@@ -20,12 +20,12 @@ constexpr int NUMBER_OF_ASTEROID = 7;
 constexpr int RADIUS_OF_ASTEROID = 15;
 constexpr float MOVING_ANGLE = 3.0f;
 
-Level2::Level2() 
+constexpr unsigned char IS_GAME_OVER = 1 << 0;
+constexpr unsigned char IS_CLEARED = 1 << 1;
+
+Level2::Level2()
 {
     mPlayer = new Player();
-
-    mShouldGameRun = true;
-    mIsGameCleared = false;
 }
 
 Level2::~Level2()
@@ -87,26 +87,33 @@ void Level2::Draw()
 
     Engine::GetWindow().GetWindow().setFramerateLimit(60);
 
-    if (mShouldGameRun == false)
+    if (mFlags & IS_GAME_OVER)
     {
         text.setString("Game Over.. Press R key to restart.");
         text.setPosition(sf::Vector2f(static_cast<float>(Engine::GetWindow().GetSize().x >> 1), static_cast<float>(Engine::GetWindow().GetSize().y >> 1)));
         Engine::GetWindow().Draw(text);
     }
+    else
+    {
+        sf::String bulletInfo = "Number of bullets left : ";
+        bulletInfo += std::to_string(mBulletLimit);
+        text.setString(bulletInfo);
+        text.setPosition(sf::Vector2f(static_cast<float>(Engine::GetWindow().GetSize().x >> 1), static_cast<float>(Engine::GetWindow().GetSize().y >> 1)));
+        Engine::GetWindow().Draw(text);
+    }
 
-    if (mIsGameCleared == true)
+    if (mFlags & IS_CLEARED)
     {
         text.setString("Level Clear!");
         text.setPosition(sf::Vector2f(static_cast<float>(Engine::GetWindow().GetSize().x >> 1), static_cast<float>(Engine::GetWindow().GetSize().y >> 1)));
         Engine::GetWindow().Draw(text);
     }
 
-
 }
 
 void Level2::Update([[maybe_unused]] double dt)
 {
-    if (mShouldGameRun == true)
+    if (!mFlags & IS_GAME_OVER)
     {
         for (auto objectAIterator = mGameObjectList.begin(); objectAIterator != mGameObjectList.end(); ++objectAIterator)
         {
@@ -190,7 +197,7 @@ void Level2::Update([[maybe_unused]] double dt)
                         mPlayer->dx = 0;
                         mPlayer->dy = 0;
 
-                        mShouldGameRun = false;
+                        mFlags |= IS_GAME_OVER;
                     }
                 }
 
@@ -209,7 +216,7 @@ void Level2::Update([[maybe_unused]] double dt)
                         mPlayer->dx = 0;
                         mPlayer->dy = 0;
 
-                        mShouldGameRun = false;
+                        mFlags |= IS_GAME_OVER;
                     }
                 }
             }
@@ -224,6 +231,10 @@ void Level2::Update([[maybe_unused]] double dt)
 
             if (object->isAlive == false)
             {
+                if (object->name == "Bullet")
+                {
+                    mBulletLimit++;
+                }
                 objectIterator = mGameObjectList.erase(objectIterator);
                 delete object;
             }
@@ -253,13 +264,24 @@ void Level2::Update([[maybe_unused]] double dt)
             }
         }
 
-        mIsGameCleared = true;
+        mFlags |= IS_CLEARED;
 
         for (auto asteroid : mGameObjectList)
         {
             if (asteroid->name == "asteroid")
             {
-                mIsGameCleared = false;
+                mFlags &= ~IS_CLEARED;
+            }
+        }
+
+        if (Engine::GetInput().IsKeyTriggered(sf::Keyboard::Space))
+        {
+            if (mBulletLimit > 0)
+            {
+                Bullet* bullet = new Bullet();
+                bullet->SetValues(mBulletAnimation, mPlayer->x, mPlayer->y, mPlayer->angle, 10.0f);
+                mGameObjectList.push_back(bullet);
+                mBulletLimit--;
             }
         }
 
@@ -282,12 +304,6 @@ void Level2::Update([[maybe_unused]] double dt)
             mPlayer->SetIsMoving(false);
         }
 
-        if (Engine::GetInput().IsKeyTriggered(sf::Keyboard::Space))
-        {
-            Bullet* bullet = new Bullet();
-            bullet->SetValues(mBulletAnimation, mPlayer->x, mPlayer->y, mPlayer->angle, 10.0f);
-            mGameObjectList.push_front(bullet);
-        }
     }
 
     for (auto object : mGameObjectList)
@@ -299,7 +315,7 @@ void Level2::Update([[maybe_unused]] double dt)
     if (Engine::GetInput().IsKeyPressed(sf::Keyboard::R))
     {
         Engine::GetGameStateManager().ReloadState();
-        mShouldGameRun = true;
+        mFlags &= ~IS_GAME_OVER;
     }
 }
 
