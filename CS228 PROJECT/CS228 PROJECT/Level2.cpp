@@ -280,7 +280,7 @@ void Level2::Update([[maybe_unused]] double dt)
             {
                 Bullet* bullet = new Bullet();
                 bullet->SetValues(mBulletAnimation, mPlayer->x, mPlayer->y, mPlayer->angle, 10.0f);
-                mGameObjectList.push_back(bullet);
+                mGameObjectList.push_front(bullet);
                 mBulletLimit--;
             }
         }
