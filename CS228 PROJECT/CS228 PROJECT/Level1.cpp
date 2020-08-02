@@ -213,6 +213,43 @@ bool Level1::CanVisit(void)
             sf::Vector2i below = { currentLocation.x, currentLocation.y - 1 };
             sf::Vector2i left = { currentLocation.x - 1, currentLocation.y };
 
+            sf::Vector2i above1 = { currentLocation.x-1, currentLocation.y + 1 };
+            sf::Vector2i right1 = { currentLocation.x-1 , currentLocation.y-1 };
+            sf::Vector2i below1 = { currentLocation.x+1, currentLocation.y - 1 };
+            sf::Vector2i left1 = { currentLocation.x+1, currentLocation.y+1 };
+
+            if (IsOutOfRange(above1) == false)
+            {
+                if (TryToAdd(above1) == true)
+                {
+                    mToVisit.push_back(above1);
+                }
+            }
+
+            if (IsOutOfRange(right1) == false)
+            {
+                if (TryToAdd(right1) == true)
+                {
+                    mToVisit.push_back(right1);
+                }
+            }
+
+            if (IsOutOfRange(below1) == false)
+            {
+                if (TryToAdd(below1) == true)
+                {
+                    mToVisit.push_back(below1);
+                }
+            }
+
+            if (IsOutOfRange(left1) == false)
+            {
+                if (TryToAdd(left1) == true)
+                {
+                    mToVisit.push_back(left1);
+                }
+            }
+
             if (IsOutOfRange(above) == false)
             {
                 if (TryToAdd(above) == true)
@@ -245,6 +282,7 @@ bool Level1::CanVisit(void)
                 }
             }
         }
+
         for (auto location : mEmptyPlace)
         {
             mShowGrid[location.x][location.y] = mGrid[location.x][location.y];
@@ -328,19 +366,18 @@ void Level1::Update([[maybe_unused]] double dt)
             {
                 Selected(sf::Vector2i(x, y));
                 mShowGrid[x][y] = mGrid[x][y];
-
             }
 
             if (Engine::GetInput().IsMouseTriggered(sf::Mouse::Right))
             {
-                if (mShowGrid[x][y] == FLAG)
+                if (mShowGrid[x][y] == TILE)
+                {
+                    mShowGrid[x][y] = FLAG;
+                }
+                else if (mShowGrid[x][y] == FLAG)
                 {
                     mShowGrid[x][y] = TILE;
                 }
-                else
-                {
-                    mShowGrid[x][y] = FLAG;
-                }   
             }
 
             CanVisit();

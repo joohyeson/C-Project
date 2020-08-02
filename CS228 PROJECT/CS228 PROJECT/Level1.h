@@ -29,10 +29,6 @@ public:
     bool TryToAdd(sf::Vector2i location);
     bool IsOutOfRange(sf::Vector2i location);
     void ShowHint(void);
-
-    void MakeEmptyRow(void);
-    void MakeTileRow(void);
-
     std::string GetName() override { return "Level1"; }
 
 private:

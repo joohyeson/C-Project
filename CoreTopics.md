@@ -1,16 +1,74 @@
 ## Core Topics
 
 1. Pointers + Arrays
-- Pointers are variables that indicate the location of another variable. If you put the value in the pointer, you can have an address value for that variable. And Using pointer, reference to the memory address makes it easy to access and manipulate various data types variables.
+- Pointers are variables that indicate the location of another variable. 
+If you put the value in the pointer, you can have an address value for that variable. 
+And Using pointer, reference to the memory address makes it easy to access and manipulate various data types variables.
 
-```
-//example here!
+```c++
+// We are using Player* mPlayer in Level 2.
+mPlayer->SetValues(playerAnimation, static_cast<float>(Engine::GetWindow().GetSize().x >> 1), static_cast<float>(Engine::GetWindow().GetSize().y >> 1), 0, 20);
+mPlayer->dx = 0;
+mPlayer->dy = 0;
+
+if (mPlayer->GetIsMoving() == true)
+{
+    mPlayer->animation = playerMoveAnimation;
+}
+else
+{
+    mPlayer->animation = playerAnimation;
+}
+
+if (Engine::GetInput().IsKeyPressed(sf::Keyboard::Right))
+{
+    mPlayer->angle += MOVING_ANGLE;
+}
+if (Engine::GetInput().IsKeyPressed(sf::Keyboard::Left))
+{
+    mPlayer->angle -= MOVING_ANGLE;
+}
+
+if (Engine::GetInput().IsKeyPressed(sf::Keyboard::Up))
+{
+    mPlayer->SetIsMoving(true);
+}
+else
+{
+    mPlayer->SetIsMoving(false);
+}
 ```
 
-- Arrays are lists of data of the same type as one variable. You can decide how much you want to use, then initialize the array, and use it. Arrays are sized according to the data type when declaring, so the index access is fast. So arrays are useful when the indices are important.
+- Arrays are lists of data of the same type as one variable. 
+You can decide how much you want to use, then initialize the array, and use it. 
+Arrays are sized according to the data type when declaring, so the index access is fast. 
+So arrays are useful when the indices are important.
 
-```
-//example here!
+```c++
+bool mKeyPressed[sf::Keyboard::KeyCount];
+bool mKeyReleased[sf::Keyboard::KeyCount];
+bool mKeyTriggered[sf::Keyboard::KeyCount];
+
+bool mMousePressed[sf::Mouse::ButtonCount];
+bool mMouseReleased[sf::Mouse::ButtonCount];
+bool mMouseTriggered[sf::Mouse::ButtonCount];
+
+void Input::Reset()
+{
+    for (int i = 0; i < sf::Keyboard::KeyCount; ++i)
+    {
+        mKeyPressed[i] = 0;
+        mKeyReleased[i] = 0;
+        mKeyTriggered[i] = 0;
+    }
+
+    for (int i = 0; i < sf::Mouse::ButtonCount; ++i)
+    {
+        mMousePressed[i] = 0;
+        mMouseReleased[i] = 0;
+        mMouseTriggered[i] = 0;
+    }
+}
 ```
 
 2. Bit operations
@@ -51,6 +109,24 @@ AND(&) 0011
 ```c++
 //We used '>>' instead using like Engine::GetWindow().GetSize().x / 2.
 Engine::GetWindow().GetSize().x >> 1
+
+//And we used bit flags like this.
+constexpr unsigned char IS_GAME_OVER = 1 << 0;
+constexpr unsigned char IS_CLEARED = 1 << 1;
+
+if (mFlags & IS_GAME_OVER)
+{
+    text.setString("Game Over.. Press R key to restart.");
+    text.setPosition(sf::Vector2f(static_cast<float>(Engine::GetWindow().GetSize().x >> 1), static_cast<float>(Engine::GetWindow().GetSize().y >> 1)));
+    Engine::GetWindow().Draw(text);
+}
+
+if (mFlags & IS_CLEARED)
+{
+    text.setString("Level Clear!");
+    text.setPosition(sf::Vector2f(static_cast<float>(Engine::GetWindow().GetSize().x >> 1), static_cast<float>(Engine::GetWindow().GetSize().y >> 1) + 50));
+    Engine::GetWindow().Draw(text);
+}
 ```
 
 3. Operator Overloading
@@ -67,12 +143,30 @@ typename List<T>::Iterator& List<T>::Iterator::operator++()
 ```
 
 4. Return Value Optimization
-- The return value optimization is literally to store the return value in the caller's memory to optimize the return value. For example, if you give a constructor a copy constructor, the constructor will not be called twice. Only the constructor is called once and no temporary objects are created. The code below is how I used 'Return Value Optimization' for this project.
+- The return value optimization is literally to store the return value in the caller's memory to optimize the return value. 
+For example, if you give a constructor a copy constructor, the constructor will not be called twice. 
+Only the constructor is called once and no temporary objects are created. The code below is how I used 'Return Value Optimization' for this project.
 ```c++
+//When using RVO
 template<typename T>
-List<T>::Iterator List<T>::end(void)
+bool GameObject::IsCollideWith(GameObject* object)
 {
-    return Iterator(&data[mSize], mSize);
+    return (object->x - x) * (object->x - x) + (object->y - y) * (object->y - y) < (radius + object->radius) * (radius + object->radius);
+}
+
+//When it is not using RVO
+bool GameObject::IsCollideWith(GameObject* object)
+{
+    float dx = object->x - x;
+    float squareOfDx = dx * dx;
+
+    float dy = object->y - y;
+    float squareOfDy = dy * dy;
+    
+    float dr = radius + object->radius;
+    float squareOfDr = dr * dr;
+
+    return squareOfDx + squareOfDy < squareOfDr;
 }
 ```
 
@@ -80,11 +174,101 @@ List<T>::Iterator List<T>::end(void)
 
 **Inheritance**
 
-- Inheritance is one of the important concepts of OOP (Object Oriented Programming) along with polymorphism and encapsulation. Inheritance has a base class (superclass) and derived class (subclass). The advantage of inheritance is that you can reuse code. If you create a function or variable in the base class, you can use the same content as in the base class without declaring the same content in the derived class.
+- Inheritance is one of the important concepts of OOP (Object Oriented Programming) along with polymorphism and encapsulation. 
+Inheritance has a base class (superclass) and derived class (subclass). The advantage of inheritance is that you can reuse code. 
+If you create a function or variable in the base class, you can use the same content as in the base class without declaring the same content in the derived class.
 
-**Inheritance Example: GameState.h&Level1.h**
+**Inheritance Example: GameObject.h&Level2.h&&LEvel2.cpp**
 ```c++
-class GameState//base class
+class GameObject
+{
+public:
+    GameObject() {};
+    void SetValues(Animation& newAnimation, float newX, float newY, float newAngle = 0, float newRadius = 1);
+    virtual void Update() {};
+    void Draw(sf::RenderWindow& window);
+    bool IsCollideWith(GameObject* object);
+    bool IsAlive(){ return isAlive;};
+    virtual ~GameObject() {};
+private:
+    float x, y, dx, dy, radius, angle;
+    bool isAlive = true;
+    std::string name;
+    Animation animation;
+};
+
+class Player : public GameObject
+{
+public:
+    Player();
+    void Update() override;
+    bool GetIsMoving();
+    void SetIsMoving(bool newIsMoving);
+private:
+    bool isMoving;
+};
+//there is no declare, but we can use baseclass' functions and variables
+
+void Level2::Update([[maybe_unused]] double dt)
+{
+  for (auto objectIterator = mGameObjectList.begin(); objectIterator != mGameObjectList.end();)
+        {
+            GameObject* object = *objectIterator;
+
+            if (object->IsAlive() == false)
+            {
+                objectIterator = mGameObjectList.erase(objectIterator);
+                delete object;
+            }
+            else
+            {
+                objectIterator++;
+            }
+        }
+}
+//mGameObjectList has player. 
+//We can see that we can also use functions and variables declared in the game object class, not the player class.
+```
+
+**Polymorphism**
+
+- Polymorphism and inheritance are important concepts of OOP(Object Oriented Programming). 
+If we use polymorphism well, it can provide a consistent usage method to users regardless of the contents of the function. 
+Polymorphism with this advantage can be implemented using inheritance. 
+If at least one function in the superclass is implemented as virtual, a virtual function table in charge of this class is created.
+This table is a collection of virtual function pointers. 
+When we override the virtual function in the subclass, a virtual pointer of the subclass is created. 
+The virtual pointers of the subclass have a unique location when overridden, but when not overridden, they point to the virtual pointer location of the base class. 
+We can implement polymorphism in inheritance through this method.
+
+**virtual table& pointer example**
+
+```c++
+class shape
+{
+    public:
+        virtual void draw() {std::cout<<"draw shape"<<std::endl;}
+        virtual void print() {std::cout<< "print shape"<<std::endl;}
+
+}
+
+class rectangle{
+    public:
+        void draw() {std::cout<<"draw shape"<<std::endl;} override;
+
+}
+[shape virtual table]  
+[shape::draw()]
+[shape::print()]
+
+[rectangle virtual table]
+[rectangle::draw()]
+[shape::print()]
+```
+
+**Polymorphism Example: Level1::Draw().h&Level2::Draw()&GameStateManager::SetRunningState()**
+```c++
+class GameState
 {
 public:
     GameState() {};
@@ -95,9 +279,9 @@ public:
     virtual std::string GetName() = 0;
     virtual ~GameState() {};
 private:
-};//pure virtual functions
+};
 
-class Level1 : public GameState//derived class
+class Level1 : public GameState
 {
 public:
     Level1();
@@ -107,22 +291,21 @@ public:
     void Draw() override;
 
     std::string GetName() override { return "Level1"; }
-
-private:
-    std::vector<std::vector<int>> mGrid;
-    std::vector<std::vector<int>> mShowGrid;
-    bool mShouldGameRun = true;
 };
 
-```
+class Level2 : public GameState
+{
+public:
+    Level2();
+    void Load() override;
+    void Update(double dt) override;
+    void Unload() override;
+    void Draw() override;
 
-**Polymorphism**
+    std::string GetName() override { return "Level2"; }
+};
 
-- Polymorphism and inheritance are important concepts of OOP(Object Oriented Programming). If we use polymorphism well, it can provide a consistent usage method to users regardless of the contents of the function. Polymorphism with this advantage can be implemented using inheritance. If at least one function in the superclass is implemented as virtual, a virtual function table in charge of this class is created. This table is a collection of virtual function pointers. When we override the virtual function in the subclass, a virtual pointer of the subclass is created. If not overridden in a subclass, the virtual pointer of the base class is retained. We can implement polymorphism in inheritance through this method.
-
-**Polymorphism Example: Level1::Draw().h&Level2::Draw()&GameStateManager::SetRunningState()**
-```c++
-void Level1::Draw() //override Game State's pure virtual function
+void Level1::Draw()//override Game State's pure virtual function
 {
     Engine::GetWindow().Clear(sf::Color(LIGHT_BLUE));
     text.setString("Minesweeper");
@@ -141,21 +324,46 @@ void GameStateManager::SetRunningState(double dt)
     mCurrentGameState->Draw();
 
     mCurrentGameState->Update(dt);
-}
+
+}//mCurrentGameState is a variable that stores subclasses that have GameState as the base class.
 ```
 
 6. Rule of 5, RAII, r-value references/Move Semantics
 
  **RAII**
-- C++ has a risk of memory leak because the programmer has to free it manually. So RAII (Resource Acquisition Is Initialization) is used to eliminate the possibility of memory leak. Simply put, This is a programming concept where the initialize (constructor) the thing is done, and then it releases automatically in its destructor.
+- C++ has a risk of memory leak because the programmer has to free it manually. 
+So RAII (Resource Acquisition Is Initialization) is used to eliminate the possibility of memory leak. 
+Simply put, This is a programming concept where the initialize (constructor) the thing is done, and then it releases automatically in its destructor.
 So using RAII is useful because there will be no possible memory leak, so the code is more stable.
+
 ```c++
-//RAII example here!
+//Automatically allocating in the constructor.
+Level2::Level2()
+{
+    mFlags = 0;
+    mBulletLimit = NUMBER_OF_BULLETS;
+    mPlayer = new Player();
+}
+
+//Automatically deallocating in the destructor.
+Level2::~Level2()
+{
+    Unload();
+}
+
+void Level2::Unload()
+{
+    mGameObjectList.clear();
+
+    mPlayer = nullptr;
+}
 ```
 
  **Rule of 5**
-- Not like the rule of 0, that avoids defining default operations and does not allocate and deallocate. Rule of 5 has, along with Rule of 3 (copy constructor, assignment operator, assignment destructor), move constructor, and move assignment operator.
+- Not like the rule of 0, that avoids defining default operations and does not allocate and deallocate. 
+Rule of 5 has, along with Rule of 3 (copy constructor, assignment operator, assignment destructor), move constructor, and move assignment operator.
 Using the rule of 5 is important because the programmer can safely and efficiently implement RAII to manage dynamically allocated resources.
+
 ```c++
     //We have to manually manage the allocated resources, so we need rule of 5 to handle resources more safely and efficiently.
     Node* MakeNode(T data)
@@ -176,13 +384,28 @@ Using the rule of 5 is important because the programmer can safely and efficient
 ```
 
  **r-value references/Move Semantics**
-- The r-value is what makes the move possible, to avoid unneeded copy. Here, the r-value is the value to the right of the expression. The r-value does not exist when the expression ends. For r-value reference, use '&&'.
+- The r-value is what makes the move possible, to avoid unneeded copy. 
+Here, the r-value is the value to the right of the expression. 
+The r-value does not exist when the expression ends. For r-value reference, use '&&'.
+
 ```c++
-//r-value example here!
+//This is a move constructor of List class.
+template<typename T>
+List<T>::List(List<T>&& rhs)
+{
+    pHead = rhs.pHead;
+    pTail = rhs.pTail;
+    mSize = rhs.mSize;
+
+    rhs.pHead = nullptr;
+    rhs.pTail = nullptr;
+    rhs.mSize = 0;
+}
 ```
 
 7. Templates
-- A template is a frame created so that a class or function once created can be used with multiple data types. The advantage of using a template is that the code is shortened and easy to modify because there is no need to rewrite the code multiple times for every possible types.
+- A template is a frame created so that a class or function once created can be used with multiple data types. 
+The advantage of using a template is that the code is shortened and easy to modify because there is no need to rewrite the code multiple times for every possible types.
 
 - Generics is the idea to allow type (Integer, String, and user-defined types) to be a parameter to methods, classes, and interfaces. 
 As it is independent of data type, so it is very reusable and convenient. 
@@ -222,15 +445,45 @@ STL container can manage a collection of objects.
 STL Container is useful because the programmer can choose what to use for the purpose, 
 as each container has its pros and cons.
 
+```c++
+void Level1::Selected(sf::Vector2i location)
+{
+    mToVisit.clear();
+
+    if (mGrid[location.x][location.y] != EMPTY)
+    {
+        return;
+    }
+    else
+    {
+        mToVisit.push_back(location);
+    }
+}
+```
+
 - STL Iterator is a common interface for accessing data of the container. 
 STL Iterator can traverse over the contents of a container or a subset of the container.
 STL Iterator is useful because as it can access the container, 
 Programmers can perform various complex tasks with algorithm functions using iterators.
+
+```c++
+std::vector<sf::Vector2i>::iterator checkAlreadyExist = std::find(mEmptyPlace.begin(), mEmptyPlace.end(), location);
+
+if (checkAlreadyExist != mEmptyPlace.end())
+{
+    return false;
+}
+```
 
 - STL Algorithm is a function that is defined in the <algorithm> library.
 There are search, sort, access, find, and so on.
 It is useful because algorithm uses the iterator as an interface, so algorithm function can be used in all containers.
 
 ```c++
-//example here!
+//When initializing grid and show grid in Level 1.
+mGrid.resize(GRID_LENGTH);
+std::generate(mGrid.begin(), mGrid.end(), EmptyRow);
+
+mShowGrid.resize(GRID_LENGTH);
+std::generate(mShowGrid.begin(), mShowGrid.end(), TileRow);
 ```

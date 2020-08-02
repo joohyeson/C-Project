@@ -36,6 +36,110 @@ Level2::~Level2()
     Unload();
 }
 
+void Level2::DeepCopy(const Level2& rhs)
+{
+    mPlayer = new Player();
+    auto object = rhs.mGameObjectList;
+
+    for (auto objectList : object)
+    {
+        mGameObjectList.push_back(new GameObject(*objectList));
+    }
+
+    mFlags = rhs.mFlags;
+    mBulletLimit = rhs.mBulletLimit;
+
+    bulletAnimation = rhs.bulletAnimation;
+    playerMoveAnimation = rhs.playerMoveAnimation;
+    playerAnimation = rhs.playerAnimation;
+    explosionAnimation = rhs.explosionAnimation;
+    smallRockAnimation = rhs.smallRockAnimation;
+    explosionShipAnimation = rhs.explosionShipAnimation;
+    rockAnimation = rhs.rockAnimation;
+
+    shipTexture = rhs.shipTexture;
+    explosionTexture = rhs.explosionTexture;
+    rockTexture = rhs.rockTexture;
+    bulletTexture = rhs.bulletTexture;
+    smallRockTexture = rhs.smallRockTexture;
+    explosionShipTexture = rhs.explosionShipTexture;
+    backgroundTexture = rhs.backgroundTexture;
+}
+
+Level2::Level2(const Level2& rhs)//copy constructor
+{
+    DeepCopy(rhs);
+}
+
+Level2::Level2(Level2&& rhs)//move constructor
+{
+    mFlags = rhs.mFlags;
+    mBulletLimit = rhs.mBulletLimit;
+
+    mPlayer = rhs.mPlayer;
+
+    mGameObjectList = rhs.mGameObjectList;
+
+    bulletAnimation = rhs.bulletAnimation;
+    playerMoveAnimation = rhs.playerMoveAnimation;
+    playerAnimation = rhs.playerAnimation;
+    explosionAnimation = rhs.explosionAnimation;
+    smallRockAnimation = rhs.smallRockAnimation;
+    explosionShipAnimation = rhs.explosionShipAnimation;
+    rockAnimation = rhs.rockAnimation;
+
+    shipTexture = rhs.shipTexture;
+    explosionTexture = rhs.explosionTexture;
+    rockTexture = rhs.rockTexture;
+    bulletTexture = rhs.bulletTexture;
+    smallRockTexture = rhs.smallRockTexture;
+    explosionShipTexture = rhs.explosionShipTexture;
+    backgroundTexture = rhs.backgroundTexture;
+
+    rhs.mPlayer = nullptr;
+    rhs.mGameObjectList.clear();
+}
+
+Level2& Level2::operator=(const Level2& rhs)//copy assignment operator
+{
+    mGameObjectList.clear();
+    DeepCopy(rhs);
+
+    return *this;
+}
+
+Level2& Level2::operator=(Level2&& rhs)//move assignment operator
+{
+    if (this != &rhs)
+    {
+        mGameObjectList.clear();
+
+        mFlags = rhs.mFlags;
+        mBulletLimit = rhs.mBulletLimit;
+        mPlayer = rhs.mPlayer;
+        mGameObjectList = rhs.mGameObjectList;
+        bulletAnimation = rhs.bulletAnimation;
+        playerMoveAnimation = rhs.playerMoveAnimation;
+        playerAnimation = rhs.playerAnimation;
+        explosionAnimation = rhs.explosionAnimation;
+        smallRockAnimation = rhs.smallRockAnimation;
+        explosionShipAnimation = rhs.explosionShipAnimation;
+        rockAnimation = rhs.rockAnimation;
+        shipTexture = rhs.shipTexture;
+        explosionTexture = rhs.explosionTexture;
+        rockTexture = rhs.rockTexture;
+        bulletTexture = rhs.bulletTexture;
+        smallRockTexture = rhs.smallRockTexture;
+        explosionShipTexture = rhs.explosionTexture;
+        backgroundTexture = rhs.backgroundTexture;
+
+        rhs.mPlayer = nullptr;
+        rhs.mGameObjectList.clear();
+    }
+
+    return *this;
+}
+
 void Level2::Load()
 {
     mFlags = 0;
@@ -55,7 +159,7 @@ void Level2::Load()
     explosionAnimation = Animation(explosionTexture, 0, 0, 256, 256, 48, 0.5f);
     rockAnimation = Animation(rockTexture, 0, 0, 64, 64, 16, 0.2f);
     smallRockAnimation = Animation(smallRockTexture, 0, 0, 64, 64, 16, 0.2f);
-    mBulletAnimation = Animation(bulletTexture, 0, 0, 32, 64, 16, 0.8f);
+    bulletAnimation = Animation(bulletTexture, 0, 0, 32, 64, 16, 0.8f);
     playerAnimation = Animation(shipTexture, 40, 0, 40, 40, 1, 0.f);
     playerMoveAnimation = Animation(shipTexture, 40, 40, 40, 40, 1, 0.f);
     explosionShipAnimation = Animation(explosionShipTexture, 0, 0, 192, 192, 64, 0.5f);
@@ -111,7 +215,7 @@ void Level2::Draw()
     if (mFlags & IS_CLEARED)
     {
         text.setString("Level Clear!");
-        text.setPosition(sf::Vector2f(static_cast<float>(Engine::GetWindow().GetSize().x >> 1), static_cast<float>(Engine::GetWindow().GetSize().y >> 1) + 50 ));
+        text.setPosition(sf::Vector2f(static_cast<float>(Engine::GetWindow().GetSize().x >> 1), static_cast<float>(Engine::GetWindow().GetSize().y >> 1) + 50));
         Engine::GetWindow().Draw(text);
     }
 
@@ -285,7 +389,7 @@ void Level2::Update([[maybe_unused]] double dt)
             if (mBulletLimit > 0)
             {
                 Bullet* bullet = new Bullet();
-                bullet->SetValues(mBulletAnimation, mPlayer->x, mPlayer->y, mPlayer->angle, 10.0f);
+                bullet->SetValues(bulletAnimation, mPlayer->x, mPlayer->y, mPlayer->angle, 10.0f);
                 mGameObjectList.push_front(bullet);
                 mBulletLimit--;
             }

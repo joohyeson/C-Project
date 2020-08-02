@@ -14,13 +14,7 @@ Creation date: 21/07/2020
 
 Input::Input()
 {
-    mKeyPressed.reset();
-    mKeyReleased.reset();
-    mKeyTriggered.reset();
-
-    mMousePressed.reset();
-    mMouseReleased.reset();
-    mMouseTriggered.reset();
+    Reset();
 
     mMouse = sf::Vector2i(0, 0);
 }
@@ -53,8 +47,15 @@ void Input::Update(sf::Event inputEvent)
 
 void Input::KeyUpdate()
 {
-    mKeyReleased = mKeyPressed;
-    mMouseReleased = mMousePressed;
+    for (int i = 0; i < sf::Keyboard::KeyCount; ++i)
+    {
+        mKeyReleased[i] = mKeyPressed[i];
+    }
+
+    for (int i = 0; i < sf::Mouse::ButtonCount; ++i)
+    {
+        mMouseReleased[i] = mMousePressed[i];
+    }
 }
 
 bool Input::IsKeyPressed(sf::Keyboard::Key scancode)
@@ -64,7 +65,7 @@ bool Input::IsKeyPressed(sf::Keyboard::Key scancode)
 
 bool Input::IsKeyReleased(sf::Keyboard::Key scancode)
 {
-    return mKeyPressed[scancode]==false;
+    return mKeyPressed[scancode] == false;
 }
 
 bool Input::IsKeyTriggered(sf::Keyboard::Key scancode)
@@ -79,12 +80,12 @@ bool Input::IsMousePressed(sf::Mouse::Button mouseButton)
 
 bool Input::IsMouseReleased(sf::Mouse::Button mouseButton)
 {
-    return mMouseReleased[mouseButton];
+    return mMousePressed[mouseButton] == false;
 }
 
 bool Input::IsMouseTriggered(sf::Mouse::Button mouseButton)
 {
-    return mMouseTriggered[mouseButton];
+    return  mMousePressed[mouseButton] == true && mMouseReleased[mouseButton] == false;
 }
 
 sf::Vector2i Input::GetMousePosition(void)
@@ -106,6 +107,7 @@ void Input::SetReleasedKey(sf::Keyboard::Key scancode)
     {
         mKeyReleased[scancode] = true;
     }
+
     mKeyPressed[scancode] = false;
 
 }
@@ -120,8 +122,12 @@ void Input::SetPressedMouse(sf::Mouse::Button mouseButton)
 
 void Input::SetReleasedMouse(sf::Mouse::Button mouseButton)
 {
+    if (mMouseReleased[mouseButton] != true)
+    {
+        mMouseReleased[mouseButton] = true;
+    }
+
     mMousePressed[mouseButton] = false;
-    mMouseReleased[mouseButton] = true;
 }
 
 void Input::SetMousePosition(sf::Vector2i position)
@@ -132,14 +138,25 @@ void Input::SetMousePosition(sf::Vector2i position)
 
 void Input::Reset()
 {
-    mKeyReleased.reset();
-    mKeyTriggered.reset();
+    for (int i = 0; i < sf::Keyboard::KeyCount; ++i)
+    {
+        mKeyPressed[i] = 0;
+        mKeyReleased[i] = 0;
+        mKeyTriggered[i] = 0;
+    }
 
-    mMouseReleased.reset();
-    mMouseTriggered.reset();
+    for (int i = 0; i < sf::Mouse::ButtonCount; ++i)
+    {
+        mMousePressed[i] = 0;
+        mMouseReleased[i] = 0;
+        mMouseTriggered[i] = 0;
+    }
 }
 
 void Input::ResetRelease()
 {
-    mKeyReleased.reset();
+    for (int i = 0; i < sf::Keyboard::KeyCount; ++i)
+    {
+        mKeyReleased[i] = 0;
+    }
 }

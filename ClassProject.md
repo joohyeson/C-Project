@@ -39,15 +39,14 @@ You must create a ReadMe markdown file that provides the following information:
 
 1. your name, project name, course name, term
 2. Section describing anything incomplete about the project
-5. Section to Provide file name and line numbers for all code related requirements.
+3. Section to Provide file name and line numbers for all code related requirements.
 4. Section to Introduces your project
     - What is it
     - What does it do
     - How to build the project
     - How to interact with the project
-3. Section describing something you're proud of about the project
+5. Section describing something you're proud of about the project
 6. Section that describes work that was done to earn an Excellent score
-
 
 ## Submission
 
@@ -63,18 +62,18 @@ The instructor will use the repo for examining the code and building the project
 - [X] [**core**] Created a ReadMe markdown file with all of the needed information
 - [X] [**core**] Created a CoreTopics markdown file with all of the needed information
 - [X] [**core**] Make good use of pointers and arrays
-- [ ] [**core**] Use Bitwise operations to create a some kind of configuration variable where you extract values. _(Combine bit flags of varying powers of 2)_
-- [ ] [**core**] Use bitwise operations to replace Arithmetic Operations
+- [X] [**core**] Use Bitwise operations to create a some kind of configuration variable where you extract values. _(Combine bit flags of varying powers of 2)_
+- [X] [**core**] Use bitwise operations to replace Arithmetic Operations
 - [X] [**core**] Makes good use of operator overloading
-- [ ] [**core**] Has examples of Return Value Optimization
+- [X] [**core**] Has examples of Return Value Optimization
 - [X] [**core**] Makes good use of Inheritance and Polymorphism
-- [ ] [**core**] Makes good use of Rule of 5
+- [X] [**core**] Makes good use of Rule of 5
 - [X] [**core**] Makes good use of Rule of 0
-- [ ] [**core**] Makes good use of RAII
+- [X] [**core**] Makes good use of RAII
 - [X] [**core**] Makes good use of Templates
 - [X] [**core**] Makes good use of STL Containers
-- [ ] [**core**] Makes good use of STL Iterators
-- [ ] [**core**] Makes good use of STL Algorithms
+- [X] [**core**] Makes good use of STL Iterators
+- [X] [**core**] Makes good use of STL Algorithms
 - [X] All source files have a proper header comment with your name, project name, course name, term.
 - [X] All source files compile without warnings and without errors
 - [X] Reasonably High Warning levels and treat warnings as errors are enabled.

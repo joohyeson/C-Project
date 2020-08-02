@@ -44,13 +44,13 @@ public:
     void ResetRelease();
 
 private:
-    std::bitset<sf::Keyboard::KeyCount> mKeyPressed;
-    std::bitset<sf::Keyboard::KeyCount> mKeyReleased;
-    std::bitset<sf::Keyboard::KeyCount> mKeyTriggered;
+    bool mKeyPressed[sf::Keyboard::KeyCount];
+    bool mKeyReleased[sf::Keyboard::KeyCount];
+    bool mKeyTriggered[sf::Keyboard::KeyCount];
 
-    std::bitset<sf::Mouse::ButtonCount> mMousePressed;
-    std::bitset<sf::Mouse::ButtonCount> mMouseReleased;
-    std::bitset<sf::Mouse::ButtonCount> mMouseTriggered;
+    bool mMousePressed[sf::Mouse::ButtonCount];
+    bool mMouseReleased[sf::Mouse::ButtonCount];
+    bool mMouseTriggered[sf::Mouse::ButtonCount];
 
     sf::Vector2i mMouse;
 };
