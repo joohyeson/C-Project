@@ -11,6 +11,7 @@ Creation date: 21/07/2020
 
 #pragma once
 #include "GameState.h" //class Level1 : public GameState (Inheritance)
+#include "SFML/Window.hpp"
 #include <vector> //std::vector
 #include <list> //std::list
 
@@ -24,8 +25,13 @@ public:
     void Draw() override;
 
     bool CanVisit(void);
-    void Selected(int x, int y);
-    bool TryToAdd(int x, int y);
+    void Selected(sf::Vector2i location);
+    bool TryToAdd(sf::Vector2i location);
+    bool IsOutOfRange(sf::Vector2i location);
+    void ShowHint(void);
+
+    void MakeEmptyRow(void);
+    void MakeTileRow(void);
 
     std::string GetName() override { return "Level1"; }
 
@@ -34,6 +40,7 @@ private:
     std::vector<std::vector<int>> mShowGrid;
 
     std::list<sf::Vector2i> mToVisit;
-
+    int mHintCount = 3;
     bool mShouldGameRun = true;
+    std::vector<sf::Vector2i> mEmptyPlace;
 };

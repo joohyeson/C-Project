@@ -14,40 +14,49 @@ Creation date: 21/07/2020
 #include "Window.h"
 #include "Levels.h"
 #include "Colors.h"
-#include "SFML/Window.hpp"
 #include <time.h>
+#include <algorithm>
+#include <random>
 
-constexpr int FLAG = 11;
-constexpr int MINE = 9;
 constexpr int EMPTY = 0;
+constexpr int MINE = 9;
 constexpr int TILE = 10;
+constexpr int FLAG = 11;
+constexpr int GRID_LENGTH = 12;
+constexpr int LEVEL = 8; // The higher is the easier.
 
 Level1::Level1() {};
+
+constexpr int Empty(void)
+{
+    return EMPTY;
+}
+
+constexpr int Tile(void)
+{
+    return TILE;
+}
 
 void Level1::Load()
 {
     srand(static_cast<unsigned int>(time(0)));
 
-    for (int i = 0; i < 12; ++i)
+    for (int i = 0; i < GRID_LENGTH; ++i)
     {
         std::vector<int> row;
+        row.resize(GRID_LENGTH);
 
-        for (int j = 0; j < 12; ++j)
-        {
-            row.push_back(EMPTY);
-        }
+        std::generate(row.begin(), row.end(), Empty);
 
         mGrid.push_back(row);
     }
 
-    for (int i = 0; i < 12; ++i)
+    for (int i = 0; i < GRID_LENGTH; ++i)
     {
         std::vector<int> row;
+        row.resize(GRID_LENGTH);
 
-        for (int j = 0; j < 12; ++j)
-        {
-            row.push_back(TILE);
-        }
+        std::generate(row.begin(), row.end(), Tile);
 
         mShowGrid.push_back(row);
     }
@@ -56,7 +65,7 @@ void Level1::Load()
     {
         for (int j = 1; j <= 10; j++)
         {
-            if (rand() % 5 == 0)
+            if (rand() % LEVEL == 0)
             {
                 mGrid[i][j] = MINE;
             }
@@ -117,7 +126,6 @@ void Level1::Load()
             mGrid[i][j] = numberOfMines;
         }
     }
-
 }
 
 void Level1::Draw()
@@ -131,6 +139,14 @@ void Level1::Draw()
     text.setCharacterSize(30);
     text.setStyle(sf::Text::Regular);
     Engine::GetWindow().Draw(text);
+
+    //sf::Text text2;
+    //text2.setFont(Engine::GetGameStateManager().GetFont());
+    //text2.setString("Hint Count :" + std::to_string(mHintCount));
+    //text2.setPosition(sf::Vector2f(800, 0));
+    //text2.setCharacterSize(30);
+    //text2.setStyle(sf::Text::Regular);
+    //Engine::GetWindow().Draw(text2);
 
     sf::Texture tileTexture;
     tileTexture.loadFromFile("../Assets/Art/tiles.jpg");
@@ -153,8 +169,7 @@ void Level1::Draw()
     {
         for (int j = 1; j <= 10; j++)
         {
-            if (0 <= x && x < 12 &&
-                0 <= y && y < 12)
+            if (IsOutOfRange(sf::Vector2i(x, y)) == false)
             {
                 if (mShowGrid[x][y] == MINE)
                 {
@@ -180,65 +195,122 @@ bool Level1::CanVisit(void)
     }
     else
     {
-        Vector2DInt currentLocation = mToVisit.front();
+        mEmptyPlace.clear();
 
-        mToVisit.pop_front();
-        board->GetCell(currentLocation)->SetToImage(Images::Red);
-
-        Vector2DInt above = { currentLocation.x, currentLocation.y + 1 };
-        Vector2DInt right = { currentLocation.x + 1, currentLocation.y };
-        Vector2DInt bellow = { currentLocation.x, currentLocation.y - 1 };
-        Vector2DInt left = { currentLocation.x - 1, currentLocation.y };
-
-        if (TryToAdd(above) == true)
+        while (mToVisit.empty() != true)
         {
-            mToVisit.push_back(above);
+            sf::Vector2i currentLocation = mToVisit.front();
+
+            mToVisit.pop_front();
+            mShowGrid[currentLocation.x][currentLocation.y] = EMPTY;
+            mEmptyPlace.push_back(currentLocation);
+
+            sf::Vector2i above = { currentLocation.x, currentLocation.y + 1 };
+            sf::Vector2i right = { currentLocation.x + 1, currentLocation.y };
+            sf::Vector2i below = { currentLocation.x, currentLocation.y - 1 };
+            sf::Vector2i left = { currentLocation.x - 1, currentLocation.y };
+
+            if (IsOutOfRange(above) == false)
+            {
+                if (TryToAdd(above) == true)
+                {
+                    mToVisit.push_back(above);
+                }
+            }
+
+            if (IsOutOfRange(right) == false)
+            {
+                if (TryToAdd(right) == true)
+                {
+                    mToVisit.push_back(right);
+                }
+            }
+
+            if (IsOutOfRange(below) == false)
+            {
+                if (TryToAdd(below) == true)
+                {
+                    mToVisit.push_back(below);
+                }
+            }
+
+            if (IsOutOfRange(left) == false)
+            {
+                if (TryToAdd(left) == true)
+                {
+                    mToVisit.push_back(left);
+                }
+            }
         }
 
-        if (TryToAdd(right) == true)
+        for (auto set : mEmptyPlace)
         {
-            mToVisit.push_back(right);
-        }
-
-        if (TryToAdd(bellow) == true)
-        {
-            mToVisit.push_back(bellow);
-        }
-
-        if (TryToAdd(left) == true)
-        {
-            mToVisit.push_back(left);
+            mShowGrid[set.x][set.y] = mGrid[set.x][set.y];
         }
 
         return false;
     }
 }
 
-void Level1::Selected(int x, int y)
+void Level1::Selected(sf::Vector2i location)
 {
     mToVisit.clear();
 
-
-    //mGrid->GetCell(cellLocation)->SetToImage(Images::RedX);
-
-    mToVisit.push_back(std::list<int>(x,y));
+    if (mGrid[location.x][location.y] != EMPTY)
+    {
+        return;
+    }
+    else
+    {
+        mShowGrid[location.x][location.y] = EMPTY;
+        mToVisit.push_back(location);
+    }
 }
 
-bool Level1::TryToAdd(int x, int y)
+bool Level1::TryToAdd(sf::Vector2i location)
 {
-    if (mGrid->GetCell(cellPos) == nullptr)
+    auto testx = std::find(mEmptyPlace.begin(), mEmptyPlace.end(), location);
+
+    if (testx != mEmptyPlace.end())
+    {
+        return false;
+    }    
+
+    if (mGrid[location.x][location.y] != EMPTY)
+    {
+        if (mGrid[location.x][location.y] != MINE)
+        {
+            mEmptyPlace.push_back(location);
+        }
+        return false;
+    }
+
+    if (mShowGrid[location.x][location.y] != TILE)
     {
         return false;
     }
 
-    if (mGrid->GetCell(cellPos)->GetImage() != Images::None)
-    {
-        return false;
-    }
 
-    mGrid->GetCell(cellPos)->SetToImage(Images::RedX);
+    //mShowGrid[location.x][location.y] = EMPTY;
 
     return true;
+}
+
+bool Level1::IsOutOfRange(sf::Vector2i location)
+{
+    if ((0 < location.x && location.x < GRID_LENGTH-1) &&
+        (0 < location.y && location.y < GRID_LENGTH-1))
+    {
+        return false;
+    }
+    else
+    {
+        return true;
+    }
+}
+
+void Level1::ShowHint(void)
+{
 }
 
 void Level1::Update([[maybe_unused]] double dt)
@@ -251,19 +323,27 @@ void Level1::Update([[maybe_unused]] double dt)
 
     if (mShouldGameRun == true)
     {
-        if (0 <= x && x < 12 &&
-            0 <= y && y < 12)
+        if (IsOutOfRange(sf::Vector2i(x, y)) == false)
         {
             if (Engine::GetInput().IsMousePressed(sf::Mouse::Left))
             {
+                Selected(sf::Vector2i(x, y));
                 mShowGrid[x][y] = mGrid[x][y];
+               
             }
 
             if (Engine::GetInput().IsMousePressed(sf::Mouse::Right))
             {
                 mShowGrid[x][y] = FLAG;
             }
+            CanVisit();
+            
         }
+    }
+
+    if (Engine::GetInput().IsKeyTriggered(sf::Keyboard::H))
+    {
+        
     }
 
     if (Engine::GetInput().IsKeyPressed(sf::Keyboard::R))
@@ -272,7 +352,7 @@ void Level1::Update([[maybe_unused]] double dt)
         mShouldGameRun = true;
     }
 
-    if (Engine::GetInput().IsKeyReleased(sf::Keyboard::Space))
+    if (Engine::GetInput().IsKeyTriggered(sf::Keyboard::Space))
     {
         Engine::GetGameStateManager().SetNextState(LEVEL2);
     }
