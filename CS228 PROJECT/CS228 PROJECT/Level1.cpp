@@ -16,13 +16,14 @@ Creation date: 21/07/2020
 #include "Colors.h"
 #include <time.h>
 #include <algorithm>
+#include <random>
 
 constexpr int EMPTY = 0;
 constexpr int MINE = 9;
 constexpr int TILE = 10;
 constexpr int FLAG = 11;
 constexpr int GRID_LENGTH = 12;
-constexpr int LEVEL = 10; // The higher is the easier.
+constexpr int LEVEL = 8; // The higher is the easier.
 
 Level1::Level1() {};
 
@@ -244,10 +245,9 @@ bool Level1::CanVisit(void)
                 }
             }
         }
-
-        for (auto emptyLocation : mEmptyPlace)
+        for (auto location : mEmptyPlace)
         {
-            mShowGrid[emptyLocation.x][emptyLocation.y] = EMPTY;
+            mShowGrid[location.x][location.y] = mGrid[location.x][location.y];
         }
 
         return false;
@@ -279,6 +279,16 @@ bool Level1::TryToAdd(sf::Vector2i location)
 
     if (mGrid[location.x][location.y] != EMPTY)
     {
+        if (mGrid[location.x][location.y] != MINE)
+        {
+            mEmptyPlace.push_back(location);
+        }
+
+        return false;
+    }
+
+    if (mShowGrid[location.x][location.y] != TILE)
+    {
         return false;
     }
 
@@ -287,8 +297,8 @@ bool Level1::TryToAdd(sf::Vector2i location)
 
 bool Level1::IsOutOfRange(sf::Vector2i location)
 {
-    if ((0 <= location.x && location.x < GRID_LENGTH) &&
-        (0 <= location.y && location.y < GRID_LENGTH))
+    if ((0 < location.x && location.x < GRID_LENGTH - 1) &&
+        (0 < location.y && location.y < GRID_LENGTH - 1))
     {
         return false;
     }
@@ -314,15 +324,23 @@ void Level1::Update([[maybe_unused]] double dt)
     {
         if (IsOutOfRange(sf::Vector2i(x, y)) == false)
         {
-            if (Engine::GetInput().IsMousePressed(sf::Mouse::Left))
+            if (Engine::GetInput().IsMouseTriggered(sf::Mouse::Left))
             {
                 Selected(sf::Vector2i(x, y));
                 mShowGrid[x][y] = mGrid[x][y];
+
             }
 
-            if (Engine::GetInput().IsMousePressed(sf::Mouse::Right))
+            if (Engine::GetInput().IsMouseTriggered(sf::Mouse::Right))
             {
-                mShowGrid[x][y] = FLAG;
+                if (mShowGrid[x][y] == FLAG)
+                {
+                    mShowGrid[x][y] = TILE;
+                }
+                else
+                {
+                    mShowGrid[x][y] = FLAG;
+                }   
             }
 
             CanVisit();
