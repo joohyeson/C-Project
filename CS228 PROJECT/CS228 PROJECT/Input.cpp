@@ -14,13 +14,7 @@ Creation date: 21/07/2020
 
 Input::Input()
 {
-    mKeyPressed.reset();
-    mKeyReleased.reset();
-    mKeyTriggered.reset();
-
-    mMousePressed.reset();
-    mMouseReleased.reset();
-    mMouseTriggered.reset();
+    Reset();
 
     mMouse = sf::Vector2i(0, 0);
 }
@@ -51,6 +45,19 @@ void Input::Update(sf::Event inputEvent)
     }
 }
 
+void Input::KeyUpdate()
+{
+    for (int i = 0; i < sf::Keyboard::KeyCount; ++i)
+    {
+        mKeyReleased[i] = mKeyPressed[i];
+    }
+
+    for (int i = 0; i < sf::Mouse::ButtonCount; ++i)
+    {
+        mMouseReleased[i] = mMousePressed[i];
+    }
+}
+
 bool Input::IsKeyPressed(sf::Keyboard::Key scancode)
 {
     return mKeyPressed[scancode];
@@ -58,12 +65,12 @@ bool Input::IsKeyPressed(sf::Keyboard::Key scancode)
 
 bool Input::IsKeyReleased(sf::Keyboard::Key scancode)
 {
-    return mKeyReleased[scancode];
+    return mKeyPressed[scancode] == false;
 }
 
 bool Input::IsKeyTriggered(sf::Keyboard::Key scancode)
 {
-    return mKeyTriggered[scancode];
+    return mKeyPressed[scancode] == true && mKeyReleased[scancode] == false;
 }
 
 bool Input::IsMousePressed(sf::Mouse::Button mouseButton)
@@ -73,12 +80,12 @@ bool Input::IsMousePressed(sf::Mouse::Button mouseButton)
 
 bool Input::IsMouseReleased(sf::Mouse::Button mouseButton)
 {
-    return mMouseReleased[mouseButton];
+    return mMousePressed[mouseButton] == false;
 }
 
 bool Input::IsMouseTriggered(sf::Mouse::Button mouseButton)
 {
-    return mMouseTriggered[mouseButton];
+    return  mMousePressed[mouseButton] == true && mMouseReleased[mouseButton] == false;
 }
 
 sf::Vector2i Input::GetMousePosition(void)
@@ -91,14 +98,18 @@ void Input::SetPressedKey(sf::Keyboard::Key scancode)
     if (mKeyPressed[scancode] != true)
     {
         mKeyPressed[scancode] = true;
-        mKeyTriggered[scancode] = true;
     }
 }
 
 void Input::SetReleasedKey(sf::Keyboard::Key scancode)
 {
+    if (mKeyReleased[scancode] != true)
+    {
+        mKeyReleased[scancode] = true;
+    }
+
     mKeyPressed[scancode] = false;
-    mKeyReleased[scancode] = true;
+
 }
 
 void Input::SetPressedMouse(sf::Mouse::Button mouseButton)
@@ -106,27 +117,46 @@ void Input::SetPressedMouse(sf::Mouse::Button mouseButton)
     if (mMousePressed[mouseButton] != true)
     {
         mMousePressed[mouseButton] = true;
-        mMouseTriggered[mouseButton] = true;
     }
 }
 
 void Input::SetReleasedMouse(sf::Mouse::Button mouseButton)
 {
+    if (mMouseReleased[mouseButton] != true)
+    {
+        mMouseReleased[mouseButton] = true;
+    }
+
     mMousePressed[mouseButton] = false;
-    mMouseReleased[mouseButton] = true;
 }
 
 void Input::SetMousePosition(sf::Vector2i position)
 {
-    mMouse.x = position.x - Engine::GetWindow().GetSize().x / 2;
-    mMouse.y = -(position.y - static_cast<int>(Engine::GetWindow().GetSize().y) / 2);
+    mMouse.x = position.x - static_cast<int>(Engine::GetWindow().GetSize().x >> 1);
+    mMouse.y = -(position.y - static_cast<int>(Engine::GetWindow().GetSize().y >> 1));
 }
 
 void Input::Reset()
 {
-    mKeyReleased.reset();
-    mKeyTriggered.reset();
+    for (int i = 0; i < sf::Keyboard::KeyCount; ++i)
+    {
+        mKeyPressed[i] = 0;
+        mKeyReleased[i] = 0;
+        mKeyTriggered[i] = 0;
+    }
 
-    mMouseReleased.reset();
-    mMouseTriggered.reset();
+    for (int i = 0; i < sf::Mouse::ButtonCount; ++i)
+    {
+        mMousePressed[i] = 0;
+        mMouseReleased[i] = 0;
+        mMouseTriggered[i] = 0;
+    }
+}
+
+void Input::ResetRelease()
+{
+    for (int i = 0; i < sf::Keyboard::KeyCount; ++i)
+    {
+        mKeyReleased[i] = 0;
+    }
 }

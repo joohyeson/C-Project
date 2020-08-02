@@ -102,4 +102,9 @@
       <Filter>Game\Level2</Filter>
     </ClInclude>
   </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\CoreTopics.md" />
+    <None Include="..\..\README.md" />
+    <None Include="..\..\ClassProject.md" />
+  </ItemGroup>
 </Project>

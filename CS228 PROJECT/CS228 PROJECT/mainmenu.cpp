@@ -35,7 +35,19 @@ void MainMenu::Update(double/* dt*/)
 {
     if (Engine::GetInput().IsKeyTriggered(sf::Keyboard::Space) == true)
     {
+        
         Engine::GetGameStateManager().SetNextState(LEVEL1);
+    }
+
+    if (Engine::GetInput().IsKeyTriggered(sf::Keyboard::F))
+    {
+       std::cout << "F" << std::endl;
+       //Engine::GetWindow().SetFullScreen();
+    }
+
+    if (Engine::GetInput().IsKeyTriggered(sf::Keyboard::Escape) == true)
+    {
+        Engine::GetGameStateManager().Shutdown();
     }
 }
 

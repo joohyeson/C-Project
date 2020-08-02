@@ -14,49 +14,62 @@ Creation date: 21/07/2020
 #include "Window.h"
 #include "Levels.h"
 #include "Colors.h"
-#include "SFML/Window.hpp"
 #include <time.h>
+#include <algorithm>
+#include <random>
 
-constexpr int FLAG = 11;
-constexpr int MINE = 9;
 constexpr int EMPTY = 0;
+constexpr int MINE = 9;
 constexpr int TILE = 10;
+constexpr int FLAG = 11;
+constexpr int GRID_LENGTH = 12;
+constexpr int LEVEL = 8; // The higher is the easier.
 
 Level1::Level1() {};
+
+constexpr int Empty(void)
+{
+    return EMPTY;
+}
+
+std::vector<int> EmptyRow(void)
+{
+    std::vector<int> row;
+    row.resize(GRID_LENGTH);
+    std::generate(row.begin(), row.end(), Empty);
+
+    return row;
+}
+
+constexpr int Tile(void)
+{
+    return TILE;
+}
+
+std::vector<int> TileRow(void)
+{
+    std::vector<int> row;
+    row.resize(GRID_LENGTH);
+    std::generate(row.begin(), row.end(), Tile);
+
+    return row;
+}
 
 void Level1::Load()
 {
     srand(static_cast<unsigned int>(time(0)));
 
-    for (int i = 0; i < 12; ++i)
-    {
-        std::vector<int> row;
+    mGrid.resize(GRID_LENGTH);
+    std::generate(mGrid.begin(), mGrid.end(), EmptyRow);
 
-        for (int j = 0; j < 12; ++j)
-        {
-            row.push_back(EMPTY);
-        }
-
-        mGrid.push_back(row);
-    }
-
-    for (int i = 0; i < 12; ++i)
-    {
-        std::vector<int> row;
-
-        for (int j = 0; j < 12; ++j)
-        {
-            row.push_back(TILE);
-        }
-
-        mShowGrid.push_back(row);
-    }
+    mShowGrid.resize(GRID_LENGTH);
+    std::generate(mShowGrid.begin(), mShowGrid.end(), TileRow);
 
     for (int i = 1; i <= 10; i++)
     {
         for (int j = 1; j <= 10; j++)
         {
-            if (rand() % 5 == 0)
+            if (rand() % LEVEL == 0)
             {
                 mGrid[i][j] = MINE;
             }
@@ -117,7 +130,6 @@ void Level1::Load()
             mGrid[i][j] = numberOfMines;
         }
     }
-
 }
 
 void Level1::Draw()
@@ -131,6 +143,14 @@ void Level1::Draw()
     text.setCharacterSize(30);
     text.setStyle(sf::Text::Regular);
     Engine::GetWindow().Draw(text);
+
+    //sf::Text text2;
+    //text2.setFont(Engine::GetGameStateManager().GetFont());
+    //text2.setString("Hint Count :" + std::to_string(mHintCount));
+    //text2.setPosition(sf::Vector2f(800, 0));
+    //text2.setCharacterSize(30);
+    //text2.setStyle(sf::Text::Regular);
+    //Engine::GetWindow().Draw(text2);
 
     sf::Texture tileTexture;
     tileTexture.loadFromFile("../Assets/Art/tiles.jpg");
@@ -153,8 +173,7 @@ void Level1::Draw()
     {
         for (int j = 1; j <= 10; j++)
         {
-            if (0 <= x && x < 12 &&
-                0 <= y && y < 12)
+            if (IsOutOfRange(sf::Vector2i(x, y)) == false)
             {
                 if (mShowGrid[x][y] == MINE)
                 {
@@ -172,6 +191,165 @@ void Level1::Draw()
     }
 }
 
+bool Level1::CanVisit(void)
+{
+    if (mToVisit.empty() == true)
+    {
+        return true;
+    }
+    else
+    {
+        mEmptyPlace.clear();
+
+        while (mToVisit.empty() != true)
+        {
+            sf::Vector2i currentLocation = mToVisit.front();
+
+            mToVisit.pop_front();
+            mEmptyPlace.push_back(currentLocation);
+
+            sf::Vector2i above = { currentLocation.x, currentLocation.y + 1 };
+            sf::Vector2i right = { currentLocation.x + 1, currentLocation.y };
+            sf::Vector2i below = { currentLocation.x, currentLocation.y - 1 };
+            sf::Vector2i left = { currentLocation.x - 1, currentLocation.y };
+
+            sf::Vector2i above1 = { currentLocation.x-1, currentLocation.y + 1 };
+            sf::Vector2i right1 = { currentLocation.x-1 , currentLocation.y-1 };
+            sf::Vector2i below1 = { currentLocation.x+1, currentLocation.y - 1 };
+            sf::Vector2i left1 = { currentLocation.x+1, currentLocation.y+1 };
+
+            if (IsOutOfRange(above1) == false)
+            {
+                if (TryToAdd(above1) == true)
+                {
+                    mToVisit.push_back(above1);
+                }
+            }
+
+            if (IsOutOfRange(right1) == false)
+            {
+                if (TryToAdd(right1) == true)
+                {
+                    mToVisit.push_back(right1);
+                }
+            }
+
+            if (IsOutOfRange(below1) == false)
+            {
+                if (TryToAdd(below1) == true)
+                {
+                    mToVisit.push_back(below1);
+                }
+            }
+
+            if (IsOutOfRange(left1) == false)
+            {
+                if (TryToAdd(left1) == true)
+                {
+                    mToVisit.push_back(left1);
+                }
+            }
+
+            if (IsOutOfRange(above) == false)
+            {
+                if (TryToAdd(above) == true)
+                {
+                    mToVisit.push_back(above);
+                }
+            }
+
+            if (IsOutOfRange(right) == false)
+            {
+                if (TryToAdd(right) == true)
+                {
+                    mToVisit.push_back(right);
+                }
+            }
+
+            if (IsOutOfRange(below) == false)
+            {
+                if (TryToAdd(below) == true)
+                {
+                    mToVisit.push_back(below);
+                }
+            }
+
+            if (IsOutOfRange(left) == false)
+            {
+                if (TryToAdd(left) == true)
+                {
+                    mToVisit.push_back(left);
+                }
+            }
+        }
+
+        for (auto location : mEmptyPlace)
+        {
+            mShowGrid[location.x][location.y] = mGrid[location.x][location.y];
+        }
+
+        return false;
+    }
+}
+
+void Level1::Selected(sf::Vector2i location)
+{
+    mToVisit.clear();
+
+    if (mGrid[location.x][location.y] != EMPTY)
+    {
+        return;
+    }
+    else
+    {
+        mToVisit.push_back(location);
+    }
+}
+
+bool Level1::TryToAdd(sf::Vector2i location)
+{
+    std::vector<sf::Vector2i>::iterator checkAlreadyExist = std::find(mEmptyPlace.begin(), mEmptyPlace.end(), location);
+
+    if (checkAlreadyExist != mEmptyPlace.end())
+    {
+        return false;
+    }
+
+    if (mGrid[location.x][location.y] != EMPTY)
+    {
+        if (mGrid[location.x][location.y] != MINE)
+        {
+            mEmptyPlace.push_back(location);
+        }
+
+        return false;
+    }
+
+    if (mShowGrid[location.x][location.y] != TILE)
+    {
+        return false;
+    }
+
+    return true;
+}
+
+bool Level1::IsOutOfRange(sf::Vector2i location)
+{
+    if ((0 < location.x && location.x < GRID_LENGTH - 1) &&
+        (0 < location.y && location.y < GRID_LENGTH - 1))
+    {
+        return false;
+    }
+    else
+    {
+        return true;
+    }
+}
+
+void Level1::ShowHint(void)
+{
+}
+
 void Level1::Update([[maybe_unused]] double dt)
 {
     sf::Vector2i mousePosition = sf::Mouse::getPosition(Engine::GetWindow().GetWindow());
@@ -182,20 +360,33 @@ void Level1::Update([[maybe_unused]] double dt)
 
     if (mShouldGameRun == true)
     {
-        if (0 <= x && x < 12 &&
-            0 <= y && y < 12)
+        if (IsOutOfRange(sf::Vector2i(x, y)) == false)
         {
-            if (Engine::GetInput().IsMousePressed(sf::Mouse::Left))
+            if (Engine::GetInput().IsMouseTriggered(sf::Mouse::Left))
             {
+                Selected(sf::Vector2i(x, y));
                 mShowGrid[x][y] = mGrid[x][y];
             }
 
-            if (Engine::GetInput().IsMousePressed(sf::Mouse::Right))
+            if (Engine::GetInput().IsMouseTriggered(sf::Mouse::Right))
             {
-                mShowGrid[x][y] = FLAG;
+                if (mShowGrid[x][y] == TILE)
+                {
+                    mShowGrid[x][y] = FLAG;
+                }
+                else if (mShowGrid[x][y] == FLAG)
+                {
+                    mShowGrid[x][y] = TILE;
+                }
             }
 
+            CanVisit();
         }
+    }
+
+    if (Engine::GetInput().IsKeyTriggered(sf::Keyboard::H))
+    {
+        ShowHint();
     }
 
     if (Engine::GetInput().IsKeyPressed(sf::Keyboard::R))
@@ -204,9 +395,14 @@ void Level1::Update([[maybe_unused]] double dt)
         mShouldGameRun = true;
     }
 
-    if (Engine::GetInput().IsKeyPressed(sf::Keyboard::Space))
+    if (Engine::GetInput().IsKeyTriggered(sf::Keyboard::Space))
     {
         Engine::GetGameStateManager().SetNextState(LEVEL2);
+    }
+
+    if (Engine::GetInput().IsKeyTriggered(sf::Keyboard::Escape) == true)
+    {
+        Engine::GetGameStateManager().Shutdown();
     }
 }
 

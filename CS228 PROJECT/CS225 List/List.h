@@ -32,6 +32,17 @@ private:
         return pNewNode;
     }
 
+    Node* MakeNode(T data, Node* next, Node* prev)
+    {
+        Node* pNewNode = new Node();
+        pNewNode->data = data;
+
+        pNewNode->pNext = next;
+        pNewNode->pPrev = prev;
+
+        return pNewNode;
+    }
+
 public:
     class Iterator
     {
@@ -84,6 +95,8 @@ private:
     Node* pHead;
     Node* pTail;
     int mSize;
+
+    void deep_copy(const List<T>& rhs);
 };
 
 #include "List.hpp" //Template list usage

@@ -19,6 +19,13 @@ class Level2 : public GameState
 {
 public:
     Level2();
+    ~Level2();
+
+    Level2(const Level2& rhs); // copy constructor
+    Level2(Level2&& rhs); // move constructor
+    Level2& operator=(const Level2& rhs); // copy assignment
+    Level2& operator=(Level2&& rhs); //move assignment
+
     void Load() override;
     void Update(double dt) override;
     void Unload() override;
@@ -27,11 +34,14 @@ public:
     std::string GetName() override { return "Level2"; }
 
 private:
-    bool mShouldGameRun = true;
-    bool mIsGameCleared = false;
+    unsigned char mFlags;
+    int mBulletLimit;
+
     Player* mPlayer;
+
     List<GameObject*> mGameObjectList;
-    Animation mBulletAnimation;
+
+    Animation bulletAnimation;
     Animation playerMoveAnimation;
     Animation playerAnimation;
     Animation explosionAnimation;
@@ -40,4 +50,6 @@ private:
     Animation rockAnimation;
 
     sf::Texture shipTexture, explosionTexture, rockTexture, bulletTexture, smallRockTexture, explosionShipTexture, backgroundTexture;
+
+    void DeepCopy(const Level2& rhs);
 };
