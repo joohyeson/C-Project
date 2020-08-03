@@ -325,9 +325,9 @@ void Level2::Update([[maybe_unused]] double dt)
                 {
                     mBulletLimit++;
                 }
-
                 objectIterator = mGameObjectList.erase(objectIterator);
                 delete object;
+                object = nullptr;
             }
             else
             {
@@ -410,6 +410,11 @@ void Level2::Update([[maybe_unused]] double dt)
 
 void Level2::Unload()
 {
+    for (auto objectIterator = mGameObjectList.begin(); objectIterator != mGameObjectList.end(); objectIterator++)
+    {
+        auto temp = *objectIterator;
+        delete temp;
+    }
     mGameObjectList.clear();
 
     mPlayer = nullptr;
