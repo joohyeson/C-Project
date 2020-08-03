@@ -353,6 +353,8 @@ Level2::~Level2()
 
 void Level2::Unload()
 {
+    //All game objects are stored in 'mGameObjectList'.
+    //So clear function deletes all the game objects, include 'mPlayer'.
     mGameObjectList.clear();
 
     mPlayer = nullptr;
@@ -361,13 +363,33 @@ void Level2::Unload()
 
  **Rule of 5**
 - Not like the rule of 0, that avoids defining default operations and does not allocate and deallocate. 
-Rule of 5 has, along with Rule of 3 (copy constructor, assignment operator, assignment destructor), move constructor, and move assignment operator.
-Using the rule of 5 is important because the programmer can safely and efficiently implement RAII to manage dynamically allocated resources.
+
+Rule of 5 has, along with Rule of 3 (copy constructor, copy assignment operator, destructor), move constructor, and move assignment operator.
+
+For copy constructor and copy assignment operator, 
+the default copy constructor is a shallow copy. So if we do not define
+a copy constructor for a deep copy, 
+and we just use a default copy constructor to make an object,
+a new object uses the same memory address with the copied object. 
+Then, 'delete' will be called twice on the same memory address, 
+and there will be memory corruption and segmentation fault for 'double free'.
+For these reasons, we need a copy constructor and copy assignment operator.
+
+And for move constructor, and move assignment operator,
+Copying objects can be expensive as it involves creating, 
+copying and then destroying temporary objects.
+So it is useful to only have one resource at a time. 
+This resource's ownership can be transferred from one manager to another. 
+In such cases, we define and use move constructor and move assignment operator.
+
+Thus, using the rule of 5 is important 
+because the programmer can safely and efficiently implement RAII to manage dynamically allocated resources.
 
 ```c++
-    //We have to manually manage the allocated resources, so we need rule of 5 to handle resources more safely and efficiently.
     Node* MakeNode(T data)
     {
+        //We have to manually manage the allocated resources, 
+        //so we need rule of 5 to handle resources more safely and efficiently.
         Node* pNewNode = new Node();
         pNewNode->data = data;
         pNewNode->pNext = nullptr;
