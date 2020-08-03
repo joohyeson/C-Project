@@ -19,6 +19,7 @@ Creation date: 21/07/2020
 #include <iostream> //std::cout, std::endl
 #include <iomanip>
 #include "List.h"
+#include <list>
 
 constexpr int NUM_OF_NODES = 5;
 
@@ -448,9 +449,8 @@ void test10()
 void test11()
 {
     std::cout << "\nTEST#11 RAII TEST" << std::endl;
-    List<int> myList;
-    myList.push_back(4);
-    List<int> listA(5, myList);
+    
+    List<int> listA(5);
 
     std::cout << "\n#ListA" << std::endl;
     for (auto node : listA)
@@ -460,6 +460,7 @@ void test11()
     std::cout << "Value : " << listA.back()<< std::endl;
 
     std::cout << "Size : " << listA.size() << std::endl;
+
 }
 
 int main(int argc, char** argv)

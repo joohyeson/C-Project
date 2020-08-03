@@ -66,7 +66,7 @@ public:
     };
 
     List();
-    List(int count, const List<T>& alloc=List<T>::List());//RAII
+    List(int count);//RAII
     ~List();
 
     List(const List<T>& rhs); // copy constructor

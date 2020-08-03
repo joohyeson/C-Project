@@ -15,21 +15,11 @@ template<typename T>
 List<T>::List() : pHead(nullptr), pTail(nullptr), mSize(0) {}
 
 template<typename T>
-List<T>::List(int count, const List<T>& alloc) {
-    deep_copy(alloc);
+List<T>::List(int count) {
 
-    auto temp = pHead;
-
-    for (int i = 1; i < count; i++)
+    for (int i = 0; i < count; i++)
     {
-        if (temp != nullptr)
-        {
-           List<T>::push_back(temp->data);
-        }
-        else
-        {
-            List<T>::push_back(0);
-        }
+        List<T>::push_back(0);
     }
 }
 
