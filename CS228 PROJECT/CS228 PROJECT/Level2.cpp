@@ -21,14 +21,8 @@ constexpr int NUMBER_OF_BULLETS = 150;
 constexpr int RADIUS_OF_ASTEROID = 15;
 constexpr float MOVING_ANGLE = 3.0f;
 
-constexpr unsigned int IS_FIRING = 1 << 0;
-constexpr unsigned int IS_MOVING = 1 << 0;
-
-Level2::Level2()
-{
-    mPlayerSpriteFlags = 0;
-    mBulletLimit = NUMBER_OF_BULLETS;
-}
+constexpr unsigned char IS_FIRING = 1 << 0;
+constexpr unsigned char IS_MOVING = 1 << 0;
 
 Level2::~Level2()
 {
@@ -47,8 +41,13 @@ void Level2::DeepCopy(const Level2& rhs)
 
     mIsGameOver = rhs.mIsGameOver;
     mIsGameCleared = rhs.mIsGameCleared;
+
     mPlayerSpriteFlags = rhs.mPlayerSpriteFlags;
+
     mBulletLimit = rhs.mBulletLimit;
+
+    mBulletTimer = rhs.mBulletTimer;
+    mPlayerMoveTimer = rhs.mPlayerMoveTimer;
 }
 
 Level2::Level2(const Level2& rhs)//copy constructor
@@ -60,8 +59,13 @@ Level2::Level2(Level2&& rhs)//move constructor
 {
     mIsGameOver = rhs.mIsGameOver;
     mIsGameCleared = rhs.mIsGameCleared;
+
     mPlayerSpriteFlags = rhs.mPlayerSpriteFlags;
+
     mBulletLimit = rhs.mBulletLimit;
+
+    mBulletTimer = rhs.mBulletTimer;
+    mPlayerMoveTimer = rhs.mPlayerMoveTimer;
 
     mPlayer = rhs.mPlayer;
 
@@ -85,8 +89,14 @@ Level2& Level2::operator=(Level2&& rhs)//move assignment operator
 
         mIsGameOver = rhs.mIsGameOver;
         mIsGameCleared = rhs.mIsGameCleared;
+
         mPlayerSpriteFlags = rhs.mPlayerSpriteFlags;
+
         mBulletLimit = rhs.mBulletLimit;
+
+        mBulletTimer = rhs.mBulletTimer;
+        mPlayerMoveTimer = rhs.mPlayerMoveTimer;
+
         mPlayer = rhs.mPlayer;
 
         rhs.mPlayer = nullptr;
@@ -96,63 +106,30 @@ Level2& Level2::operator=(Level2&& rhs)//move assignment operator
     return *this;
 }
 
-Animation Level2::GetAnimationFromEnum(eTexture textureEnum)
-{
-    sf::Texture texture;
-    Animation animation;
-
-    switch (textureEnum)
-    {
-    case eTexture::BULLET:
-        texture.loadFromFile("../Assets/Art/fire_blue.png");
-        animation.SetAnimationValues(texture, 0, 0, 32, 64, 16, 0.8f);
-        break;
-    case eTexture::PLAYER:
-        texture.loadFromFile("../Assets/Art/spaceship.png");
-        texture.setSmooth(true);
-        animation.SetAnimationValues(texture, 40, 0, 40, 40, 1, 0.f);
-        break;
-    case eTexture::PLAYER_MOVE:
-        texture.loadFromFile("../Assets/Art/spaceship.png");
-        texture.setSmooth(true);
-        animation.SetAnimationValues(texture, 40, 40, 40, 40, 1, 0.f);
-        break;
-    case eTexture::EXPLOSION:
-        texture.loadFromFile("../Assets/Art/explosions/type_C.png");
-        animation.SetAnimationValues(texture, 0, 0, 256, 256, 48, 0.5f);
-        break;
-    case eTexture::ROCK:
-        texture.loadFromFile("../Assets/Art/rock.png");
-        animation.SetAnimationValues(texture, 0, 0, 64, 64, 16, 0.2f);
-        break;
-    case eTexture::SMALL_ROCK:
-        texture.loadFromFile("../Assets/Art/rock_small.png");
-        animation.SetAnimationValues(texture, 0, 0, 64, 64, 16, 0.2f);
-        break;
-    default:
-        break;
-    }
-
-    return animation;
-}
-
 void Level2::Load()
 {
     mIsGameOver = false;
     mIsGameCleared = false;
 
     mPlayerSpriteFlags = 0;
+
     mBulletLimit = NUMBER_OF_BULLETS;
+
+    mBulletTimer = 0;
+    mPlayerMoveTimer = 0;
 
     mPlayer = new Player();
 
-    mPlayer->SetValues(GetAnimationFromEnum(eTexture::PLAYER), static_cast<float>(Engine::GetWindow().GetSize().x >> 1), static_cast<float>(Engine::GetWindow().GetSize().y >> 1), 0, 20);
+    mPlayer->SetValues(Animation(eTexture::PLAYER), static_cast<float>(Engine::GetWindow().GetSize().x >> 1), static_cast<float>(Engine::GetWindow().GetSize().y >> 1), 0, 20);
     mGameObjectList.push_back(mPlayer);
+
+    mPlayerOriginalScale = mPlayer->animation.GetAnimationSprite().getScale();
+    mPlayerOriginalColor = mPlayer->animation.GetAnimationSprite().getColor();
 
     for (int i = 0; i < NUMBER_OF_ASTEROID; i++)
     {
         Asteroid* asteroid = new Asteroid();
-        asteroid->SetValues(GetAnimationFromEnum(eTexture::ROCK), static_cast<float>(rand() % Engine::GetWindow().GetSize().x), static_cast<float>(rand() % Engine::GetWindow().GetSize().y), static_cast<float>(rand() % 360), 25);
+        asteroid->SetValues(Animation(eTexture::ROCK), static_cast<float>(rand() % Engine::GetWindow().GetSize().x), static_cast<float>(rand() % Engine::GetWindow().GetSize().y), static_cast<float>(rand() % 360), 25);
         mGameObjectList.push_back(asteroid);
     }
 }
@@ -203,6 +180,16 @@ void Level2::Draw()
 
 void Level2::Update([[maybe_unused]] double dt)
 {
+    if (mBulletTimer > 0.0f)
+    {
+        mBulletTimer -= static_cast<float>(dt);
+    }
+
+    if (mPlayerMoveTimer > 0.0f)
+    {
+        mPlayerMoveTimer -= static_cast<float>(dt);
+    }
+
     if (!mIsGameOver)
     {
         for (auto objectAIterator = mGameObjectList.begin(); objectAIterator != mGameObjectList.end(); ++objectAIterator)
@@ -224,7 +211,7 @@ void Level2::Update([[maybe_unused]] double dt)
                         objectB->isAlive = false;
 
                         GameObject* explosion = new GameObject();
-                        explosion->SetValues(GetAnimationFromEnum(eTexture::EXPLOSION), objectA->x, objectA->y);
+                        explosion->SetValues(Animation(eTexture::EXPLOSION), objectA->x, objectA->y);
                         explosion->name = "explosion";
                         mGameObjectList.push_front(explosion);
 
@@ -237,7 +224,7 @@ void Level2::Update([[maybe_unused]] double dt)
                             else
                             {
                                 GameObject* asteroid = new Asteroid();
-                                asteroid->SetValues(GetAnimationFromEnum(eTexture::SMALL_ROCK), objectA->x, objectA->y, static_cast<float>(rand() % 360), 15.0f);
+                                asteroid->SetValues(Animation(eTexture::SMALL_ROCK), objectA->x, objectA->y, static_cast<float>(rand() % 360), 15.0f);
                                 mGameObjectList.push_front(asteroid);
                             }
                         }
@@ -252,7 +239,7 @@ void Level2::Update([[maybe_unused]] double dt)
                         objectB->isAlive = false;
 
                         GameObject* explosion = new GameObject();
-                        explosion->SetValues(GetAnimationFromEnum(eTexture::EXPLOSION), objectB->x, objectB->y);
+                        explosion->SetValues(Animation(eTexture::EXPLOSION), objectB->x, objectB->y);
                         explosion->name = "explosion";
                         mGameObjectList.push_front(explosion);
 
@@ -265,7 +252,7 @@ void Level2::Update([[maybe_unused]] double dt)
                             else
                             {
                                 GameObject* asteroid = new Asteroid();
-                                asteroid->SetValues(GetAnimationFromEnum(eTexture::SMALL_ROCK), objectB->x, objectB->y, static_cast<float>(rand() % 360), 15.0f);
+                                asteroid->SetValues(Animation(eTexture::SMALL_ROCK), objectB->x, objectB->y, static_cast<float>(rand() % 360), 15.0f);
                                 mGameObjectList.push_front(asteroid);
                             }
                         }
@@ -279,11 +266,11 @@ void Level2::Update([[maybe_unused]] double dt)
                         objectB->isAlive = false;
 
                         GameObject* explosion = new GameObject();
-                        explosion->SetValues(GetAnimationFromEnum(eTexture::EXPLOSION), objectA->x, objectA->y);
+                        explosion->SetValues(Animation(eTexture::EXPLOSION), objectA->x, objectA->y);
                         explosion->name = "explosion";
                         mGameObjectList.push_front(explosion);
 
-                        mPlayer->SetValues(GetAnimationFromEnum(eTexture::PLAYER), static_cast<float>(Engine::GetWindow().GetSize().x >> 1), static_cast<float>(Engine::GetWindow().GetSize().y >> 1), 0, 20);
+                        mPlayer->SetValues(Animation(eTexture::PLAYER), static_cast<float>(Engine::GetWindow().GetSize().x >> 1), static_cast<float>(Engine::GetWindow().GetSize().y >> 1), 0, 20);
                         mPlayer->dx = 0;
                         mPlayer->dy = 0;
 
@@ -298,11 +285,11 @@ void Level2::Update([[maybe_unused]] double dt)
                         objectA->isAlive = false;
 
                         GameObject* explosion = new GameObject();
-                        explosion->SetValues(GetAnimationFromEnum(eTexture::EXPLOSION), objectB->x, objectB->y);
+                        explosion->SetValues(Animation(eTexture::EXPLOSION), objectB->x, objectB->y);
                         explosion->name = "explosion";
                         mGameObjectList.push_front(explosion);
 
-                        mPlayer->SetValues(GetAnimationFromEnum(eTexture::PLAYER), static_cast<float>(Engine::GetWindow().GetSize().x >> 1), static_cast<float>(Engine::GetWindow().GetSize().y >> 1), 0, 20);
+                        mPlayer->SetValues(Animation(eTexture::PLAYER), static_cast<float>(Engine::GetWindow().GetSize().x >> 1), static_cast<float>(Engine::GetWindow().GetSize().y >> 1), 0, 20);
                         mPlayer->dx = 0;
                         mPlayer->dy = 0;
 
@@ -335,13 +322,35 @@ void Level2::Update([[maybe_unused]] double dt)
             }
         }
 
-        if (mPlayer->GetIsMoving() == true)
+        if (mPlayerSpriteFlags & IS_FIRING && mBulletTimer < 0.0f)
         {
-            mPlayer->animation = GetAnimationFromEnum(eTexture::PLAYER);
+            mPlayer->animation.GetAnimationSprite().setColor(static_cast<sf::Color>(RED));
+            mBulletTimer = 0.3f;
         }
         else
         {
-            mPlayer->animation = GetAnimationFromEnum(eTexture::PLAYER);
+            mPlayer->animation.GetAnimationSprite().setColor(mPlayerOriginalColor);
+        }
+
+        if (mPlayerSpriteFlags & IS_MOVING && mPlayerMoveTimer < 0.0f)
+        {
+            mPlayer->animation.GetAnimationSprite().setScale(mPlayerOriginalScale.x, mPlayerOriginalScale.y + 50);
+            mPlayerMoveTimer = 0.3f;
+        }
+        else
+        {
+            mPlayer->animation.GetAnimationSprite().setScale(mPlayerOriginalScale);
+        }
+
+        if (mPlayer->GetIsMoving() == true)
+        {
+            mPlayer->animation = Animation(eTexture::PLAYER_MOVE);
+            mPlayerSpriteFlags |= IS_MOVING;
+        }
+        else
+        {
+            mPlayer->animation = Animation(eTexture::PLAYER);
+            mPlayerSpriteFlags &= ~IS_MOVING;
         }
 
         for (auto explosion : mGameObjectList)
@@ -370,9 +379,10 @@ void Level2::Update([[maybe_unused]] double dt)
             if (mBulletLimit > 0)
             {
                 Bullet* bullet = new Bullet();
-                bullet->SetValues(GetAnimationFromEnum(eTexture::BULLET), mPlayer->x, mPlayer->y, mPlayer->angle, 10.0f);
+                bullet->SetValues(Animation(eTexture::BULLET), mPlayer->x, mPlayer->y, mPlayer->angle, 10.0f);
                 mGameObjectList.push_front(bullet);
                 mBulletLimit--;
+                mPlayerSpriteFlags |= IS_FIRING;
             }
         }
 

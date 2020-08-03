@@ -1,7 +1,10 @@
 ## Core Topics
 
-1. Pointers + Arrays
-- Pointers are variables that indicate the location of another variable. 
+**1. Pointers + Arrays**
+
+- Pointers
+
+Pointers are variables that indicate the location of another variable. 
 If you put the value in the pointer, you can have an address value for that variable. 
 And Using pointer, reference to the memory address makes it easy to access and manipulate various data types variables.
 
@@ -39,7 +42,9 @@ else
 }
 ```
 
-- Arrays are lists of data of the same type as one variable. 
+- Arrays
+
+Arrays are lists of data of the same type as one variable. 
 You can decide how much you want to use, then initialize the array, and use it. 
 Arrays are sized according to the data type when declaring, so the index access is fast. 
 So arrays are useful when the indices are important.
@@ -71,8 +76,8 @@ void Input::Reset()
 }
 ```
 
-2. Bit operations
-- A bit is the smallest unit that the computer can use, to save the binary digits like '1011'.
+**2. Bit operations**
+A bit is the smallest unit that the computer can use, to save the binary digits like '1011'.
 Bit operations are the operations that applied in bits for the binary digits.
 Bit operations can improve the CPU performance because '4/2' is the same as '4>>1' but, using '>>' is less expensive behavior.
 Below codes are the examples for the bit operations.
@@ -114,9 +119,11 @@ Engine::GetWindow().GetSize().x >> 1;
 //New flag here!
 ```
 
-3. Operator Overloading
-- Operator overloading is to redefine existing '=', '-', '/', etc. operators. In this way, you can use operators like 'class + class' and 'class - class'.
-- It can be used by redefining the operator within the function. The code below is how I used 'Operator Overloading' for this project.
+**3. Operator Overloading**
+
+Operator overloading is to redefine existing '=', '-', '/', etc. operators. In this way, you can use operators like 'class + class' and 'class - class'.
+It can be used by redefining the operator within the function. The code below is how I used 'Operator Overloading' for this project.
+
 ```c++
 template <typename T>
 typename List<T>::Iterator& List<T>::Iterator::operator++()
@@ -127,23 +134,28 @@ typename List<T>::Iterator& List<T>::Iterator::operator++()
 }
 ```
 
-4. Return Value Optimization
-- The return value optimization is literally to store the return value in the caller's memory to optimize the return value. 
-For example, if you give a constructor a copy constructor, the constructor will not be called twice. 
-Only the constructor is called once and no temporary objects are created. The code below is how I used 'Return Value Optimization' for this project.
+**4. Return Value Optimization**
+
+The return value optimization is literally to store the return value in the caller's memory to optimize the return value. 
+RVO is useful because it speeds up the runtime.
+Suppose we return a really big resource from a function.
+If we do not use RVO, we will make the resource locally, and returns it. 
+Then, we have to pay for that cost to deallocate that big temporary object.
+The code below is how I used 'Return Value Optimization' for this project.
+
 ```c++
 //RVO here
 ```
 
-5. Inheritance + Polymorphism
+**5. Inheritance + Polymorphism**
 
-**Inheritance**
+- Inheritance
 
-- Inheritance is one of the important concepts of OOP (Object Oriented Programming) along with polymorphism and encapsulation. 
+Inheritance is one of the important concepts of OOP (Object Oriented Programming) along with polymorphism and encapsulation. 
 Inheritance has a base class (superclass) and derived class (subclass). The advantage of inheritance is that you can reuse code. 
 If you create a function or variable in the base class, you can use the same content as in the base class without declaring the same content in the derived class.
 
-**Inheritance Example: GameObject.h&Level2.h&&LEvel2.cpp**
+- Inheritance Example: GameObject.h&Level2.h&&LEvel2.cpp
 ```c++
 class GameObject
 {
@@ -195,9 +207,9 @@ void Level2::Update([[maybe_unused]] double dt)
 //We can see that we can also use functions and variables declared in the game object class, not the player class.
 ```
 
-**Polymorphism**
+- Polymorphism
 
-- Polymorphism and inheritance are important concepts of OOP(Object Oriented Programming). 
+Polymorphism and inheritance are important concepts of OOP(Object Oriented Programming). 
 If we use polymorphism well, it can provide a consistent usage method to users regardless of the contents of the function. 
 Polymorphism with this advantage can be implemented using inheritance. 
 If at least one function in the superclass is implemented as virtual, a virtual function table in charge of this class is created.
@@ -206,7 +218,7 @@ When we override the virtual function in the subclass, a virtual pointer of the 
 The virtual pointers of the subclass have a unique location when overridden, but when not overridden, they point to the virtual pointer location of the base class. 
 We can implement polymorphism in inheritance through this method.
 
-**virtual table& pointer example**
+- Virtual table & Pointer example
 
 ```c++
 class shape
@@ -231,7 +243,7 @@ class rectangle{
 [shape::print()]
 ```
 
-**Polymorphism Example: Level1::Draw().h&Level2::Draw()&GameStateManager::SetRunningState()**
+- Polymorphism Example: Level1::Draw().h&Level2::Draw()&GameStateManager::SetRunningState()
 ```c++
 class GameState
 {
@@ -293,10 +305,10 @@ void GameStateManager::SetRunningState(double dt)
 }//mCurrentGameState is a variable that stores subclasses that have GameState as the base class.
 ```
 
-6. Rule of 5, RAII, r-value references/Move Semantics
+**6. Rule of 5, RAII, r-value references/Move Semantics**
 
- **RAII**
-- C++ has a risk of memory leak because the programmer has to free it manually. 
+ - RAII
+C++ has a risk of memory leak because the programmer has to free it manually. 
 So RAII (Resource Acquisition Is Initialization) is used to eliminate the possibility of memory leak. 
 Simply put, we initialize and allocate resources in the constructor, and then it deallocates automatically in its destructor.
 So using RAII is useful because there will be no possible memory leak, so the code become more stable.
@@ -305,8 +317,9 @@ So using RAII is useful because there will be no possible memory leak, so the co
 //List count constructor
 ```
 
- **Rule of 5**
-- Not like the rule of 0, that avoids defining operations, uses default, does not allocate and deallocate. 
+- Rule of 5
+
+Not like the rule of 0, that avoids defining operations, uses default, does not allocate and deallocate. 
 
 Rule of 5 has, along with Rule of 3 (copy constructor, copy assignment operator, destructor), move constructor, and move assignment operator.
 
@@ -440,8 +453,8 @@ List<T>& List<T>::operator=(List<T>&& rhs)
 }
 ```
 
- **r-value references/Move Semantics**
-- The r-value's name comes from the reason that the value is to the right of the expression.
+- r-value references/Move Semantics
+The r-value's name comes from the reason that the value is to the right of the expression.
 R-value is a special name for a temporary object that does not have a variable name.
 So no variable name means that we cannot get the address and reference to it.
 This is useful to copy more efficiently, because r-value object has very short life time,
@@ -463,11 +476,12 @@ List<T>::List(List<T>&& rhs)
 }
 ```
 
-7. Templates
-- A template is a frame created so that a class or function once created can be used with multiple data types. 
+**7. Templates**
+
+A template is a frame created so that a class or function once created can be used with multiple data types. 
 The advantage of using a template is that the code is shortened and easy to modify because there is no need to rewrite the code multiple times for every possible types.
 
-- Generics is the idea to allow type (Integer, String, and user-defined types) to be a parameter to methods, classes, and interfaces. 
+And Generics is the idea to allow type (Integer, String, and user-defined types) to be a parameter to methods, classes, and interfaces. 
 As it is independent of data type, so it is very reusable and convenient. 
 And generics can be implemented in C++ using Templates, like sort(), max(), min(), print().
 
@@ -497,10 +511,11 @@ class List
 }
 ```
 
-8. STL Container + Iterators + Algorithms
-- STL is a Standard template library.
+**8. STL Container + Iterators + Algorithms**
 
-- STL container is various types of a template class, like linked list, tree, stack, queue. 
+- STL Container
+
+STL container is various types of a template class, like linked list, tree, stack, queue. 
 STL container can manage a collection of objects.
 STL Container is useful because the programmer can choose what to use for the purpose, 
 as each container has its pros and cons.
@@ -521,7 +536,9 @@ void Level1::Selected(sf::Vector2i location)
 }
 ```
 
-- STL Iterator is a common interface for accessing data of the container. 
+- STL Iterators
+
+STL Iterator is a common interface for accessing data of the container. 
 STL Iterator can traverse over the contents of a container or a subset of the container.
 STL Iterator is useful because as it can access the container, 
 Programmers can perform various complex tasks with algorithm functions using iterators.
@@ -535,7 +552,9 @@ if (checkAlreadyExist != mEmptyPlace.end())
 }
 ```
 
-- STL Algorithm is a function that is defined in the <algorithm> library.
+- STL Algorithms
+
+STL Algorithm is a function that is defined in the <algorithm> library.
 There are search, sort, access, find, and so on.
 It is useful because algorithm uses the iterator as an interface, so algorithm function can be used in all containers.
 
