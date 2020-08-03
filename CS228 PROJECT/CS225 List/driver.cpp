@@ -19,6 +19,7 @@ Creation date: 21/07/2020
 #include <iostream> //std::cout, std::endl
 #include <iomanip>
 #include "List.h"
+#include <list>
 
 constexpr int NUM_OF_NODES = 5;
 
@@ -436,13 +437,30 @@ void test10()
     {
         std::cout << "Value : " << node << std::endl;
     }
-    
+
     std::cout << "Size : " << listA.size() << std::endl;
 
     listA.clear();
     std::cout << "\n===========AFTER CLEAR===========" << std::endl;
 
     std::cout << "Size : " << listA.size() << std::endl;
+}
+
+void test11()
+{
+    std::cout << "\nTEST#11 RAII TEST" << std::endl;
+    
+    List<int> listA(5);
+
+    std::cout << "\n#ListA" << std::endl;
+    for (auto node : listA)
+    {
+        std::cout << "Value : " << node << std::endl;
+    }
+    std::cout << "Value : " << listA.back()<< std::endl;
+
+    std::cout << "Size : " << listA.size() << std::endl;
+
 }
 
 int main(int argc, char** argv)
@@ -472,11 +490,12 @@ int main(int argc, char** argv)
         test8();
         test9();
         test10();
+        test11();
     }
     else
     {
         typedef void(*Test)(void);
-        Test Tests[] = { test1, test2, test3, test4, test5, test6, test7, test8, test9, test10 };
+        Test Tests[] = { test1, test2, test3, test4, test5, test6, test7, test8, test9, test10, test11 };
 
         Tests[testNum - 1]();
     }
