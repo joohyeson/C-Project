@@ -108,7 +108,7 @@ AND(&) 0011
 
 ```c++
 //We used '>>' instead using like Engine::GetWindow().GetSize().x / 2.
-Engine::GetWindow().GetSize().x >> 1
+Engine::GetWindow().GetSize().x >> 1;
 
 //And we used bit flags like this.
 constexpr unsigned char IS_GAME_OVER = 1 << 0;
@@ -130,7 +130,7 @@ if (mFlags & IS_CLEARED)
 ```
 
 3. Operator Overloading
-- Operator overloading is to redefine existing =,-,*, etc. operators. In this way, you can use operators like class+class and class*class.
+- Operator overloading is to redefine existing '=', '-', '/', etc. operators. In this way, you can use operators like 'class + class' and 'class - class'.
 - It can be used by redefining the operator within the function. The code below is how I used 'Operator Overloading' for this project.
 ```c++
 template <typename T>
