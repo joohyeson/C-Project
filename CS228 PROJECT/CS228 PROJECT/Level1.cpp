@@ -69,6 +69,7 @@ void Level1::Load()
     {
         for (int j = 1; j <= 10; j++)
         {
+            //use algorithm
             if (rand() % LEVEL == 0)
             {
                 mGrid[i][j] = MINE;

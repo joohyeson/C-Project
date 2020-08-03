@@ -65,7 +65,7 @@ The instructor will use the repo for examining the code and building the project
 - [X] [**core**] Use Bitwise operations to create a some kind of configuration variable where you extract values. _(Combine bit flags of varying powers of 2)_
 - [X] [**core**] Use bitwise operations to replace Arithmetic Operations
 - [X] [**core**] Makes good use of operator overloading
-- [X] [**core**] Has examples of Return Value Optimization
+- [ ] [**core**] Has examples of Return Value Optimization
 - [X] [**core**] Makes good use of Inheritance and Polymorphism
 - [X] [**core**] Makes good use of Rule of 5
 - [X] [**core**] Makes good use of Rule of 0

@@ -28,7 +28,7 @@ Level2::Level2()
 {
     mFlags = 0;
     mBulletLimit = NUMBER_OF_BULLETS;
-    mPlayer = new Player();
+    //mPlayer = new Player();
 }
 
 Level2::~Level2()
@@ -156,6 +156,7 @@ void Level2::Load()
     shipTexture.setSmooth(true);
     backgroundTexture.setSmooth(true);
 
+    //Make enum? -> unnamed RVO
     explosionAnimation = Animation(explosionTexture, 0, 0, 256, 256, 48, 0.5f);
     rockAnimation = Animation(rockTexture, 0, 0, 64, 64, 16, 0.2f);
     smallRockAnimation = Animation(smallRockTexture, 0, 0, 64, 64, 16, 0.2f);
@@ -218,7 +219,6 @@ void Level2::Draw()
         text.setPosition(sf::Vector2f(static_cast<float>(Engine::GetWindow().GetSize().x >> 1), static_cast<float>(Engine::GetWindow().GetSize().y >> 1) + 50));
         Engine::GetWindow().Draw(text);
     }
-
 }
 
 void Level2::Update([[maybe_unused]] double dt)

@@ -10,6 +10,7 @@ Creation date: 23/07/2020
 -----------------------------------------------------------------*/
 
 #include "Animation.h"
+#include "Colors.h"
 
 Animation::Animation(){}
 
@@ -26,6 +27,7 @@ Animation::Animation(sf::Texture& texture, int x, int y, int w, int h, int count
     mAnimationSprite.setTexture(texture);
     mAnimationSprite.setOrigin(w / 2.0f, h / 2.0f);
     mAnimationSprite.setTextureRect(mAnimationCoordinates[0]);
+    //mAnimationSprite.setColor(static_cast<sf::Color>(BABY_PINK));
 }
 
 void Animation::Update()

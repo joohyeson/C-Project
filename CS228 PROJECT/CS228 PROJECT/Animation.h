@@ -16,7 +16,7 @@ Creation date: 23/07/2020
 class Animation
 {
 public:
-    Animation();
+    Animation() = default;
     Animation(sf::Texture& texture, int x, int y, int w, int h, int count, float Speed);
     void Update();
     bool IsAnimationEnded();

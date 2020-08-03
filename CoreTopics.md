@@ -333,7 +333,7 @@ void GameStateManager::SetRunningState(double dt)
  **RAII**
 - C++ has a risk of memory leak because the programmer has to free it manually. 
 So RAII (Resource Acquisition Is Initialization) is used to eliminate the possibility of memory leak. 
-Simply put, This is a programming concept where the initialize (constructor) the thing is done, and then it releases automatically in its destructor.
+Simply put, This is a programming concept where we initialize and allocate resources in the constructor is done, and then it releases automatically in its destructor.
 So using RAII is useful because there will be no possible memory leak, so the code is more stable.
 
 ```c++
@@ -355,6 +355,8 @@ void Level2::Unload()
 {
     //All game objects are stored in 'mGameObjectList'.
     //So clear function deletes all the game objects, include 'mPlayer'.
+    //플레이어를 리스트에 추가하는 거랑 리스트가 뭔지 보여주기. 클리어로는 부족. 
+    //노드만 딜리트 할게 아니라 포인터도 지워야함.
     mGameObjectList.clear();
 
     mPlayer = nullptr;
@@ -362,7 +364,7 @@ void Level2::Unload()
 ```
 
  **Rule of 5**
-- Not like the rule of 0, that avoids defining default operations and does not allocate and deallocate. 
+- Not like the rule of 0, that avoids defining operations, uses default, does not allocate and deallocate. 
 
 Rule of 5 has, along with Rule of 3 (copy constructor, copy assignment operator, destructor), move constructor, and move assignment operator.
 
@@ -376,7 +378,7 @@ and there will be memory corruption and segmentation fault for 'double free'.
 For these reasons, we need a copy constructor and copy assignment operator.
 
 And for move constructor, and move assignment operator,
-Copying objects can be expensive as it involves creating, 
+copying objects can be expensive as it involves creating, 
 copying and then destroying temporary objects.
 So it is useful to only have one resource at a time. 
 This resource's ownership can be transferred from one manager to another. 
@@ -409,6 +411,8 @@ because the programmer can safely and efficiently implement RAII to manage dynam
 - The r-value is what makes the move possible, to avoid unneeded copy. 
 Here, the r-value is the value to the right of the expression. 
 The r-value does not exist when the expression ends. For r-value reference, use '&&'.
+//logical And 일수도 있으니까 표현하는 방법은 & 두개를 쓰거나 레퍼런스 하는 것이다 라고 하기.
+//to have more efficient copy. 설명 좀 더 추가하기. 틀린 설명은 없음.
 
 ```c++
 //This is a move constructor of List class.
