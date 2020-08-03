@@ -18,7 +18,7 @@ Creation date: 21/07/2020
 class Level2 : public GameState
 {
 public:
-    Level2();
+    Level2() = default;
     ~Level2();
 
     Level2(const Level2& rhs); // copy constructor
@@ -26,7 +26,6 @@ public:
     Level2& operator=(const Level2& rhs); // copy assignment
     Level2& operator=(Level2&& rhs); //move assignment
 
-    Animation GetAnimationFromEnum(eTexture textureEnum);
     void Load() override;
     void Update(double dt) override;
     void Unload() override;
@@ -39,9 +38,15 @@ private:
     bool mIsGameCleared;
     
     unsigned char mPlayerSpriteFlags;
+
     int mBulletLimit;
+    
+    float mBulletTimer;
+    float mPlayerMoveTimer;
 
     Player* mPlayer;
+    sf::Vector2f mPlayerOriginalScale;
+    sf::Color mPlayerOriginalColor;
     List<GameObject*> mGameObjectList;
 
     void DeepCopy(const Level2& rhs);

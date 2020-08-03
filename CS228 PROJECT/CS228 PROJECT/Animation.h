@@ -28,14 +28,14 @@ class Animation
 {
 public:
     Animation() = default;
-    void SetAnimationValues(sf::Texture& texture, int x, int y, int w, int h, int count, float Speed);
+    Animation(eTexture textureEnum);
+    void SetAnimationValues(sf::Texture texture, int x, int y, int w, int h, int count, float Speed);
     void Update();
     bool IsAnimationEnded();
     sf::Sprite& GetAnimationSprite();
 
 private:
     sf::Sprite mAnimationSprite;
-    sf::Texture mTexture;
     std::vector<sf::IntRect> mAnimationCoordinates;
     float mAnimationFrame, mAnimationSpeed;
 };
