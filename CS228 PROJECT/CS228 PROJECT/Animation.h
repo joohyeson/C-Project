@@ -13,17 +13,29 @@ Creation date: 23/07/2020
 #include <SFML/Graphics.hpp>
 #include <vector>
 
+enum class eTexture
+{
+    NONE,
+    BULLET,
+    PLAYER,
+    PLAYER_MOVE,
+    EXPLOSION,
+    ROCK,
+    SMALL_ROCK
+};
+
 class Animation
 {
 public:
     Animation() = default;
-    Animation(sf::Texture& texture, int x, int y, int w, int h, int count, float Speed);
+    void SetAnimationValues(sf::Texture& texture, int x, int y, int w, int h, int count, float Speed);
     void Update();
     bool IsAnimationEnded();
     sf::Sprite& GetAnimationSprite();
 
 private:
     sf::Sprite mAnimationSprite;
+    sf::Texture mTexture;
     std::vector<sf::IntRect> mAnimationCoordinates;
     float mAnimationFrame, mAnimationSpeed;
 };

@@ -111,22 +111,7 @@ AND(&) 0011
 Engine::GetWindow().GetSize().x >> 1;
 
 //And we used bit flags like this.
-constexpr unsigned char IS_GAME_OVER = 1 << 0;
-constexpr unsigned char IS_CLEARED = 1 << 1;
-
-if (mFlags & IS_GAME_OVER)
-{
-    text.setString("Game Over.. Press R key to restart.");
-    text.setPosition(sf::Vector2f(static_cast<float>(Engine::GetWindow().GetSize().x >> 1), static_cast<float>(Engine::GetWindow().GetSize().y >> 1)));
-    Engine::GetWindow().Draw(text);
-}
-
-if (mFlags & IS_CLEARED)
-{
-    text.setString("Level Clear!");
-    text.setPosition(sf::Vector2f(static_cast<float>(Engine::GetWindow().GetSize().x >> 1), static_cast<float>(Engine::GetWindow().GetSize().y >> 1) + 50));
-    Engine::GetWindow().Draw(text);
-}
+//New flag here!
 ```
 
 3. Operator Overloading
@@ -147,27 +132,7 @@ typename List<T>::Iterator& List<T>::Iterator::operator++()
 For example, if you give a constructor a copy constructor, the constructor will not be called twice. 
 Only the constructor is called once and no temporary objects are created. The code below is how I used 'Return Value Optimization' for this project.
 ```c++
-//When using RVO
-template<typename T>
-bool GameObject::IsCollideWith(GameObject* object)
-{
-    return (object->x - x) * (object->x - x) + (object->y - y) * (object->y - y) < (radius + object->radius) * (radius + object->radius);
-}
-
-//When it is not using RVO
-bool GameObject::IsCollideWith(GameObject* object)
-{
-    float dx = object->x - x;
-    float squareOfDx = dx * dx;
-
-    float dy = object->y - y;
-    float squareOfDy = dy * dy;
-    
-    float dr = radius + object->radius;
-    float squareOfDr = dr * dr;
-
-    return squareOfDx + squareOfDy < squareOfDr;
-}
+//RVO here
 ```
 
 5. Inheritance + Polymorphism
@@ -333,34 +298,11 @@ void GameStateManager::SetRunningState(double dt)
  **RAII**
 - C++ has a risk of memory leak because the programmer has to free it manually. 
 So RAII (Resource Acquisition Is Initialization) is used to eliminate the possibility of memory leak. 
-Simply put, This is a programming concept where we initialize and allocate resources in the constructor is done, and then it releases automatically in its destructor.
-So using RAII is useful because there will be no possible memory leak, so the code is more stable.
+Simply put, we initialize and allocate resources in the constructor, and then it deallocates automatically in its destructor.
+So using RAII is useful because there will be no possible memory leak, so the code become more stable.
 
 ```c++
-//Automatically allocating in the constructor.
-Level2::Level2()
-{
-    mFlags = 0;
-    mBulletLimit = NUMBER_OF_BULLETS;
-    mPlayer = new Player();
-}
-
-//Automatically deallocating in the destructor.
-Level2::~Level2()
-{
-    Unload();
-}
-
-void Level2::Unload()
-{
-    //All game objects are stored in 'mGameObjectList'.
-    //So clear function deletes all the game objects, include 'mPlayer'.
-    //플레이어를 리스트에 추가하는 거랑 리스트가 뭔지 보여주기. 클리어로는 부족. 
-    //노드만 딜리트 할게 아니라 포인터도 지워야함.
-    mGameObjectList.clear();
-
-    mPlayer = nullptr;
-}
+//List count constructor
 ```
 
  **Rule of 5**
@@ -372,7 +314,7 @@ For copy constructor and copy assignment operator,
 the default copy constructor is a shallow copy. So if we do not define
 a copy constructor for a deep copy, 
 and we just use a default copy constructor to make an object,
-a new object uses the same memory address with the copied object. 
+a new object uses the same memory address with the object that is just copied. 
 Then, 'delete' will be called twice on the same memory address, 
 and there will be memory corruption and segmentation fault for 'double free'.
 For these reasons, we need a copy constructor and copy assignment operator.
@@ -400,19 +342,111 @@ because the programmer can safely and efficiently implement RAII to manage dynam
         return pNewNode;
     }
 
-    ~List();
-    List(const List<T>& rhs); // copy constructor
-    List(List<T>&& rhs); // move constructor
-    List<T>& operator=(const List<T>& rhs); // copy assignment
-    List<T>& operator=(List<T>&& rhs); //move assignment
+template<typename T>
+List<T>::~List()
+{
+    clear();
+}
+
+template<typename T>
+void List<T>::clear()
+{
+    Node* current = pHead;
+    Node* next;
+
+    while (current != nullptr)
+    {
+        next = current->pNext;
+        delete current;
+        --mSize;
+        current = next;
+    }
+
+    pHead = nullptr;
+    pTail = nullptr;
+}
+
+template<typename T>
+void List<T>::deep_copy(const List<T>& rhs)
+{
+    if (rhs.pHead != nullptr)
+    {
+        pHead = MakeNode(rhs.pHead->data);
+
+        Node* pTemp = pHead;
+        Node* rhsTemp = rhs.pHead->pNext;
+
+        while (rhsTemp != nullptr)
+        {
+            pTemp->pNext = MakeNode(rhsTemp->data, nullptr, pTemp);
+            pTemp = pTemp->pNext;
+            rhsTemp = rhsTemp->pNext;
+        }
+
+        pTail = pTemp;
+    }
+
+    mSize = rhs.mSize;
+}
+
+//copy constructor(deep copy)
+template<typename T>
+List<T>::List(const List<T>& rhs)
+{
+    deep_copy(rhs);
+}
+
+//move constructor 
+template<typename T>
+List<T>::List(List<T>&& rhs)
+{
+    pHead = rhs.pHead;
+    pTail = rhs.pTail;
+    mSize = rhs.mSize;
+
+    rhs.pHead = nullptr;
+    rhs.pTail = nullptr;
+    rhs.mSize = 0;
+}
+
+//copy assignment operator(deep copy)
+template<typename T>
+List<T>& List<T>::operator=(const List<T>& rhs)
+{
+    clear();
+    deep_copy(rhs);
+
+    return *this;
+}
+
+//move assignmnet operator
+template<typename T>
+List<T>& List<T>::operator=(List<T>&& rhs)
+{
+    if (this != &rhs)
+    {
+        clear();
+
+        pHead = rhs.pHead;
+        pTail = rhs.pTail;
+        mSize = rhs.mSize;
+
+        rhs.pHead = nullptr;
+        rhs.pTail = nullptr;
+        rhs.mSize = 0;
+    }
+
+    return *this;
+}
 ```
 
  **r-value references/Move Semantics**
-- The r-value is what makes the move possible, to avoid unneeded copy. 
-Here, the r-value is the value to the right of the expression. 
-The r-value does not exist when the expression ends. For r-value reference, use '&&'.
-//logical And 일수도 있으니까 표현하는 방법은 & 두개를 쓰거나 레퍼런스 하는 것이다 라고 하기.
-//to have more efficient copy. 설명 좀 더 추가하기. 틀린 설명은 없음.
+- The r-value's name comes from the reason that the value is to the right of the expression.
+R-value is a special name for a temporary object that does not have a variable name.
+So no variable name means that we cannot get the address and reference to it.
+This is useful to copy more efficiently, because r-value object has very short life time,
+so it will be disappeared very soon. So if we just move the object, we can save the cost to deep copying.
+To express r-value in c++, we make a type declaration of a reference that has '&&'(This is not a logical and!).
 
 ```c++
 //This is a move constructor of List class.

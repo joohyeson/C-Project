@@ -16,8 +16,8 @@ Creation date: 21/07/2020
 class GameObject
 {
 public:
-    GameObject() {};
-    void SetValues(Animation& newAnimation, float newX, float newY, float newAngle = 0, float newRadius = 1);
+    GameObject() = default;
+    void SetValues(const Animation& newAnimation, float newX, float newY, float newAngle = 0, float newRadius = 1);
     virtual void Update() {};
     void Draw(sf::RenderWindow& window);
     bool IsCollideWith(GameObject* object);

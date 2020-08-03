@@ -266,7 +266,7 @@ int List<T>::size(void)
 }
 
 template<typename T>
-inline void List<T>::deep_copy(const List<T>& rhs)
+void List<T>::deep_copy(const List<T>& rhs)
 {
     if (rhs.pHead != nullptr)
     {

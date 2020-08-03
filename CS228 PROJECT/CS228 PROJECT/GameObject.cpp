@@ -1,6 +1,6 @@
 #include "GameObject.h"
 
-void GameObject::SetValues(Animation& newAnimation, float newX, float newY, float newAngle, float newRadius)
+void GameObject::SetValues(const Animation& newAnimation, float newX, float newY, float newAngle, float newRadius)
 {
     animation = newAnimation;
     x = newX;

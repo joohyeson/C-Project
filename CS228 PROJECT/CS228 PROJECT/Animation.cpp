@@ -12,22 +12,20 @@ Creation date: 23/07/2020
 #include "Animation.h"
 #include "Colors.h"
 
-Animation::Animation(){}
-
-Animation::Animation(sf::Texture& texture, int x, int y, int w, int h, int count, float Speed)
+void Animation::SetAnimationValues(sf::Texture& texture, int x, int y, int w, int h, int count, float speed)
 {
     mAnimationFrame = 0;
-    mAnimationSpeed = Speed;
+    mAnimationSpeed = speed;
 
     for (int i = 0; i < count; ++i)
     {
         mAnimationCoordinates.push_back(sf::IntRect(x + i * w, y, w, h));
     }
 
-    mAnimationSprite.setTexture(texture);
+    mTexture = texture;
+    mAnimationSprite.setTexture(mTexture);
     mAnimationSprite.setOrigin(w / 2.0f, h / 2.0f);
     mAnimationSprite.setTextureRect(mAnimationCoordinates[0]);
-    //mAnimationSprite.setColor(static_cast<sf::Color>(BABY_PINK));
 }
 
 void Animation::Update()
@@ -35,13 +33,13 @@ void Animation::Update()
     mAnimationFrame += mAnimationSpeed;
 
     int frameSize = static_cast<int>(mAnimationCoordinates.size());
-    
-    if (mAnimationFrame >= frameSize) 
+
+    if (mAnimationFrame >= frameSize)
     {
         mAnimationFrame -= frameSize;
     }
-    
-    if (frameSize > 0) 
+
+    if (frameSize > 0)
     {
         mAnimationSprite.setTextureRect(mAnimationCoordinates[static_cast<int>(mAnimationFrame)]);
     }

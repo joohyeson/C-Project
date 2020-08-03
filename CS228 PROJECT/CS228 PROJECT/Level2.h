@@ -26,6 +26,7 @@ public:
     Level2& operator=(const Level2& rhs); // copy assignment
     Level2& operator=(Level2&& rhs); //move assignment
 
+    Animation GetAnimationFromEnum(eTexture textureEnum);
     void Load() override;
     void Update(double dt) override;
     void Unload() override;
@@ -34,22 +35,14 @@ public:
     std::string GetName() override { return "Level2"; }
 
 private:
-    unsigned char mFlags;
+    bool mIsGameOver;
+    bool mIsGameCleared;
+    
+    unsigned char mPlayerSpriteFlags;
     int mBulletLimit;
 
     Player* mPlayer;
-
     List<GameObject*> mGameObjectList;
-
-    Animation bulletAnimation;
-    Animation playerMoveAnimation;
-    Animation playerAnimation;
-    Animation explosionAnimation;
-    Animation smallRockAnimation;
-    Animation explosionShipAnimation;
-    Animation rockAnimation;
-
-    sf::Texture shipTexture, explosionTexture, rockTexture, bulletTexture, smallRockTexture, explosionShipTexture, backgroundTexture;
 
     void DeepCopy(const Level2& rhs);
 };
