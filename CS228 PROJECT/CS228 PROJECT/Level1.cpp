@@ -27,8 +27,13 @@ constexpr int LEVEL = 8; // The higher is the easier.
 
 Level1::Level1() {};
 
-constexpr int Empty(void)
+int Empty(void)
 {
+    if (rand() % LEVEL == 0)
+    {
+        return MINE;
+    }
+
     return EMPTY;
 }
 
@@ -41,7 +46,7 @@ std::vector<int> EmptyRow(void)
     return row;
 }
 
-constexpr int Tile(void)
+int Tile(void)
 {
     return TILE;
 }
@@ -64,18 +69,6 @@ void Level1::Load()
 
     mShowGrid.resize(GRID_LENGTH);
     std::generate(mShowGrid.begin(), mShowGrid.end(), TileRow);
-
-    for (int i = 1; i <= 10; i++)
-    {
-        for (int j = 1; j <= 10; j++)
-        {
-            //use algorithm
-            if (rand() % LEVEL == 0)
-            {
-                mGrid[i][j] = MINE;
-            }
-        }
-    }
 
     for (int i = 1; i <= 10; i++)
     {
@@ -144,14 +137,6 @@ void Level1::Draw()
     text.setCharacterSize(30);
     text.setStyle(sf::Text::Regular);
     Engine::GetWindow().Draw(text);
-
-    //sf::Text text2;
-    //text2.setFont(Engine::GetGameStateManager().GetFont());
-    //text2.setString("Hint Count :" + std::to_string(mHintCount));
-    //text2.setPosition(sf::Vector2f(800, 0));
-    //text2.setCharacterSize(30);
-    //text2.setStyle(sf::Text::Regular);
-    //Engine::GetWindow().Draw(text2);
 
     sf::Texture tileTexture;
     tileTexture.loadFromFile("../Assets/Art/tiles.jpg");

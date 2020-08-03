@@ -13,7 +13,7 @@ Creation date: 21/07/2020
 #include "GameState.h" //class Level1 : public GameState (Inheritance)
 #include "SFML/Window.hpp"
 #include <vector> //std::vector
-#include <list> //std::list
+#include <deque> //std::list
 
 class Level1 : public GameState
 {
@@ -35,7 +35,7 @@ private:
     std::vector<std::vector<int>> mGrid;
     std::vector<std::vector<int>> mShowGrid;
 
-    std::list<sf::Vector2i> mToVisit;
+    std::deque<sf::Vector2i> mToVisit;
     int mHintCount = 3;
     bool mShouldGameRun = true;
     std::vector<sf::Vector2i> mEmptyPlace;

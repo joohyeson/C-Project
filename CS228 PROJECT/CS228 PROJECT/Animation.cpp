@@ -12,7 +12,6 @@ Creation date: 23/07/2020
 #include "Animation.h"
 #include "Colors.h"
 
-Animation::Animation(){}
 
 Animation::Animation(sf::Texture& texture, int x, int y, int w, int h, int count, float Speed)
 {
