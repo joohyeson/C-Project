@@ -199,10 +199,10 @@ bool Level1::CanVisit(void)
             sf::Vector2i below = { currentLocation.x, currentLocation.y - 1 };
             sf::Vector2i left = { currentLocation.x - 1, currentLocation.y };
 
-            sf::Vector2i above1 = { currentLocation.x-1, currentLocation.y + 1 };
-            sf::Vector2i right1 = { currentLocation.x-1 , currentLocation.y-1 };
-            sf::Vector2i below1 = { currentLocation.x+1, currentLocation.y - 1 };
-            sf::Vector2i left1 = { currentLocation.x+1, currentLocation.y+1 };
+            sf::Vector2i above1 = { currentLocation.x - 1, currentLocation.y + 1 };
+            sf::Vector2i right1 = { currentLocation.x - 1 , currentLocation.y - 1 };
+            sf::Vector2i below1 = { currentLocation.x + 1, currentLocation.y - 1 };
+            sf::Vector2i left1 = { currentLocation.x + 1, currentLocation.y + 1 };
 
             if (IsOutOfRange(above1) == false)
             {
@@ -269,9 +269,15 @@ bool Level1::CanVisit(void)
             }
         }
 
-        for (auto location : mEmptyPlace)
+        auto currLoc = mEmptyPlace.begin();
+        int count = 1;
+
+        while (currLoc != mEmptyPlace.end())
         {
-            mShowGrid[location.x][location.y] = mGrid[location.x][location.y];
+            mShowGrid[currLoc->x][currLoc->y] = mGrid[currLoc->x][currLoc->y];
+
+            currLoc = mEmptyPlace.begin() + count;
+            count++;
         }
 
         return false;
@@ -294,7 +300,7 @@ void Level1::Selected(sf::Vector2i location)
 
 bool Level1::TryToAdd(sf::Vector2i location)
 {
-    std::vector<sf::Vector2i>::iterator checkAlreadyExist = std::find(mEmptyPlace.begin(), mEmptyPlace.end(), location);
+    auto checkAlreadyExist = std::find(mEmptyPlace.begin(), mEmptyPlace.end(), location);
 
     if (checkAlreadyExist != mEmptyPlace.end())
     {
