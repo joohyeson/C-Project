@@ -16,7 +16,7 @@ Creation date: 21/07/2020
 class GameObject
 {
 public:
-    GameObject() {};
+    GameObject() = default;
     void SetValues(Animation& newAnimation, float newX, float newY, float newAngle = 0, float newRadius = 1);
     virtual void Update() {};
     void Draw(sf::RenderWindow& window);
@@ -26,5 +26,5 @@ public:
     float x, y, dx, dy, angle, radius;
     bool isAlive = true;
     std::string name;
-    Animation animation;
+    Animation* animation;
 };

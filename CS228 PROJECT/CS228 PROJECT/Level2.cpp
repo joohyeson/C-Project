@@ -21,15 +21,8 @@ constexpr int NUMBER_OF_BULLETS = 150;
 constexpr int RADIUS_OF_ASTEROID = 15;
 constexpr float MOVING_ANGLE = 3.0f;
 
-constexpr unsigned char IS_GAME_OVER = 1 << 0;
-constexpr unsigned char IS_CLEARED = 1 << 1;
-
-Level2::Level2()
-{
-    mFlags = 0;
-    mBulletLimit = NUMBER_OF_BULLETS;
-    //mPlayer = new Player();
-}
+constexpr unsigned char IS_FIRING = 1 << 0;
+constexpr unsigned char IS_MOVING = 1 << 0;
 
 Level2::~Level2()
 {
@@ -46,24 +39,15 @@ void Level2::DeepCopy(const Level2& rhs)
         mGameObjectList.push_back(new GameObject(*objectList));
     }
 
-    mFlags = rhs.mFlags;
+    mIsGameOver = rhs.mIsGameOver;
+    mIsGameCleared = rhs.mIsGameCleared;
+
+    mPlayerSpriteFlags = rhs.mPlayerSpriteFlags;
+
     mBulletLimit = rhs.mBulletLimit;
 
-    bulletAnimation = rhs.bulletAnimation;
-    playerMoveAnimation = rhs.playerMoveAnimation;
-    playerAnimation = rhs.playerAnimation;
-    explosionAnimation = rhs.explosionAnimation;
-    smallRockAnimation = rhs.smallRockAnimation;
-    explosionShipAnimation = rhs.explosionShipAnimation;
-    rockAnimation = rhs.rockAnimation;
-
-    shipTexture = rhs.shipTexture;
-    explosionTexture = rhs.explosionTexture;
-    rockTexture = rhs.rockTexture;
-    bulletTexture = rhs.bulletTexture;
-    smallRockTexture = rhs.smallRockTexture;
-    explosionShipTexture = rhs.explosionShipTexture;
-    backgroundTexture = rhs.backgroundTexture;
+    mBulletTimer = rhs.mBulletTimer;
+    mPlayerMoveTimer = rhs.mPlayerMoveTimer;
 }
 
 Level2::Level2(const Level2& rhs)//copy constructor
@@ -73,36 +57,26 @@ Level2::Level2(const Level2& rhs)//copy constructor
 
 Level2::Level2(Level2&& rhs)//move constructor
 {
-    mFlags = rhs.mFlags;
+    mIsGameOver = rhs.mIsGameOver;
+    mIsGameCleared = rhs.mIsGameCleared;
+
+    mPlayerSpriteFlags = rhs.mPlayerSpriteFlags;
+
     mBulletLimit = rhs.mBulletLimit;
 
+    mBulletTimer = rhs.mBulletTimer;
+    mPlayerMoveTimer = rhs.mPlayerMoveTimer;
+
     mPlayer = rhs.mPlayer;
-
-    mGameObjectList = rhs.mGameObjectList;
-
-    bulletAnimation = rhs.bulletAnimation;
-    playerMoveAnimation = rhs.playerMoveAnimation;
-    playerAnimation = rhs.playerAnimation;
-    explosionAnimation = rhs.explosionAnimation;
-    smallRockAnimation = rhs.smallRockAnimation;
-    explosionShipAnimation = rhs.explosionShipAnimation;
-    rockAnimation = rhs.rockAnimation;
-
-    shipTexture = rhs.shipTexture;
-    explosionTexture = rhs.explosionTexture;
-    rockTexture = rhs.rockTexture;
-    bulletTexture = rhs.bulletTexture;
-    smallRockTexture = rhs.smallRockTexture;
-    explosionShipTexture = rhs.explosionShipTexture;
-    backgroundTexture = rhs.backgroundTexture;
-
     rhs.mPlayer = nullptr;
-    rhs.mGameObjectList.clear();
+
+    mGameObjectList = std::move(rhs.mGameObjectList);
 }
 
 Level2& Level2::operator=(const Level2& rhs)//copy assignment operator
 {
-    mGameObjectList.clear();
+    Unload();
+
     DeepCopy(rhs);
 
     return *this;
@@ -114,64 +88,93 @@ Level2& Level2::operator=(Level2&& rhs)//move assignment operator
     {
         mGameObjectList.clear();
 
-        mFlags = rhs.mFlags;
-        mBulletLimit = rhs.mBulletLimit;
-        mPlayer = rhs.mPlayer;
-        mGameObjectList = rhs.mGameObjectList;
-        bulletAnimation = rhs.bulletAnimation;
-        playerMoveAnimation = rhs.playerMoveAnimation;
-        playerAnimation = rhs.playerAnimation;
-        explosionAnimation = rhs.explosionAnimation;
-        smallRockAnimation = rhs.smallRockAnimation;
-        explosionShipAnimation = rhs.explosionShipAnimation;
-        rockAnimation = rhs.rockAnimation;
-        shipTexture = rhs.shipTexture;
-        explosionTexture = rhs.explosionTexture;
-        rockTexture = rhs.rockTexture;
-        bulletTexture = rhs.bulletTexture;
-        smallRockTexture = rhs.smallRockTexture;
-        explosionShipTexture = rhs.explosionTexture;
-        backgroundTexture = rhs.backgroundTexture;
+        mIsGameOver = rhs.mIsGameOver;
+        mIsGameCleared = rhs.mIsGameCleared;
 
+        mPlayerSpriteFlags = rhs.mPlayerSpriteFlags;
+
+        mBulletLimit = rhs.mBulletLimit;
+
+        mBulletTimer = rhs.mBulletTimer;
+        mPlayerMoveTimer = rhs.mPlayerMoveTimer;
+
+        mPlayer = rhs.mPlayer;
         rhs.mPlayer = nullptr;
+
+        mGameObjectList = std::move(rhs.mGameObjectList);
         rhs.mGameObjectList.clear();
     }
 
     return *this;
 }
 
+Animation Level2::LoadAnimation(eLevel2Texture textureEnum)
+{
+    switch (textureEnum)
+    {
+    case eLevel2Texture::BULLET:
+        bulletTexture.loadFromFile("../Assets/Art/fire_blue.png");
+        return Animation(bulletTexture, 0, 0, 32, 64, 16, 0.8f);
+        break;
+    case eLevel2Texture::PLAYER:
+        playerTexture.loadFromFile("../Assets/Art/spaceship.png");
+        playerTexture.setSmooth(true);
+        return Animation(playerTexture, 40, 0, 40, 40, 1, 0.f);
+        break;
+    case eLevel2Texture::PLAYER_MOVE:
+        playerMoveTexture.loadFromFile("../Assets/Art/spaceship.png");
+        playerMoveTexture.setSmooth(true);
+        return Animation(playerMoveTexture, 40, 40, 40, 40, 1, 0.f);
+        break;
+    case eLevel2Texture::EXPLOSION:
+        explosionTexture.loadFromFile("../Assets/Art/type_C.png");
+        return Animation(explosionTexture, 0, 0, 256, 256, 48, 0.3f);
+        break;
+    case eLevel2Texture::ROCK:
+        rockTexture.loadFromFile("../Assets/Art/rock.png");
+        return Animation(rockTexture, 0, 0, 64, 64, 16, 0.1f);
+        break;
+    case eLevel2Texture::SMALL_ROCK:
+        smallRockTexture.loadFromFile("../Assets/Art/rock_small.png");
+        return Animation(smallRockTexture, 0, 0, 64, 64, 16, 0.1f);
+        break;
+    default:
+        break;
+    }
+
+    return Animation();
+}
+
 void Level2::Load()
 {
-    mFlags = 0;
+    mIsGameOver = false;
+    mIsGameCleared = false;
+
+    mPlayerSpriteFlags = 0;
+
     mBulletLimit = NUMBER_OF_BULLETS;
 
-    shipTexture.loadFromFile("../Assets/Art/spaceship.png");
+    mBulletTimer = 0;
+    mPlayerMoveTimer = 0;
+
+    mPlayer = new Player();
+
+    bulletAnimation = LoadAnimation(eLevel2Texture::BULLET);
+    playerAnimation = LoadAnimation(eLevel2Texture::PLAYER);
+    playerMoveAnimation = LoadAnimation(eLevel2Texture::PLAYER_MOVE);
+    explosionAnimation = LoadAnimation(eLevel2Texture::EXPLOSION);
+    rockAnimation = LoadAnimation(eLevel2Texture::ROCK);
+    smallRockAnimation = LoadAnimation(eLevel2Texture::SMALL_ROCK);
+
     backgroundTexture.loadFromFile("../Assets/Art/background.jpg");
-    explosionTexture.loadFromFile("../Assets/Art/explosions/type_C.png");
-    rockTexture.loadFromFile("../Assets/Art/rock.png");
-    bulletTexture.loadFromFile("../Assets/Art/fire_blue.png");
-    smallRockTexture.loadFromFile("../Assets/Art/rock_small.png");
-    explosionShipTexture.loadFromFile("../Assets/Art/explosions/type_B.png");
-
-    shipTexture.setSmooth(true);
     backgroundTexture.setSmooth(true);
-
-    //Make enum? -> unnamed RVO
-    explosionAnimation = Animation(explosionTexture, 0, 0, 256, 256, 48, 0.5f);
-    rockAnimation = Animation(rockTexture, 0, 0, 64, 64, 16, 0.2f);
-    smallRockAnimation = Animation(smallRockTexture, 0, 0, 64, 64, 16, 0.2f);
-    bulletAnimation = Animation(bulletTexture, 0, 0, 32, 64, 16, 0.8f);
-    playerAnimation = Animation(shipTexture, 40, 0, 40, 40, 1, 0.f);
-    playerMoveAnimation = Animation(shipTexture, 40, 40, 40, 40, 1, 0.f);
-    explosionShipAnimation = Animation(explosionShipTexture, 0, 0, 192, 192, 64, 0.5f);
-
-    if (mPlayer == nullptr)
-    {
-        mPlayer = new Player();
-    }
+    backgroundSprite.setTexture(backgroundTexture);
 
     mPlayer->SetValues(playerAnimation, static_cast<float>(Engine::GetWindow().GetSize().x >> 1), static_cast<float>(Engine::GetWindow().GetSize().y >> 1), 0, 20);
     mGameObjectList.push_back(mPlayer);
+
+    mPlayerOriginalScale = mPlayer->animation->GetAnimationSprite().getScale();
+    mPlayerOriginalColor = mPlayer->animation->GetAnimationSprite().getColor();
 
     for (int i = 0; i < NUMBER_OF_ASTEROID; i++)
     {
@@ -183,7 +186,6 @@ void Level2::Load()
 
 void Level2::Draw()
 {
-    sf::Sprite backgroundSprite(backgroundTexture);
     Engine::GetWindow().Draw(backgroundSprite);
 
     sf::Text text;
@@ -198,13 +200,21 @@ void Level2::Draw()
 
     Engine::GetWindow().GetWindow().setFramerateLimit(60);
 
-    if (mFlags & IS_GAME_OVER)
+    if (mIsGameOver)
     {
         text.setString("Game Over.. Press R key to restart.");
         text.setPosition(sf::Vector2f(static_cast<float>(Engine::GetWindow().GetSize().x >> 1), static_cast<float>(Engine::GetWindow().GetSize().y >> 1)));
         Engine::GetWindow().Draw(text);
     }
-    else
+
+    if (mIsGameCleared)
+    {
+        text.setString("Level Clear!");
+        text.setPosition(sf::Vector2f(static_cast<float>(Engine::GetWindow().GetSize().x >> 1), static_cast<float>(Engine::GetWindow().GetSize().y >> 1)));
+        Engine::GetWindow().Draw(text);
+    }
+
+    if (!mIsGameOver && !mIsGameCleared)
     {
         sf::String bulletInfo = "Number of bullets left : ";
         bulletInfo += std::to_string(mBulletLimit);
@@ -212,18 +222,21 @@ void Level2::Draw()
         text.setPosition(sf::Vector2f(static_cast<float>(Engine::GetWindow().GetSize().x >> 1), static_cast<float>(Engine::GetWindow().GetSize().y >> 1)));
         Engine::GetWindow().Draw(text);
     }
-
-    if (mFlags & IS_CLEARED)
-    {
-        text.setString("Level Clear!");
-        text.setPosition(sf::Vector2f(static_cast<float>(Engine::GetWindow().GetSize().x >> 1), static_cast<float>(Engine::GetWindow().GetSize().y >> 1) + 50));
-        Engine::GetWindow().Draw(text);
-    }
 }
 
 void Level2::Update([[maybe_unused]] double dt)
 {
-    if (!(mFlags & IS_GAME_OVER))
+    if (mBulletTimer > 0.0f)
+    {
+        mBulletTimer -= static_cast<float>(dt);
+    }
+
+    if (mPlayerMoveTimer > 0.0f)
+    {
+        mPlayerMoveTimer -= static_cast<float>(dt);
+    }
+
+    if (!mIsGameOver)
     {
         for (auto objectAIterator = mGameObjectList.begin(); objectAIterator != mGameObjectList.end(); ++objectAIterator)
         {
@@ -235,34 +248,6 @@ void Level2::Update([[maybe_unused]] double dt)
             {
                 auto objectA = *objectAIterator;
                 auto objectB = *objectBIterator;
-
-                if (objectA->name == "asteroid" && objectB->name == "bullet")
-                {
-                    if (objectA->IsCollideWith(objectB))
-                    {
-                        objectA->isAlive = false;
-                        objectB->isAlive = false;
-
-                        GameObject* explosion = new GameObject();
-                        explosion->SetValues(explosionAnimation, objectA->x, objectA->y);
-                        explosion->name = "explosion";
-                        mGameObjectList.push_front(explosion);
-
-                        for (int i = 0; i < 2; i++)
-                        {
-                            if (objectA->radius == RADIUS_OF_ASTEROID)
-                            {
-                                continue;
-                            }
-                            else
-                            {
-                                GameObject* asteroid = new Asteroid();
-                                asteroid->SetValues(smallRockAnimation, objectA->x, objectA->y, static_cast<float>(rand() % 360), 15.0f);
-                                mGameObjectList.push_front(asteroid);
-                            }
-                        }
-                    }
-                }
 
                 if (objectA->name == "bullet" && objectB->name == "asteroid")
                 {
@@ -307,26 +292,7 @@ void Level2::Update([[maybe_unused]] double dt)
                         mPlayer->dx = 0;
                         mPlayer->dy = 0;
 
-                        mFlags |= IS_GAME_OVER;
-                    }
-                }
-
-                if (objectA->name == "asteroid" && objectB->name == "player")
-                {
-                    if (objectB->IsCollideWith(objectA))
-                    {
-                        objectA->isAlive = false;
-
-                        GameObject* explosion = new GameObject();
-                        explosion->SetValues(explosionAnimation, objectB->x, objectB->y);
-                        explosion->name = "explosion";
-                        mGameObjectList.push_front(explosion);
-
-                        mPlayer->SetValues(playerAnimation, static_cast<float>(Engine::GetWindow().GetSize().x >> 1), static_cast<float>(Engine::GetWindow().GetSize().y >> 1), 0, 20);
-                        mPlayer->dx = 0;
-                        mPlayer->dy = 0;
-
-                        mFlags |= IS_GAME_OVER;
+                        mIsGameOver = true;
                     }
                 }
             }
@@ -337,7 +303,7 @@ void Level2::Update([[maybe_unused]] double dt)
             GameObject* object = *objectIterator;
 
             object->Update();
-            object->animation.Update();
+            object->animation->Update();
 
             if (object->isAlive == false)
             {
@@ -345,8 +311,10 @@ void Level2::Update([[maybe_unused]] double dt)
                 {
                     mBulletLimit++;
                 }
+
                 objectIterator = mGameObjectList.erase(objectIterator);
                 delete object;
+                object = nullptr;
             }
             else
             {
@@ -354,33 +322,59 @@ void Level2::Update([[maybe_unused]] double dt)
             }
         }
 
-        if (mPlayer->GetIsMoving() == true)
+        if (mPlayerSpriteFlags & IS_FIRING && mBulletTimer < 0.0f)
         {
-            mPlayer->animation = playerMoveAnimation;
+            mPlayer->animation->SetSpriteColor(sf::Color(BLUE));
+            //mPlayer->animation->GetAnimationSprite().setColor(static_cast<sf::Color>(BLUE));
+            mBulletTimer = 0.3f;
         }
         else
         {
-            mPlayer->animation = playerAnimation;
+            mPlayer->animation->SetSpriteColor(mPlayerOriginalColor);
+            //mPlayer->animation->GetAnimationSprite().setColor(mPlayerOriginalColor);
+        }
+
+        if (mPlayerSpriteFlags & IS_MOVING && mPlayerMoveTimer < 0.0f)
+        {
+            mPlayer->animation->SetSpriteScale(sf::Vector2f(mPlayerOriginalScale.x, mPlayerOriginalScale.y + 50));
+            //mPlayer->animation->GetAnimationSprite().setScale(mPlayerOriginalScale.x, mPlayerOriginalScale.y + 50);
+            mPlayerMoveTimer = 0.3f;
+        }
+        else
+        {
+            mPlayer->animation->SetSpriteScale(mPlayerOriginalScale);
+            //mPlayer->animation->GetAnimationSprite().setScale(mPlayerOriginalScale);
+        }
+
+        if (mPlayer->GetIsMoving() == true)
+        {
+            mPlayer->animation = &playerMoveAnimation;
+            mPlayerSpriteFlags |= IS_MOVING;
+        }
+        else
+        {
+            mPlayer->animation = &playerAnimation;
+            mPlayerSpriteFlags &= ~IS_MOVING;
         }
 
         for (auto explosion : mGameObjectList)
         {
             if (explosion->name == "explosion")
             {
-                if (explosion->animation.IsAnimationEnded())
+                if (explosion->animation->IsAnimationEnded())
                 {
                     explosion->isAlive = false;
                 }
             }
         }
 
-        mFlags |= IS_CLEARED;
+        mIsGameCleared = true;
 
         for (auto asteroid : mGameObjectList)
         {
             if (asteroid->name == "asteroid")
             {
-                mFlags &= ~IS_CLEARED;
+                mIsGameCleared = false;
             }
         }
 
@@ -392,6 +386,7 @@ void Level2::Update([[maybe_unused]] double dt)
                 bullet->SetValues(bulletAnimation, mPlayer->x, mPlayer->y, mPlayer->angle, 10.0f);
                 mGameObjectList.push_front(bullet);
                 mBulletLimit--;
+                mPlayerSpriteFlags |= IS_FIRING;
             }
         }
 
@@ -423,13 +418,25 @@ void Level2::Update([[maybe_unused]] double dt)
     if (Engine::GetInput().IsKeyPressed(sf::Keyboard::R))
     {
         Engine::GetGameStateManager().ReloadState();
-        mFlags &= ~IS_GAME_OVER;
+        mIsGameOver = false;
     }
 }
 
 void Level2::Unload()
 {
-    mGameObjectList.clear();
+    if (mGameObjectList.size() != 0)
+    {
+        for (auto objectIterator = mGameObjectList.begin(); objectIterator != mGameObjectList.end(); objectIterator++)
+        {
+            auto temp = *objectIterator;
+            delete temp;
+        }
 
-    mPlayer = nullptr;
+        auto temp = *mGameObjectList.end();
+        delete temp;
+
+        mGameObjectList.clear();
+
+        mPlayer = nullptr;
+    }
 }

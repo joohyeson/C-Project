@@ -15,10 +15,21 @@ Creation date: 21/07/2020
 #include "Player.h"
 #include "../CS225 List/List.h"
 
+enum class eLevel2Texture
+{
+    NONE,
+    BULLET,
+    PLAYER,
+    PLAYER_MOVE,
+    EXPLOSION,
+    ROCK,
+    SMALL_ROCK
+};
+
 class Level2 : public GameState
 {
 public:
-    Level2();
+    Level2() = default;
     ~Level2();
 
     Level2(const Level2& rhs); // copy constructor
@@ -26,6 +37,7 @@ public:
     Level2& operator=(const Level2& rhs); // copy assignment
     Level2& operator=(Level2&& rhs); //move assignment
 
+    Animation LoadAnimation(eLevel2Texture textureEnum);
     void Load() override;
     void Update(double dt) override;
     void Unload() override;
@@ -34,22 +46,37 @@ public:
     std::string GetName() override { return "Level2"; }
 
 private:
-    unsigned char mFlags;
+    bool mIsGameOver;
+    bool mIsGameCleared;
+
+    unsigned char mPlayerSpriteFlags;
+
     int mBulletLimit;
 
-    Player* mPlayer;
+    float mBulletTimer;
+    float mPlayerMoveTimer;
 
+    Player* mPlayer;
+    sf::Vector2f mPlayerOriginalScale;
+    sf::Color mPlayerOriginalColor;
     List<GameObject*> mGameObjectList;
 
-    Animation bulletAnimation;
-    Animation playerMoveAnimation;
-    Animation playerAnimation;
-    Animation explosionAnimation;
-    Animation smallRockAnimation;
-    Animation explosionShipAnimation;
-    Animation rockAnimation;
+    sf::Texture bulletTexture;
+    sf::Texture playerTexture;
+    sf::Texture playerMoveTexture;
+    sf::Texture explosionTexture;
+    sf::Texture rockTexture;
+    sf::Texture smallRockTexture;
+    sf::Texture backgroundTexture;
 
-    sf::Texture shipTexture, explosionTexture, rockTexture, bulletTexture, smallRockTexture, explosionShipTexture, backgroundTexture;
+    sf::Sprite backgroundSprite;
+
+    Animation bulletAnimation;
+    Animation playerAnimation;
+    Animation playerMoveAnimation;
+    Animation explosionAnimation;
+    Animation rockAnimation;
+    Animation smallRockAnimation;
 
     void DeepCopy(const Level2& rhs);
 };

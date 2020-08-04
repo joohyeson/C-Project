@@ -65,7 +65,7 @@ The instructor will use the repo for examining the code and building the project
 - [X] [**core**] Use Bitwise operations to create a some kind of configuration variable where you extract values. _(Combine bit flags of varying powers of 2)_
 - [X] [**core**] Use bitwise operations to replace Arithmetic Operations
 - [X] [**core**] Makes good use of operator overloading
-- [ ] [**core**] Has examples of Return Value Optimization
+- [X] [**core**] Has examples of Return Value Optimization
 - [X] [**core**] Makes good use of Inheritance and Polymorphism
 - [X] [**core**] Makes good use of Rule of 5
 - [X] [**core**] Makes good use of Rule of 0
@@ -83,7 +83,7 @@ The instructor will use the repo for examining the code and building the project
 - [X] No memory leaks detected with the CRT library.
 - [X] Reused functions as much as possible.
 - [X] Code is organized nicely across multiple files.
-- [ ] Submitted pre-built executable(s) of the project on the course site
+- [X] Submitted pre-built executable(s) of the project on the course site
 - [X] Source code submitted has no redundant computations.
 - [X] Reused functions/code as much as possible.
 - [X] Keep global variables to a minimum _(Allocate long lived objects on the stack in `main()` and then pass around pointers to it)_

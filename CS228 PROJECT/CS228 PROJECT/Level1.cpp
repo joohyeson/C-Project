@@ -25,34 +25,26 @@ constexpr int FLAG = 11;
 constexpr int GRID_LENGTH = 12;
 constexpr int LEVEL = 8; // The higher is the easier.
 
-Level1::Level1() {};
-
-constexpr int Empty(void)
+std::vector<int> GetGridRow(void)
 {
-    return EMPTY;
-}
+    std::vector<int> row(GRID_LENGTH, EMPTY);
 
-std::vector<int> EmptyRow(void)
-{
-    std::vector<int> row;
-    row.resize(GRID_LENGTH);
-    std::generate(row.begin(), row.end(), Empty);
+    std::generate(row.begin() + 1, row.end() - 1,
+        []()
+    {
+        if (rand() % LEVEL == 0)
+        {
+            return MINE;
+        }
+        return EMPTY;
+    });
 
     return row;
 }
 
-constexpr int Tile(void)
+std::vector<int> GetTileRow(void)
 {
-    return TILE;
-}
-
-std::vector<int> TileRow(void)
-{
-    std::vector<int> row;
-    row.resize(GRID_LENGTH);
-    std::generate(row.begin(), row.end(), Tile);
-
-    return row;
+    return std::vector<int>(GRID_LENGTH, TILE);;
 }
 
 void Level1::Load()
@@ -60,22 +52,14 @@ void Level1::Load()
     srand(static_cast<unsigned int>(time(0)));
 
     mGrid.resize(GRID_LENGTH);
-    std::generate(mGrid.begin(), mGrid.end(), EmptyRow);
+
+    std::generate(mGrid.begin() + 1, mGrid.end() - 1, GetGridRow);
+
+    mGrid.at(0) = std::vector<int>(GRID_LENGTH, EMPTY);
+    mGrid.at(11) = std::vector<int>(GRID_LENGTH, EMPTY);
 
     mShowGrid.resize(GRID_LENGTH);
-    std::generate(mShowGrid.begin(), mShowGrid.end(), TileRow);
-
-    for (int i = 1; i <= 10; i++)
-    {
-        for (int j = 1; j <= 10; j++)
-        {
-            //use algorithm
-            if (rand() % LEVEL == 0)
-            {
-                mGrid[i][j] = MINE;
-            }
-        }
-    }
+    std::generate(mShowGrid.begin(), mShowGrid.end(), GetTileRow);
 
     for (int i = 1; i <= 10; i++)
     {
@@ -83,52 +67,24 @@ void Level1::Load()
         {
             int numberOfMines = 0;
 
+            std::vector<sf::Vector2i> checkLocation = { sf::Vector2i(0,1), sf::Vector2i(1,0), sf::Vector2i(0,-1), sf::Vector2i(-1,0), sf::Vector2i(-1,1), sf::Vector2i(-1,-1), sf::Vector2i(1,-1), sf::Vector2i(1,1) };
+
+            for (int currCount = 0; currCount < checkLocation.size(); currCount++)
+            {
+                if (mGrid[i + checkLocation.at(currCount).x][j + checkLocation.at(currCount).y] == MINE)
+                {
+                    ++numberOfMines;
+                }
+            }
+
             if (mGrid[i][j] == MINE)
             {
                 continue;
             }
-
-            if (mGrid[i + 1][j] == MINE)
+            else
             {
-                ++numberOfMines;
+                mGrid[i][j] = numberOfMines;
             }
-
-            if (mGrid[i][j + 1] == MINE)
-            {
-                ++numberOfMines;
-            }
-
-            if (mGrid[i - 1][j] == MINE)
-            {
-                ++numberOfMines;
-            }
-
-            if (mGrid[i][j - 1] == MINE)
-            {
-                ++numberOfMines;
-            }
-
-            if (mGrid[i + 1][j + 1] == MINE)
-            {
-                ++numberOfMines;
-            }
-
-            if (mGrid[i - 1][j - 1] == MINE)
-            {
-                ++numberOfMines;
-            }
-
-            if (mGrid[i - 1][j + 1] == MINE)
-            {
-                ++numberOfMines;
-            }
-
-            if (mGrid[i + 1][j - 1] == MINE)
-            {
-                ++numberOfMines;
-            }
-
-            mGrid[i][j] = numberOfMines;
         }
     }
 }
@@ -144,14 +100,6 @@ void Level1::Draw()
     text.setCharacterSize(30);
     text.setStyle(sf::Text::Regular);
     Engine::GetWindow().Draw(text);
-
-    //sf::Text text2;
-    //text2.setFont(Engine::GetGameStateManager().GetFont());
-    //text2.setString("Hint Count :" + std::to_string(mHintCount));
-    //text2.setPosition(sf::Vector2f(800, 0));
-    //text2.setCharacterSize(30);
-    //text2.setStyle(sf::Text::Regular);
-    //Engine::GetWindow().Draw(text2);
 
     sf::Texture tileTexture;
     tileTexture.loadFromFile("../Assets/Art/tiles.jpg");
@@ -192,13 +140,9 @@ void Level1::Draw()
     }
 }
 
-bool Level1::CanVisit(void)
+void Level1::CanVisit(void)
 {
-    if (mToVisit.empty() == true)
-    {
-        return true;
-    }
-    else
+    if (mToVisit.empty() != true)
     {
         mEmptyPlace.clear();
 
@@ -209,87 +153,30 @@ bool Level1::CanVisit(void)
             mToVisit.pop_front();
             mEmptyPlace.push_back(currentLocation);
 
-            sf::Vector2i above = { currentLocation.x, currentLocation.y + 1 };
-            sf::Vector2i right = { currentLocation.x + 1, currentLocation.y };
-            sf::Vector2i below = { currentLocation.x, currentLocation.y - 1 };
-            sf::Vector2i left = { currentLocation.x - 1, currentLocation.y };
+            std::vector<sf::Vector2i> checkLocations = { sf::Vector2i(0,1), sf::Vector2i(1,0),sf::Vector2i(0,-1),sf::Vector2i(-1,0),sf::Vector2i(-1,1), sf::Vector2i(-1,-1),sf::Vector2i(1,-1),sf::Vector2i(1,1) };
 
-            sf::Vector2i above1 = { currentLocation.x-1, currentLocation.y + 1 };
-            sf::Vector2i right1 = { currentLocation.x-1 , currentLocation.y-1 };
-            sf::Vector2i below1 = { currentLocation.x+1, currentLocation.y - 1 };
-            sf::Vector2i left1 = { currentLocation.x+1, currentLocation.y+1 };
-
-            if (IsOutOfRange(above1) == false)
+            for (int i = 0; i < checkLocations.size(); ++i)
             {
-                if (TryToAdd(above1) == true)
+                if (IsOutOfRange(currentLocation + checkLocations.at(i)) == false)
                 {
-                    mToVisit.push_back(above1);
-                }
-            }
-
-            if (IsOutOfRange(right1) == false)
-            {
-                if (TryToAdd(right1) == true)
-                {
-                    mToVisit.push_back(right1);
-                }
-            }
-
-            if (IsOutOfRange(below1) == false)
-            {
-                if (TryToAdd(below1) == true)
-                {
-                    mToVisit.push_back(below1);
-                }
-            }
-
-            if (IsOutOfRange(left1) == false)
-            {
-                if (TryToAdd(left1) == true)
-                {
-                    mToVisit.push_back(left1);
-                }
-            }
-
-            if (IsOutOfRange(above) == false)
-            {
-                if (TryToAdd(above) == true)
-                {
-                    mToVisit.push_back(above);
-                }
-            }
-
-            if (IsOutOfRange(right) == false)
-            {
-                if (TryToAdd(right) == true)
-                {
-                    mToVisit.push_back(right);
-                }
-            }
-
-            if (IsOutOfRange(below) == false)
-            {
-                if (TryToAdd(below) == true)
-                {
-                    mToVisit.push_back(below);
-                }
-            }
-
-            if (IsOutOfRange(left) == false)
-            {
-                if (TryToAdd(left) == true)
-                {
-                    mToVisit.push_back(left);
+                    if (TryToAdd(currentLocation + checkLocations.at(i)) == true)
+                    {
+                        mToVisit.push_back(currentLocation + checkLocations.at(i));
+                    }
                 }
             }
         }
 
-        for (auto location : mEmptyPlace)
+        auto currentLocation = mEmptyPlace.begin();
+        int count = 1;
+
+        while (currentLocation != mEmptyPlace.end())
         {
-            mShowGrid[location.x][location.y] = mGrid[location.x][location.y];
-        }
+            mShowGrid[currentLocation->x][currentLocation->y] = mGrid[currentLocation->x][currentLocation->y];
 
-        return false;
+            currentLocation = mEmptyPlace.begin() + count;
+            count++;
+        }
     }
 }
 
@@ -309,7 +196,7 @@ void Level1::Selected(sf::Vector2i location)
 
 bool Level1::TryToAdd(sf::Vector2i location)
 {
-    std::vector<sf::Vector2i>::iterator checkAlreadyExist = std::find(mEmptyPlace.begin(), mEmptyPlace.end(), location);
+    auto checkAlreadyExist = std::find(mEmptyPlace.begin(), mEmptyPlace.end(), location);
 
     if (checkAlreadyExist != mEmptyPlace.end())
     {
@@ -347,10 +234,6 @@ bool Level1::IsOutOfRange(sf::Vector2i location)
     }
 }
 
-void Level1::ShowHint(void)
-{
-}
-
 void Level1::Update([[maybe_unused]] double dt)
 {
     sf::Vector2i mousePosition = sf::Mouse::getPosition(Engine::GetWindow().GetWindow());
@@ -385,12 +268,7 @@ void Level1::Update([[maybe_unused]] double dt)
         }
     }
 
-    if (Engine::GetInput().IsKeyTriggered(sf::Keyboard::H))
-    {
-        ShowHint();
-    }
-
-    if (Engine::GetInput().IsKeyPressed(sf::Keyboard::R))
+    if (Engine::GetInput().IsKeyTriggered(sf::Keyboard::R))
     {
         Engine::GetGameStateManager().ReloadState();
         mShouldGameRun = true;

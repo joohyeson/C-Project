@@ -12,11 +12,7 @@ Creation date: 21/07/2020
 #include "MainMenu.h"
 #include "Engine.h" //Engine::GetWindow()
 
-MainMenu::MainMenu() {};
-
-void MainMenu::Load()
-{
-}
+void MainMenu::Load() {}
 
 void MainMenu::Draw()
 {
@@ -31,18 +27,11 @@ void MainMenu::Draw()
     Engine::GetWindow().Draw(mainMenuText);
 }
 
-void MainMenu::Update(double/* dt*/)
+void MainMenu::Update([[maybe_unused]] double dt)
 {
     if (Engine::GetInput().IsKeyTriggered(sf::Keyboard::Space) == true)
     {
-        
         Engine::GetGameStateManager().SetNextState(LEVEL1);
-    }
-
-    if (Engine::GetInput().IsKeyTriggered(sf::Keyboard::F))
-    {
-       std::cout << "F" << std::endl;
-       //Engine::GetWindow().SetFullScreen();
     }
 
     if (Engine::GetInput().IsKeyTriggered(sf::Keyboard::Escape) == true)
@@ -51,6 +40,4 @@ void MainMenu::Update(double/* dt*/)
     }
 }
 
-void MainMenu::Unload()
-{
-}
+void MainMenu::Unload() {}

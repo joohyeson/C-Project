@@ -11,6 +11,6 @@ Creation date: 21/07/2020
 
 #pragma once
 
-#define MAIN_MENU 0
-#define LEVEL1 1
-#define LEVEL2 2
+const int MAIN_MENU = 0;
+const int LEVEL1 = 1;
+const int LEVEL2 = 2;

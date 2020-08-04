@@ -10,11 +10,11 @@ Creation date: 21/07/2020
 -----------------------------------------------------------------*/
 
 #pragma once
-#include "GameStateManager.h" //GameStateManager
-#include "Input.h" //Input
-#include "Window.h"
 #include <string> //std::string
 #include <chrono> //std::chrono::system_clock::time_point
+#include "Input.h" 
+#include "Window.h"
+#include "GameStateManager.h"
 
 class Engine
 {

@@ -5,7 +5,7 @@ written consent of DigiPen Institute of Technology is prohibited.
 File Name: Input.cpp
 Purpose: This is input source file.
 Project: CS225
-Author: Daeun Jeong
+Author: Daeun Jeong, Juhye Son
 Creation date: 21/07/2020
 -----------------------------------------------------------------*/
 
@@ -15,7 +15,6 @@ Creation date: 21/07/2020
 Input::Input()
 {
     Reset();
-
     mMouse = sf::Vector2i(0, 0);
 }
 
@@ -150,13 +149,5 @@ void Input::Reset()
         mMousePressed[i] = 0;
         mMouseReleased[i] = 0;
         mMouseTriggered[i] = 0;
-    }
-}
-
-void Input::ResetRelease()
-{
-    for (int i = 0; i < sf::Keyboard::KeyCount; ++i)
-    {
-        mKeyReleased[i] = 0;
     }
 }

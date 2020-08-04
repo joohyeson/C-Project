@@ -5,19 +5,17 @@ written consent of DigiPen Institute of Technology is prohibited.
 File Name: Animation.cpp
 Purpose: This is Animation source file.
 Project: CS225
-Author: Daeun Jeong
+Author: Daeun Jeong, Juhye Son
 Creation date: 23/07/2020
 -----------------------------------------------------------------*/
 
 #include "Animation.h"
 #include "Colors.h"
 
-Animation::Animation(){}
-
-Animation::Animation(sf::Texture& texture, int x, int y, int w, int h, int count, float Speed)
+Animation::Animation(sf::Texture& texture, int x, int y, int w, int h, int count, float speed)
 {
     mAnimationFrame = 0;
-    mAnimationSpeed = Speed;
+    mAnimationSpeed = speed;
 
     for (int i = 0; i < count; ++i)
     {
@@ -27,7 +25,6 @@ Animation::Animation(sf::Texture& texture, int x, int y, int w, int h, int count
     mAnimationSprite.setTexture(texture);
     mAnimationSprite.setOrigin(w / 2.0f, h / 2.0f);
     mAnimationSprite.setTextureRect(mAnimationCoordinates[0]);
-    //mAnimationSprite.setColor(static_cast<sf::Color>(BABY_PINK));
 }
 
 void Animation::Update()
@@ -35,13 +32,24 @@ void Animation::Update()
     mAnimationFrame += mAnimationSpeed;
 
     int frameSize = static_cast<int>(mAnimationCoordinates.size());
-    
-    if (mAnimationFrame >= frameSize) 
+
+    if (mAnimationFrame + mAnimationSpeed >= mAnimationCoordinates.size())
     {
-        mAnimationFrame -= frameSize;
+        //if (mOwner->name == "explosion")
+        //{
+        //    mIsAnimationEnded = true;
+        //}
+        //else
+        {
+            mAnimationFrame -= frameSize;
+        }
     }
-    
-    if (frameSize > 0) 
+    else
+    {
+        mIsAnimationEnded = false;
+    }
+
+    if (frameSize > 0)
     {
         mAnimationSprite.setTextureRect(mAnimationCoordinates[static_cast<int>(mAnimationFrame)]);
     }
@@ -55,4 +63,19 @@ bool Animation::IsAnimationEnded()
 sf::Sprite& Animation::GetAnimationSprite()
 {
     return mAnimationSprite;
+}
+
+void Animation::SetSpriteColor(sf::Color color)
+{
+    mAnimationSprite.setColor(color);
+}
+
+void Animation::SetSpriteScale(sf::Vector2f scale)
+{
+    mAnimationSprite.setScale(scale);
+}
+
+void Animation::SetOwner(GameObject* owner)
+{
+    mOwner = owner;
 }

@@ -24,14 +24,7 @@ public:
     sf::RenderWindow& GetWindow(void);
     void Draw(const sf::Drawable& drawable);
     void Clear(sf::Color color);
-    void SetFullScreen() {
-        isFullScreen = !isFullScreen;
-        std::cout << isFullScreen << std::endl;
-        FullScreen();
-    };
-    void FullScreen();
 
 private:
     sf::RenderWindow mRenderWindow;
-    bool isFullScreen = false;
 };

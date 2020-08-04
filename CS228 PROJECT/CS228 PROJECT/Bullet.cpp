@@ -2,8 +2,8 @@
 Copyright (C) 2020 DigiPen Institute of Technology.
 Reproduction or disclosure of this file or its contents without the prior
 written consent of DigiPen Institute of Technology is prohibited.
-File Name: Bullet.h
-Purpose: This is Bullet header file.
+File Name: Bullet.cpp
+Purpose: This is Bullet source file.
 Project: CS225
 Author: Daeun Jeong
 Creation date: 21/07/2020

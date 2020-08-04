@@ -1,47 +1,44 @@
 ## Core Topics
 
-1. Pointers + Arrays
-- Pointers are variables that indicate the location of another variable. 
+**1. Pointers + Arrays**
+
+- Pointers
+
+Pointers are variables that indicate the location of another variable. 
+
 If you put the value in the pointer, you can have an address value for that variable. 
+
 And Using pointer, reference to the memory address makes it easy to access and manipulate various data types variables.
 
 ```c++
-// We are using Player* mPlayer in Level 2.
-mPlayer->SetValues(playerAnimation, static_cast<float>(Engine::GetWindow().GetSize().x >> 1), static_cast<float>(Engine::GetWindow().GetSize().y >> 1), 0, 20);
-mPlayer->dx = 0;
-mPlayer->dy = 0;
+// We are using Node* in List class.
+template<typename T>
+void List<T>::clear()
+{
+    Node* current = pHead;
+    Node* next;
 
-if (mPlayer->GetIsMoving() == true)
-{
-    mPlayer->animation = playerMoveAnimation;
-}
-else
-{
-    mPlayer->animation = playerAnimation;
-}
+    while (current != nullptr)
+    {
+        next = current->pNext;
+        delete current;
+        --mSize;
+        current = next;
+    }
 
-if (Engine::GetInput().IsKeyPressed(sf::Keyboard::Right))
-{
-    mPlayer->angle += MOVING_ANGLE;
-}
-if (Engine::GetInput().IsKeyPressed(sf::Keyboard::Left))
-{
-    mPlayer->angle -= MOVING_ANGLE;
-}
-
-if (Engine::GetInput().IsKeyPressed(sf::Keyboard::Up))
-{
-    mPlayer->SetIsMoving(true);
-}
-else
-{
-    mPlayer->SetIsMoving(false);
+    pHead = nullptr;
+    pTail = nullptr;
 }
 ```
 
-- Arrays are lists of data of the same type as one variable. 
+- Arrays
+
+Arrays are lists of data of the same type as one variable. 
+
 You can decide how much you want to use, then initialize the array, and use it. 
+
 Arrays are sized according to the data type when declaring, so the index access is fast. 
+
 So arrays are useful when the indices are important.
 
 ```c++
@@ -71,10 +68,14 @@ void Input::Reset()
 }
 ```
 
-2. Bit operations
-- A bit is the smallest unit that the computer can use, to save the binary digits like '1011'.
+**2. Bit operations**
+
+A bit is the smallest unit that the computer can use, to save the binary digits like '1011'.
+
 Bit operations are the operations that applied in bits for the binary digits.
+
 Bit operations can improve the CPU performance because '4/2' is the same as '4>>1' but, using '>>' is less expensive behavior.
+
 Below codes are the examples for the bit operations.
 
 ```
@@ -111,27 +112,15 @@ AND(&) 0011
 Engine::GetWindow().GetSize().x >> 1;
 
 //And we used bit flags like this.
-constexpr unsigned char IS_GAME_OVER = 1 << 0;
-constexpr unsigned char IS_CLEARED = 1 << 1;
-
-if (mFlags & IS_GAME_OVER)
-{
-    text.setString("Game Over.. Press R key to restart.");
-    text.setPosition(sf::Vector2f(static_cast<float>(Engine::GetWindow().GetSize().x >> 1), static_cast<float>(Engine::GetWindow().GetSize().y >> 1)));
-    Engine::GetWindow().Draw(text);
-}
-
-if (mFlags & IS_CLEARED)
-{
-    text.setString("Level Clear!");
-    text.setPosition(sf::Vector2f(static_cast<float>(Engine::GetWindow().GetSize().x >> 1), static_cast<float>(Engine::GetWindow().GetSize().y >> 1) + 50));
-    Engine::GetWindow().Draw(text);
-}
+//New flag here!
 ```
 
-3. Operator Overloading
-- Operator overloading is to redefine existing '=', '-', '/', etc. operators. In this way, you can use operators like 'class + class' and 'class - class'.
-- It can be used by redefining the operator within the function. The code below is how I used 'Operator Overloading' for this project.
+**3. Operator Overloading**
+
+Operator overloading is to redefine existing '=', '-', '/', etc. operators. In this way, you can use operators like 'class + class' and 'class - class'.
+
+It can be used by redefining the operator within the function. The code below is how I used 'Operator Overloading' for this project.
+
 ```c++
 template <typename T>
 typename List<T>::Iterator& List<T>::Iterator::operator++()
@@ -142,43 +131,78 @@ typename List<T>::Iterator& List<T>::Iterator::operator++()
 }
 ```
 
-4. Return Value Optimization
-- The return value optimization is literally to store the return value in the caller's memory to optimize the return value. 
-For example, if you give a constructor a copy constructor, the constructor will not be called twice. 
-Only the constructor is called once and no temporary objects are created. The code below is how I used 'Return Value Optimization' for this project.
+**4. Return Value Optimization**
+
+The return value optimization is literally to store the return value in the caller's memory to optimize the return value. 
+
+RVO is useful because it speeds up the runtime.
+
+Suppose we return a really big resource from a function.
+
+If we do not use RVO, we will make the resource locally, and return it. 
+
+Then, we have to pay for that cost to deep copy and deallocate that big temporary object.
+
+The code below is how I used 'Return Value Optimization' for this project.
+
 ```c++
-//When using RVO
-template<typename T>
-bool GameObject::IsCollideWith(GameObject* object)
+//Unnamed RVO
+Animation Level2::LoadAnimation(eLevel2Texture textureEnum)
 {
-    return (object->x - x) * (object->x - x) + (object->y - y) * (object->y - y) < (radius + object->radius) * (radius + object->radius);
+    switch (textureEnum)
+    {
+    case eLevel2Texture::BULLET:
+        bulletTexture.loadFromFile("../Assets/Art/fire_blue.png");
+        return Animation(bulletTexture, 0, 0, 32, 64, 16, 0.8f);
+        break;
+    case eLevel2Texture::PLAYER:
+        playerTexture.loadFromFile("../Assets/Art/spaceship.png");
+        playerTexture.setSmooth(true);
+        return Animation(playerTexture, 40, 0, 40, 40, 1, 0.f);
+        break;
+    case eLevel2Texture::PLAYER_MOVE:
+        playerMoveTexture.loadFromFile("../Assets/Art/spaceship.png");
+        playerMoveTexture.setSmooth(true);
+        return Animation(playerMoveTexture, 40, 40, 40, 40, 1, 0.f);
+        break;
+    case eLevel2Texture::EXPLOSION:
+        explosionTexture.loadFromFile("../Assets/Art/type_C.png");
+        return Animation(explosionTexture, 0, 0, 256, 256, 48, 0.3f);
+        break;
+    case eLevel2Texture::ROCK:
+        rockTexture.loadFromFile("../Assets/Art/rock.png");
+        return Animation(rockTexture, 0, 0, 64, 64, 16, 0.1f);
+        break;
+    case eLevel2Texture::SMALL_ROCK:
+        smallRockTexture.loadFromFile("../Assets/Art/rock_small.png");
+        return Animation(smallRockTexture, 0, 0, 64, 64, 16, 0.1f);
+        break;
+    default:
+        break;
+    }
+
+    return Animation();
 }
 
-//When it is not using RVO
-bool GameObject::IsCollideWith(GameObject* object)
-{
-    float dx = object->x - x;
-    float squareOfDx = dx * dx;
-
-    float dy = object->y - y;
-    float squareOfDy = dy * dy;
-    
-    float dr = radius + object->radius;
-    float squareOfDr = dr * dr;
-
-    return squareOfDx + squareOfDy < squareOfDr;
-}
+bulletAnimation = LoadAnimation(eLevel2Texture::BULLET);
+playerAnimation = LoadAnimation(eLevel2Texture::PLAYER);
+playerMoveAnimation = LoadAnimation(eLevel2Texture::PLAYER_MOVE);
+explosionAnimation = LoadAnimation(eLevel2Texture::EXPLOSION);
+rockAnimation = LoadAnimation(eLevel2Texture::ROCK);
+smallRockAnimation = LoadAnimation(eLevel2Texture::SMALL_ROCK);
 ```
 
-5. Inheritance + Polymorphism
+**5. Inheritance + Polymorphism**
 
-**Inheritance**
+- Inheritance
 
-- Inheritance is one of the important concepts of OOP (Object Oriented Programming) along with polymorphism and encapsulation. 
+Inheritance is one of the important concepts of OOP (Object Oriented Programming) along with polymorphism and encapsulation. 
+
 Inheritance has a base class (superclass) and derived class (subclass). The advantage of inheritance is that you can reuse code. 
+
 If you create a function or variable in the base class, you can use the same content as in the base class without declaring the same content in the derived class.
 
-**Inheritance Example: GameObject.h&Level2.h&&LEvel2.cpp**
+- Inheritance Example: GameObject.h & Level2.h & Level2.cpp
 ```c++
 class GameObject
 {
@@ -230,18 +254,25 @@ void Level2::Update([[maybe_unused]] double dt)
 //We can see that we can also use functions and variables declared in the game object class, not the player class.
 ```
 
-**Polymorphism**
+- Polymorphism
 
-- Polymorphism and inheritance are important concepts of OOP(Object Oriented Programming). 
+Polymorphism and inheritance are important concepts of OOP(Object Oriented Programming). 
+
 If we use polymorphism well, it can provide a consistent usage method to users regardless of the contents of the function. 
+
 Polymorphism with this advantage can be implemented using inheritance. 
+
 If at least one function in the superclass is implemented as virtual, a virtual function table in charge of this class is created.
+
 This table is a collection of virtual function pointers. 
+
 When we override the virtual function in the subclass, a virtual pointer of the subclass is created. 
+
 The virtual pointers of the subclass have a unique location when overridden, but when not overridden, they point to the virtual pointer location of the base class. 
+
 We can implement polymorphism in inheritance through this method.
 
-**virtual table& pointer example**
+- Virtual table & Pointer example
 
 ```c++
 class shape
@@ -266,7 +297,8 @@ class rectangle{
 [shape::print()]
 ```
 
-**Polymorphism Example: Level1::Draw().h&Level2::Draw()&GameStateManager::SetRunningState()**
+- Polymorphism Example: Level1::Draw().h & Level2::Draw() & GameStateManager::SetRunningState()
+
 ```c++
 class GameState
 {
@@ -328,91 +360,215 @@ void GameStateManager::SetRunningState(double dt)
 }//mCurrentGameState is a variable that stores subclasses that have GameState as the base class.
 ```
 
-6. Rule of 5, RAII, r-value references/Move Semantics
+**6. Rule of 5, RAII, r-value references/Move Semantics**
 
- **RAII**
-- C++ has a risk of memory leak because the programmer has to free it manually. 
+ - RAII
+
+C++ has a risk of memory leak because the programmer has to free it manually. 
+
 So RAII (Resource Acquisition Is Initialization) is used to eliminate the possibility of memory leak. 
-Simply put, This is a programming concept where we initialize and allocate resources in the constructor is done, and then it releases automatically in its destructor.
-So using RAII is useful because there will be no possible memory leak, so the code is more stable.
+
+Simply put, we initialize and allocate resources in the constructor, and then it deallocates automatically in its destructor.
+
+So using RAII is useful because there will be no possible memory leak, so the code become more stable.
 
 ```c++
-//Automatically allocating in the constructor.
-Level2::Level2()
+//Automatically allocating.
+template<typename T>
+List<T>::List(int count) 
 {
-    mFlags = 0;
-    mBulletLimit = NUMBER_OF_BULLETS;
-    mPlayer = new Player();
+    for (int i = 0; i < count; i++)
+    {
+        List<T>::push_back(T{});
+    }
 }
 
-//Automatically deallocating in the destructor.
-Level2::~Level2()
+//Automatically deallocating.
+template<typename T>
+List<T>::~List()
 {
-    Unload();
+    clear();
 }
 
-void Level2::Unload()
+template<typename T>
+void List<T>::clear()
 {
-    //All game objects are stored in 'mGameObjectList'.
-    //So clear function deletes all the game objects, include 'mPlayer'.
-    //플레이어를 리스트에 추가하는 거랑 리스트가 뭔지 보여주기. 클리어로는 부족. 
-    //노드만 딜리트 할게 아니라 포인터도 지워야함.
-    mGameObjectList.clear();
+    Node* current = pHead;
+    Node* next;
 
-    mPlayer = nullptr;
+    while (current != nullptr)
+    {
+        next = current->pNext;
+        delete current;
+        --mSize;
+        current = next;
+    }
+
+    pHead = nullptr;
+    pTail = nullptr;
 }
 ```
 
- **Rule of 5**
-- Not like the rule of 0, that avoids defining operations, uses default, does not allocate and deallocate. 
+- Rule of 5
+
+Not like the rule of 0, that avoids defining operations, uses default, does not allocate and deallocate. 
 
 Rule of 5 has, along with Rule of 3 (copy constructor, copy assignment operator, destructor), move constructor, and move assignment operator.
 
 For copy constructor and copy assignment operator, 
-the default copy constructor is a shallow copy. So if we do not define
-a copy constructor for a deep copy, 
+
+the default copy constructor is a shallow copy. So if we do not define a copy constructor for a deep copy, 
+
 and we just use a default copy constructor to make an object,
-a new object uses the same memory address with the copied object. 
+
+a new object uses the same memory address with the object that is just copied. 
+
 Then, 'delete' will be called twice on the same memory address, 
+
 and there will be memory corruption and segmentation fault for 'double free'.
+
 For these reasons, we need a copy constructor and copy assignment operator.
 
 And for move constructor, and move assignment operator,
+
 copying objects can be expensive as it involves creating, 
+
 copying and then destroying temporary objects.
+
 So it is useful to only have one resource at a time. 
+
 This resource's ownership can be transferred from one manager to another. 
+
 In such cases, we define and use move constructor and move assignment operator.
 
 Thus, using the rule of 5 is important 
+
 because the programmer can safely and efficiently implement RAII to manage dynamically allocated resources.
 
 ```c++
-    Node* MakeNode(T data)
-    {
-        //We have to manually manage the allocated resources, 
-        //so we need rule of 5 to handle resources more safely and efficiently.
-        Node* pNewNode = new Node();
-        pNewNode->data = data;
-        pNewNode->pNext = nullptr;
-        pNewNode->pPrev = nullptr;
+Node* MakeNode(T data)
+{
+    //We have to manually manage the allocated resources, 
+    //so we need rule of 5 to handle resources more safely and efficiently.
+    Node* pNewNode = new Node();
+    pNewNode->data = data;
+    pNewNode->pNext = nullptr;
+    pNewNode->pPrev = nullptr;
 
-        return pNewNode;
+    return pNewNode;
+}
+
+template<typename T>
+List<T>::~List()
+{
+    clear();
+}
+
+template<typename T>
+void List<T>::clear()
+{
+    Node* current = pHead;
+    Node* next;
+
+    while (current != nullptr)
+    {
+        next = current->pNext;
+        delete current;
+        --mSize;
+        current = next;
     }
 
-    ~List();
-    List(const List<T>& rhs); // copy constructor
-    List(List<T>&& rhs); // move constructor
-    List<T>& operator=(const List<T>& rhs); // copy assignment
-    List<T>& operator=(List<T>&& rhs); //move assignment
+    pHead = nullptr;
+    pTail = nullptr;
+}
+
+template<typename T>
+void List<T>::deep_copy(const List<T>& rhs)
+{
+    if (rhs.pHead != nullptr)
+    {
+        pHead = MakeNode(rhs.pHead->data);
+
+        Node* pTemp = pHead;
+        Node* rhsTemp = rhs.pHead->pNext;
+
+        while (rhsTemp != nullptr)
+        {
+            pTemp->pNext = MakeNode(rhsTemp->data, nullptr, pTemp);
+            pTemp = pTemp->pNext;
+            rhsTemp = rhsTemp->pNext;
+        }
+
+        pTail = pTemp;
+    }
+
+    mSize = rhs.mSize;
+}
+
+//copy constructor(deep copy)
+template<typename T>
+List<T>::List(const List<T>& rhs)
+{
+    deep_copy(rhs);
+}
+
+//move constructor 
+template<typename T>
+List<T>::List(List<T>&& rhs)
+{
+    pHead = rhs.pHead;
+    pTail = rhs.pTail;
+    mSize = rhs.mSize;
+
+    rhs.pHead = nullptr;
+    rhs.pTail = nullptr;
+    rhs.mSize = 0;
+}
+
+//copy assignment operator(deep copy)
+template<typename T>
+List<T>& List<T>::operator=(const List<T>& rhs)
+{
+    clear();
+    deep_copy(rhs);
+
+    return *this;
+}
+
+//move assignmnet operator
+template<typename T>
+List<T>& List<T>::operator=(List<T>&& rhs)
+{
+    if (this != &rhs)
+    {
+        clear();
+
+        pHead = rhs.pHead;
+        pTail = rhs.pTail;
+        mSize = rhs.mSize;
+
+        rhs.pHead = nullptr;
+        rhs.pTail = nullptr;
+        rhs.mSize = 0;
+    }
+
+    return *this;
+}
 ```
 
- **r-value references/Move Semantics**
-- The r-value is what makes the move possible, to avoid unneeded copy. 
-Here, the r-value is the value to the right of the expression. 
-The r-value does not exist when the expression ends. For r-value reference, use '&&'.
-//logical And 일수도 있으니까 표현하는 방법은 & 두개를 쓰거나 레퍼런스 하는 것이다 라고 하기.
-//to have more efficient copy. 설명 좀 더 추가하기. 틀린 설명은 없음.
+- r-value references/Move Semantics
+
+The r-value's name comes from the reason that the value is to the right of the expression.
+
+R-value is a special name for a temporary object that does not have a variable name.
+
+So no variable name means that we cannot get the address and reference to it.
+
+This is useful to copy more efficiently, because r-value object has very short life time,
+
+so it will disappear very soon. So if we just move the object, we can save the cost of deep copy.
+
+To express r-value in c++, we make a type declaration of a reference that has '&&'(This is not a logical and!).
 
 ```c++
 //This is a move constructor of List class.
@@ -429,12 +585,16 @@ List<T>::List(List<T>&& rhs)
 }
 ```
 
-7. Templates
-- A template is a frame created so that a class or function once created can be used with multiple data types. 
+**7. Templates**
+
+A template is a frame created so that a class or function once created can be used with multiple data types. 
+
 The advantage of using a template is that the code is shortened and easy to modify because there is no need to rewrite the code multiple times for every possible types.
 
-- Generics is the idea to allow type (Integer, String, and user-defined types) to be a parameter to methods, classes, and interfaces. 
+And Generics is the idea to allow type (Integer, String, and user-defined types) to be a parameter to methods, classes, and interfaces. 
+
 As it is independent of data type, so it is very reusable and convenient. 
+
 And generics can be implemented in C++ using Templates, like sort(), max(), min(), print().
 
 ```c++
@@ -463,13 +623,15 @@ class List
 }
 ```
 
-8. STL Container + Iterators + Algorithms
-- STL is a Standard template library.
+**8. STL Container + Iterators + Algorithms**
 
-- STL container is various types of a template class, like linked list, tree, stack, queue. 
+- STL Container
+
+STL container is various types of a template class, like linked list, tree, stack, queue. 
+
 STL container can manage a collection of objects.
-STL Container is useful because the programmer can choose what to use for the purpose, 
-as each container has its pros and cons.
+
+STL Container is useful because the programmer can choose what to use for the purpose, as each container has its pros and cons.
 
 ```c++
 void Level1::Selected(sf::Vector2i location)
@@ -487,29 +649,55 @@ void Level1::Selected(sf::Vector2i location)
 }
 ```
 
-- STL Iterator is a common interface for accessing data of the container. 
+- STL Iterators
+
+STL Iterator is a common interface for accessing data of the container. 
+
 STL Iterator can traverse over the contents of a container or a subset of the container.
-STL Iterator is useful because as it can access the container, 
-Programmers can perform various complex tasks with algorithm functions using iterators.
+
+STL Iterator is useful because as it can access the container, Programmers can perform various complex tasks with algorithm functions using iterators.
 
 ```c++
-std::vector<sf::Vector2i>::iterator checkAlreadyExist = std::find(mEmptyPlace.begin(), mEmptyPlace.end(), location);
+std::vector<int> GetGridRow(void)
+{
+    std::vector<int> row(GRID_LENGTH, EMPTY);
+    
+    std::generate(row.begin() + 1, row.end() - 1,
+        []()
+    {
+        if (rand() % LEVEL == 0)
+        {
+            return MINE;
+        }
+        return EMPTY;
+    });
+
+    return row;
+}
+
+void Level1::Load()
+{
+    srand(static_cast<unsigned int>(time(0)));
+    mGrid.resize(GRID_LENGTH);
+    std::generate(mGrid.begin() + 1, mGrid.end() - 1, GetGridRow);
+    //...
+}
+```
+
+- STL Algorithms
+
+STL Algorithm is a function that is defined in the <algorithm> library.
+
+There are search, sort, access, find, and so on.
+
+It is useful because algorithm uses the iterator as an interface, so algorithm function can be used in all containers.
+
+```c++
+//When find the location is already in the vector or not.
+auto checkAlreadyExist = std::find(mEmptyPlace.begin(), mEmptyPlace.end(), location);
 
 if (checkAlreadyExist != mEmptyPlace.end())
 {
     return false;
 }
-```
-
-- STL Algorithm is a function that is defined in the <algorithm> library.
-There are search, sort, access, find, and so on.
-It is useful because algorithm uses the iterator as an interface, so algorithm function can be used in all containers.
-
-```c++
-//When initializing grid and show grid in Level 1.
-mGrid.resize(GRID_LENGTH);
-std::generate(mGrid.begin(), mGrid.end(), EmptyRow);
-
-mShowGrid.resize(GRID_LENGTH);
-std::generate(mShowGrid.begin(), mShowGrid.end(), TileRow);
 ```
