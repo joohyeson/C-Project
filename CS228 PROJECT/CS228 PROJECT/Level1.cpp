@@ -27,7 +27,7 @@ constexpr int LEVEL = 8; // The higher is the easier.
 
 Level1::Level1() {};
 
-int SetEmpty(void)
+int GetRandomMine(void)
 {
     if (rand() % LEVEL == 0)
     {
@@ -37,15 +37,15 @@ int SetEmpty(void)
     return EMPTY;
 }
 
-std::vector<int> EmptyRow(void)
+std::vector<int> GetGridRow(void)
 {
     std::vector<int> row;
     row.resize(GRID_LENGTH);
-    std::fill(row.begin(), row.end(), SetEmpty);
+    std::generate(row.begin(), row.end(), GetRandomMine);
     return row;
 }
 
-std::vector<int> TileRow(void)
+std::vector<int> GetTileRow(void)
 {
     std::vector<int> row;
     row.resize(GRID_LENGTH);
@@ -59,10 +59,10 @@ void Level1::Load()
     srand(static_cast<unsigned int>(time(0)));
 
     mGrid.resize(GRID_LENGTH);
-    std::generate(mGrid.begin(), mGrid.end(), EmptyRow);
+    std::generate(mGrid.begin(), mGrid.end(), GetGridRow);
 
     mShowGrid.resize(GRID_LENGTH);
-    std::generate(mShowGrid.begin(), mShowGrid.end(), TileRow);
+    std::generate(mShowGrid.begin(), mShowGrid.end(), GetTileRow);
 
     for (int i = 1; i <= 10; i++)
     {
