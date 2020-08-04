@@ -18,17 +18,16 @@ Creation date: 21/07/2020
 class Level1 : public GameState
 {
 public:
-    Level1();
+    Level1() = default;
     void Load() override;
     void Update(double dt) override;
     void Unload() override;
     void Draw() override;
 
-    bool CanVisit(void);
+    void CanVisit(void);
     void Selected(sf::Vector2i location);
     bool TryToAdd(sf::Vector2i location);
     bool IsOutOfRange(sf::Vector2i location);
-    void ShowHint(void);
     std::string GetName() override { return "Level1"; }
 
 private:
@@ -36,7 +35,6 @@ private:
     std::vector<std::vector<int>> mShowGrid;
 
     std::deque<sf::Vector2i> mToVisit;
-    int mHintCount = 3;
     bool mShouldGameRun = true;
     std::vector<sf::Vector2i> mEmptyPlace;
 };

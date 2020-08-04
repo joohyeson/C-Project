@@ -36,18 +36,6 @@ void Window::Clear(sf::Color color)
     mRenderWindow.clear(color);
 }
 
-void Window::FullScreen()
-{
-    if (isFullScreen == true)
-    {
-        mRenderWindow.create(sf::VideoMode(1280, 720), "name", sf::Style::Fullscreen);
-    }
-    else
-    {
-        mRenderWindow.create(sf::VideoMode(1280, 720), "name", sf::Style::Close | sf::Style::Resize);
-    }
-}
-
 void Window::Draw(const sf::Drawable& drawable)
 {
     mRenderWindow.draw(drawable);

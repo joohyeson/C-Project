@@ -33,7 +33,6 @@ void Player::Update()
     }
 
     float maxSpeed = 15.0f;
-
     float speed = sqrt(dx * dx + dy * dy);
 
     if (speed > maxSpeed)

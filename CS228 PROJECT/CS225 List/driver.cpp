@@ -3,7 +3,7 @@ Copyright (C) 2020 DigiPen Institute of Technology.
 Reproduction or disclosure of this file or its contents without the prior
 written consent of DigiPen Institute of Technology is prohibited.
 File Name: driver.cpp
-Purpose: This is driver source file to test 'List' class.
+Purpose: This is a test driver source file to test 'List' class.
 Project: CS225
 Author: Juhye Son, Daeun Jeong
 Creation date: 21/07/2020
@@ -17,9 +17,8 @@ Creation date: 21/07/2020
 #include <crtdbg.h> // debug memory tracking
 
 #include <iostream> //std::cout, std::endl
-#include <iomanip>
+#include <iomanip> //std::setw
 #include "List.h"
-#include <list>
 
 constexpr int NUM_OF_NODES = 5;
 
@@ -456,7 +455,6 @@ void test11()
     
     for (auto node : listA)
     {
-        //Not just print, check the value.
         std::cout << "Value : " << node << std::endl;
     }
 

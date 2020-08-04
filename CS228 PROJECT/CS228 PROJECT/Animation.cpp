@@ -5,7 +5,7 @@ written consent of DigiPen Institute of Technology is prohibited.
 File Name: Animation.cpp
 Purpose: This is Animation source file.
 Project: CS225
-Author: Daeun Jeong
+Author: Daeun Jeong, Juhye Son
 Creation date: 23/07/2020
 -----------------------------------------------------------------*/
 
@@ -33,9 +33,20 @@ void Animation::Update()
 
     int frameSize = static_cast<int>(mAnimationCoordinates.size());
 
-    if (mAnimationFrame >= frameSize)
+    if (mAnimationFrame + mAnimationSpeed >= mAnimationCoordinates.size())
     {
-        mAnimationFrame -= frameSize;
+        //if (mOwner->name == "explosion")
+        //{
+        //    mIsAnimationEnded = true;
+        //}
+        //else
+        {
+            mAnimationFrame -= frameSize;
+        }
+    }
+    else
+    {
+        mIsAnimationEnded = false;
     }
 
     if (frameSize > 0)
@@ -52,4 +63,19 @@ bool Animation::IsAnimationEnded()
 sf::Sprite& Animation::GetAnimationSprite()
 {
     return mAnimationSprite;
+}
+
+void Animation::SetSpriteColor(sf::Color color)
+{
+    mAnimationSprite.setColor(color);
+}
+
+void Animation::SetSpriteScale(sf::Vector2f scale)
+{
+    mAnimationSprite.setScale(scale);
+}
+
+void Animation::SetOwner(GameObject* owner)
+{
+    mOwner = owner;
 }

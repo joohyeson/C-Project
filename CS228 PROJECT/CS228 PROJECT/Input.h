@@ -5,7 +5,7 @@ written consent of DigiPen Institute of Technology is prohibited.
 File Name: Input.hpp
 Purpose: This is input header file.
 Project: CS225
-Author: Daeun Jeong
+Author: Daeun Jeong, Juhye Son
 Creation date: 21/07/2020
 -----------------------------------------------------------------*/
 
@@ -41,7 +41,6 @@ public:
 
     void Reset();
     void KeyUpdate();
-    void ResetRelease();
 
 private:
     bool mKeyPressed[sf::Keyboard::KeyCount];

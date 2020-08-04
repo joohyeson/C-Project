@@ -11,36 +11,23 @@ If you put the value in the pointer, you can have an address value for that vari
 And Using pointer, reference to the memory address makes it easy to access and manipulate various data types variables.
 
 ```c++
-// We are using Player* mPlayer in Level 2.
-mPlayer->SetValues(playerAnimation, static_cast<float>(Engine::GetWindow().GetSize().x >> 1), static_cast<float>(Engine::GetWindow().GetSize().y >> 1), 0, 20);
-mPlayer->dx = 0;
-mPlayer->dy = 0;
+// We are using Node* in List class.
+template<typename T>
+void List<T>::clear()
+{
+    Node* current = pHead;
+    Node* next;
 
-if (mPlayer->GetIsMoving() == true)
-{
-    mPlayer->animation = playerMoveAnimation;
-}
-else
-{
-    mPlayer->animation = playerAnimation;
-}
+    while (current != nullptr)
+    {
+        next = current->pNext;
+        delete current;
+        --mSize;
+        current = next;
+    }
 
-if (Engine::GetInput().IsKeyPressed(sf::Keyboard::Right))
-{
-    mPlayer->angle += MOVING_ANGLE;
-}
-if (Engine::GetInput().IsKeyPressed(sf::Keyboard::Left))
-{
-    mPlayer->angle -= MOVING_ANGLE;
-}
-
-if (Engine::GetInput().IsKeyPressed(sf::Keyboard::Up))
-{
-    mPlayer->SetIsMoving(true);
-}
-else
-{
-    mPlayer->SetIsMoving(false);
+    pHead = nullptr;
+    pTail = nullptr;
 }
 ```
 
@@ -159,7 +146,50 @@ Then, we have to pay for that cost to deep copy and deallocate that big temporar
 The code below is how I used 'Return Value Optimization' for this project.
 
 ```c++
-//RVO here
+//Unnamed RVO
+Animation Level2::LoadAnimation(eLevel2Texture textureEnum)
+{
+    switch (textureEnum)
+    {
+    case eLevel2Texture::BULLET:
+        bulletTexture.loadFromFile("../Assets/Art/fire_blue.png");
+        return Animation(bulletTexture, 0, 0, 32, 64, 16, 0.8f);
+        break;
+    case eLevel2Texture::PLAYER:
+        playerTexture.loadFromFile("../Assets/Art/spaceship.png");
+        playerTexture.setSmooth(true);
+        return Animation(playerTexture, 40, 0, 40, 40, 1, 0.f);
+        break;
+    case eLevel2Texture::PLAYER_MOVE:
+        playerMoveTexture.loadFromFile("../Assets/Art/spaceship.png");
+        playerMoveTexture.setSmooth(true);
+        return Animation(playerMoveTexture, 40, 40, 40, 40, 1, 0.f);
+        break;
+    case eLevel2Texture::EXPLOSION:
+        explosionTexture.loadFromFile("../Assets/Art/type_C.png");
+        return Animation(explosionTexture, 0, 0, 256, 256, 48, 0.3f);
+        break;
+    case eLevel2Texture::ROCK:
+        rockTexture.loadFromFile("../Assets/Art/rock.png");
+        return Animation(rockTexture, 0, 0, 64, 64, 16, 0.1f);
+        break;
+    case eLevel2Texture::SMALL_ROCK:
+        smallRockTexture.loadFromFile("../Assets/Art/rock_small.png");
+        return Animation(smallRockTexture, 0, 0, 64, 64, 16, 0.1f);
+        break;
+    default:
+        break;
+    }
+
+    return Animation();
+}
+
+bulletAnimation = LoadAnimation(eLevel2Texture::BULLET);
+playerAnimation = LoadAnimation(eLevel2Texture::PLAYER);
+playerMoveAnimation = LoadAnimation(eLevel2Texture::PLAYER_MOVE);
+explosionAnimation = LoadAnimation(eLevel2Texture::EXPLOSION);
+rockAnimation = LoadAnimation(eLevel2Texture::ROCK);
+smallRockAnimation = LoadAnimation(eLevel2Texture::SMALL_ROCK);
 ```
 
 **5. Inheritance + Polymorphism**
@@ -343,7 +373,40 @@ Simply put, we initialize and allocate resources in the constructor, and then it
 So using RAII is useful because there will be no possible memory leak, so the code become more stable.
 
 ```c++
-//List count constructor
+//Automatically allocating.
+template<typename T>
+List<T>::List(int count) 
+{
+    for (int i = 0; i < count; i++)
+    {
+        List<T>::push_back(T{});
+    }
+}
+
+//Automatically deallocating.
+template<typename T>
+List<T>::~List()
+{
+    clear();
+}
+
+template<typename T>
+void List<T>::clear()
+{
+    Node* current = pHead;
+    Node* next;
+
+    while (current != nullptr)
+    {
+        next = current->pNext;
+        delete current;
+        --mSize;
+        current = next;
+    }
+
+    pHead = nullptr;
+    pTail = nullptr;
+}
 ```
 
 - Rule of 5
@@ -595,11 +658,29 @@ STL Iterator can traverse over the contents of a container or a subset of the co
 STL Iterator is useful because as it can access the container, Programmers can perform various complex tasks with algorithm functions using iterators.
 
 ```c++
-std::vector<sf::Vector2i>::iterator checkAlreadyExist = std::find(mEmptyPlace.begin(), mEmptyPlace.end(), location);
-
-if (checkAlreadyExist != mEmptyPlace.end())
+std::vector<int> GetGridRow(void)
 {
-    return false;
+    std::vector<int> row(GRID_LENGTH, EMPTY);
+    
+    std::generate(row.begin() + 1, row.end() - 1,
+        []()
+    {
+        if (rand() % LEVEL == 0)
+        {
+            return MINE;
+        }
+        return EMPTY;
+    });
+
+    return row;
+}
+
+void Level1::Load()
+{
+    srand(static_cast<unsigned int>(time(0)));
+    mGrid.resize(GRID_LENGTH);
+    std::generate(mGrid.begin() + 1, mGrid.end() - 1, GetGridRow);
+    //...
 }
 ```
 
@@ -612,10 +693,11 @@ There are search, sort, access, find, and so on.
 It is useful because algorithm uses the iterator as an interface, so algorithm function can be used in all containers.
 
 ```c++
-//When initializing grid and show grid in Level 1.
-mGrid.resize(GRID_LENGTH);
-std::generate(mGrid.begin(), mGrid.end(), EmptyRow);
+//When find the location is already in the vector or not.
+auto checkAlreadyExist = std::find(mEmptyPlace.begin(), mEmptyPlace.end(), location);
 
-mShowGrid.resize(GRID_LENGTH);
-std::generate(mShowGrid.begin(), mShowGrid.end(), TileRow);
+if (checkAlreadyExist != mEmptyPlace.end())
+{
+    return false;
+}
 ```

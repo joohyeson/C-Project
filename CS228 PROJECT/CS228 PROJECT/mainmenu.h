@@ -17,7 +17,7 @@ Creation date: 21/07/2020
 class MainMenu : public GameState 
 {
 public:
-    MainMenu();
+    MainMenu() = default;
     void Load() override;
     void Update(double dt) override;
     void Unload() override;

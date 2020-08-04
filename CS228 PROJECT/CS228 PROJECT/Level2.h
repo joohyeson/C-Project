@@ -48,11 +48,11 @@ public:
 private:
     bool mIsGameOver;
     bool mIsGameCleared;
-    
+
     unsigned char mPlayerSpriteFlags;
 
     int mBulletLimit;
-    
+
     float mBulletTimer;
     float mPlayerMoveTimer;
 

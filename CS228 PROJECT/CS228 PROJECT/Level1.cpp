@@ -25,50 +25,26 @@ constexpr int FLAG = 11;
 constexpr int GRID_LENGTH = 12;
 constexpr int LEVEL = 8; // The higher is the easier.
 
-Level1::Level1() {};
-
-int GetRandomMine(void)
-{
-    if (rand() % LEVEL == 0)
-    {
-        return MINE;
-    }
-}
-
 std::vector<int> GetGridRow(void)
 {
-    std::vector<int> row;
-    row.resize(GRID_LENGTH);
-    std::fill(row.begin(), row.end(), EMPTY);
-    //std::generate(row.begin(), row.end(),
-    //    [](int i)
-    //{
-    //    if (1 <= i && i <= 10)
-    //    {
-    //        ++i;
-    //        
-    //        if (rand() % LEVEL == 0)
-    //        {
-    //            return MINE;
-    //        }
-    //    }
-    //    else
-    //    {
-    //        ++i;
-    //        return EMPTY;
-    //    }
-    //});
+    std::vector<int> row(GRID_LENGTH, EMPTY);
+
+    std::generate(row.begin() + 1, row.end() - 1,
+        []()
+    {
+        if (rand() % LEVEL == 0)
+        {
+            return MINE;
+        }
+        return EMPTY;
+    });
 
     return row;
 }
 
 std::vector<int> GetTileRow(void)
 {
-    std::vector<int> row;
-    row.resize(GRID_LENGTH);
-    std::fill(row.begin(), row.end(), TILE);
-
-    return row;
+    return std::vector<int>(GRID_LENGTH, TILE);;
 }
 
 void Level1::Load()
@@ -76,7 +52,11 @@ void Level1::Load()
     srand(static_cast<unsigned int>(time(0)));
 
     mGrid.resize(GRID_LENGTH);
-    std::generate(mGrid.begin(), mGrid.end(), GetGridRow);
+
+    std::generate(mGrid.begin() + 1, mGrid.end() - 1, GetGridRow);
+
+    mGrid.at(0) = std::vector<int>(GRID_LENGTH, EMPTY);
+    mGrid.at(11) = std::vector<int>(GRID_LENGTH, EMPTY);
 
     mShowGrid.resize(GRID_LENGTH);
     std::generate(mShowGrid.begin(), mShowGrid.end(), GetTileRow);
@@ -87,52 +67,24 @@ void Level1::Load()
         {
             int numberOfMines = 0;
 
+            std::vector<sf::Vector2i> checkLocation = { sf::Vector2i(0,1), sf::Vector2i(1,0), sf::Vector2i(0,-1), sf::Vector2i(-1,0), sf::Vector2i(-1,1), sf::Vector2i(-1,-1), sf::Vector2i(1,-1), sf::Vector2i(1,1) };
+
+            for (int currCount = 0; currCount < checkLocation.size(); currCount++)
+            {
+                if (mGrid[i + checkLocation.at(currCount).x][j + checkLocation.at(currCount).y] == MINE)
+                {
+                    ++numberOfMines;
+                }
+            }
+
             if (mGrid[i][j] == MINE)
             {
                 continue;
             }
-
-            if (mGrid[i + 1][j] == MINE)
+            else
             {
-                ++numberOfMines;
+                mGrid[i][j] = numberOfMines;
             }
-
-            if (mGrid[i][j + 1] == MINE)
-            {
-                ++numberOfMines;
-            }
-
-            if (mGrid[i - 1][j] == MINE)
-            {
-                ++numberOfMines;
-            }
-
-            if (mGrid[i][j - 1] == MINE)
-            {
-                ++numberOfMines;
-            }
-
-            if (mGrid[i + 1][j + 1] == MINE)
-            {
-                ++numberOfMines;
-            }
-
-            if (mGrid[i - 1][j - 1] == MINE)
-            {
-                ++numberOfMines;
-            }
-
-            if (mGrid[i - 1][j + 1] == MINE)
-            {
-                ++numberOfMines;
-            }
-
-            if (mGrid[i + 1][j - 1] == MINE)
-            {
-                ++numberOfMines;
-            }
-
-            mGrid[i][j] = numberOfMines;
         }
     }
 }
@@ -188,13 +140,9 @@ void Level1::Draw()
     }
 }
 
-bool Level1::CanVisit(void)
+void Level1::CanVisit(void)
 {
-    if (mToVisit.empty() == true)
-    {
-        return true;
-    }
-    else
+    if (mToVisit.empty() != true)
     {
         mEmptyPlace.clear();
 
@@ -205,93 +153,30 @@ bool Level1::CanVisit(void)
             mToVisit.pop_front();
             mEmptyPlace.push_back(currentLocation);
 
-            sf::Vector2i above = { currentLocation.x, currentLocation.y + 1 };
-            sf::Vector2i right = { currentLocation.x + 1, currentLocation.y };
-            sf::Vector2i below = { currentLocation.x, currentLocation.y - 1 };
-            sf::Vector2i left = { currentLocation.x - 1, currentLocation.y };
+            std::vector<sf::Vector2i> checkLocations = { sf::Vector2i(0,1), sf::Vector2i(1,0),sf::Vector2i(0,-1),sf::Vector2i(-1,0),sf::Vector2i(-1,1), sf::Vector2i(-1,-1),sf::Vector2i(1,-1),sf::Vector2i(1,1) };
 
-            sf::Vector2i above1 = { currentLocation.x - 1, currentLocation.y + 1 };
-            sf::Vector2i right1 = { currentLocation.x - 1 , currentLocation.y - 1 };
-            sf::Vector2i below1 = { currentLocation.x + 1, currentLocation.y - 1 };
-            sf::Vector2i left1 = { currentLocation.x + 1, currentLocation.y + 1 };
-
-            if (IsOutOfRange(above1) == false)
+            for (int i = 0; i < checkLocations.size(); ++i)
             {
-                if (TryToAdd(above1) == true)
+                if (IsOutOfRange(currentLocation + checkLocations.at(i)) == false)
                 {
-                    mToVisit.push_back(above1);
-                }
-            }
-
-            if (IsOutOfRange(right1) == false)
-            {
-                if (TryToAdd(right1) == true)
-                {
-                    mToVisit.push_back(right1);
-                }
-            }
-
-            if (IsOutOfRange(below1) == false)
-            {
-                if (TryToAdd(below1) == true)
-                {
-                    mToVisit.push_back(below1);
-                }
-            }
-
-            if (IsOutOfRange(left1) == false)
-            {
-                if (TryToAdd(left1) == true)
-                {
-                    mToVisit.push_back(left1);
-                }
-            }
-
-            if (IsOutOfRange(above) == false)
-            {
-                if (TryToAdd(above) == true)
-                {
-                    mToVisit.push_back(above);
-                }
-            }
-
-            if (IsOutOfRange(right) == false)
-            {
-                if (TryToAdd(right) == true)
-                {
-                    mToVisit.push_back(right);
-                }
-            }
-
-            if (IsOutOfRange(below) == false)
-            {
-                if (TryToAdd(below) == true)
-                {
-                    mToVisit.push_back(below);
-                }
-            }
-
-            if (IsOutOfRange(left) == false)
-            {
-                if (TryToAdd(left) == true)
-                {
-                    mToVisit.push_back(left);
+                    if (TryToAdd(currentLocation + checkLocations.at(i)) == true)
+                    {
+                        mToVisit.push_back(currentLocation + checkLocations.at(i));
+                    }
                 }
             }
         }
 
-        auto currLoc = mEmptyPlace.begin();
+        auto currentLocation = mEmptyPlace.begin();
         int count = 1;
 
-        while (currLoc != mEmptyPlace.end())
+        while (currentLocation != mEmptyPlace.end())
         {
-            mShowGrid[currLoc->x][currLoc->y] = mGrid[currLoc->x][currLoc->y];
+            mShowGrid[currentLocation->x][currentLocation->y] = mGrid[currentLocation->x][currentLocation->y];
 
-            currLoc = mEmptyPlace.begin() + count;
+            currentLocation = mEmptyPlace.begin() + count;
             count++;
         }
-
-        return false;
     }
 }
 
@@ -349,10 +234,6 @@ bool Level1::IsOutOfRange(sf::Vector2i location)
     }
 }
 
-void Level1::ShowHint(void)
-{
-}
-
 void Level1::Update([[maybe_unused]] double dt)
 {
     sf::Vector2i mousePosition = sf::Mouse::getPosition(Engine::GetWindow().GetWindow());
@@ -387,12 +268,7 @@ void Level1::Update([[maybe_unused]] double dt)
         }
     }
 
-    if (Engine::GetInput().IsKeyTriggered(sf::Keyboard::H))
-    {
-        ShowHint();
-    }
-
-    if (Engine::GetInput().IsKeyPressed(sf::Keyboard::R))
+    if (Engine::GetInput().IsKeyTriggered(sf::Keyboard::R))
     {
         Engine::GetGameStateManager().ReloadState();
         mShouldGameRun = true;

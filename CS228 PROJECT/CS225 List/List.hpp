@@ -15,8 +15,8 @@ template<typename T>
 List<T>::List() : pHead(nullptr), pTail(nullptr), mSize(0) {}
 
 template<typename T>
-List<T>::List(int count) {
-
+List<T>::List(int count)
+{
     for (int i = 0; i < count; i++)
     {
         List<T>::push_back(T{});

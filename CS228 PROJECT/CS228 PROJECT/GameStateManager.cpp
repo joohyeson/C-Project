@@ -91,8 +91,6 @@ void GameStateManager::SetRunningState(double dt)
     
     mCurrentGameState->Draw();
     mCurrentGameState->Update(dt);
-
-   
 }
 
 void GameStateManager::SetUnloadState()
