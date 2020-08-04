@@ -157,7 +157,14 @@ void Level2::Load()
 
     mPlayer = new Player();
 
-    mPlayer->SetValues(LoadAnimation(eLevel2Texture::PLAYER), static_cast<float>(Engine::GetWindow().GetSize().x >> 1), static_cast<float>(Engine::GetWindow().GetSize().y >> 1), 0, 20);
+    bulletAnimation = LoadAnimation(eLevel2Texture::BULLET);
+    playerAnimation = LoadAnimation(eLevel2Texture::PLAYER);
+    playerMoveAnimation = LoadAnimation(eLevel2Texture::PLAYER_MOVE);
+    explosionAnimation = LoadAnimation(eLevel2Texture::EXPLOSION);
+    rockAnimation = LoadAnimation(eLevel2Texture::ROCK);
+    smallRockAnimation = LoadAnimation(eLevel2Texture::SMALL_ROCK);
+
+    mPlayer->SetValues(playerAnimation, static_cast<float>(Engine::GetWindow().GetSize().x >> 1), static_cast<float>(Engine::GetWindow().GetSize().y >> 1), 0, 20);
     mGameObjectList.push_back(mPlayer);
 
     mPlayerOriginalScale = mPlayer->animation.GetAnimationSprite().getScale();
@@ -166,7 +173,7 @@ void Level2::Load()
     for (int i = 0; i < NUMBER_OF_ASTEROID; i++)
     {
         Asteroid* asteroid = new Asteroid();
-        asteroid->SetValues(LoadAnimation(eLevel2Texture::ROCK), static_cast<float>(rand() % Engine::GetWindow().GetSize().x), static_cast<float>(rand() % Engine::GetWindow().GetSize().y), static_cast<float>(rand() % 360), 25);
+        asteroid->SetValues(rockAnimation, static_cast<float>(rand() % Engine::GetWindow().GetSize().x), static_cast<float>(rand() % Engine::GetWindow().GetSize().y), static_cast<float>(rand() % 360), 25);
         mGameObjectList.push_back(asteroid);
     }
 }
@@ -248,7 +255,7 @@ void Level2::Update([[maybe_unused]] double dt)
                         objectB->isAlive = false;
 
                         GameObject* explosion = new GameObject();
-                        explosion->SetValues(LoadAnimation(eLevel2Texture::EXPLOSION), objectA->x, objectA->y);
+                        explosion->SetValues(explosionAnimation, objectA->x, objectA->y);
                         explosion->name = "explosion";
                         mGameObjectList.push_front(explosion);
 
@@ -261,7 +268,7 @@ void Level2::Update([[maybe_unused]] double dt)
                             else
                             {
                                 GameObject* asteroid = new Asteroid();
-                                asteroid->SetValues(LoadAnimation(eLevel2Texture::SMALL_ROCK), objectA->x, objectA->y, static_cast<float>(rand() % 360), 15.0f);
+                                asteroid->SetValues(smallRockAnimation, objectA->x, objectA->y, static_cast<float>(rand() % 360), 15.0f);
                                 mGameObjectList.push_front(asteroid);
                             }
                         }
@@ -276,7 +283,7 @@ void Level2::Update([[maybe_unused]] double dt)
                         objectB->isAlive = false;
 
                         GameObject* explosion = new GameObject();
-                        explosion->SetValues(LoadAnimation(eLevel2Texture::EXPLOSION), objectB->x, objectB->y);
+                        explosion->SetValues(explosionAnimation, objectB->x, objectB->y);
                         explosion->name = "explosion";
                         mGameObjectList.push_front(explosion);
 
@@ -289,7 +296,7 @@ void Level2::Update([[maybe_unused]] double dt)
                             else
                             {
                                 GameObject* asteroid = new Asteroid();
-                                asteroid->SetValues(LoadAnimation(eLevel2Texture::SMALL_ROCK), objectB->x, objectB->y, static_cast<float>(rand() % 360), 15.0f);
+                                asteroid->SetValues(smallRockAnimation, objectB->x, objectB->y, static_cast<float>(rand() % 360), 15.0f);
                                 mGameObjectList.push_front(asteroid);
                             }
                         }
@@ -303,11 +310,11 @@ void Level2::Update([[maybe_unused]] double dt)
                         objectB->isAlive = false;
 
                         GameObject* explosion = new GameObject();
-                        explosion->SetValues(LoadAnimation(eLevel2Texture::EXPLOSION), objectA->x, objectA->y);
+                        explosion->SetValues(explosionAnimation, objectA->x, objectA->y);
                         explosion->name = "explosion";
                         mGameObjectList.push_front(explosion);
 
-                        mPlayer->SetValues(LoadAnimation(eLevel2Texture::PLAYER), static_cast<float>(Engine::GetWindow().GetSize().x >> 1), static_cast<float>(Engine::GetWindow().GetSize().y >> 1), 0, 20);
+                        mPlayer->SetValues(playerAnimation, static_cast<float>(Engine::GetWindow().GetSize().x >> 1), static_cast<float>(Engine::GetWindow().GetSize().y >> 1), 0, 20);
                         mPlayer->dx = 0;
                         mPlayer->dy = 0;
 
@@ -322,11 +329,11 @@ void Level2::Update([[maybe_unused]] double dt)
                         objectA->isAlive = false;
 
                         GameObject* explosion = new GameObject();
-                        explosion->SetValues(LoadAnimation(eLevel2Texture::EXPLOSION), objectB->x, objectB->y);
+                        explosion->SetValues(explosionAnimation, objectB->x, objectB->y);
                         explosion->name = "explosion";
                         mGameObjectList.push_front(explosion);
 
-                        mPlayer->SetValues(LoadAnimation(eLevel2Texture::PLAYER), static_cast<float>(Engine::GetWindow().GetSize().x >> 1), static_cast<float>(Engine::GetWindow().GetSize().y >> 1), 0, 20);
+                        mPlayer->SetValues(playerAnimation, static_cast<float>(Engine::GetWindow().GetSize().x >> 1), static_cast<float>(Engine::GetWindow().GetSize().y >> 1), 0, 20);
                         mPlayer->dx = 0;
                         mPlayer->dy = 0;
 
@@ -381,12 +388,12 @@ void Level2::Update([[maybe_unused]] double dt)
 
         if (mPlayer->GetIsMoving() == true)
         {
-            mPlayer->animation = LoadAnimation(eLevel2Texture::PLAYER_MOVE);
+            mPlayer->animation = playerMoveAnimation;
             mPlayerSpriteFlags |= IS_MOVING;
         }
         else
         {
-            mPlayer->animation = LoadAnimation(eLevel2Texture::PLAYER);
+            mPlayer->animation = playerAnimation;
             mPlayerSpriteFlags &= ~IS_MOVING;
         }
 
@@ -416,7 +423,7 @@ void Level2::Update([[maybe_unused]] double dt)
             if (mBulletLimit > 0)
             {
                 Bullet* bullet = new Bullet();
-                bullet->SetValues(LoadAnimation(eLevel2Texture::BULLET), mPlayer->x, mPlayer->y, mPlayer->angle, 10.0f);
+                bullet->SetValues(bulletAnimation, mPlayer->x, mPlayer->y, mPlayer->angle, 10.0f);
                 mGameObjectList.push_front(bullet);
                 mBulletLimit--;
                 mPlayerSpriteFlags |= IS_FIRING;

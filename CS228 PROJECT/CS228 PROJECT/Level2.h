@@ -68,5 +68,12 @@ private:
     sf::Texture rockTexture;
     sf::Texture smallRockTexture;
 
+    Animation bulletAnimation;
+    Animation playerAnimation;
+    Animation playerMoveAnimation;
+    Animation explosionAnimation;
+    Animation rockAnimation;
+    Animation smallRockAnimation;
+
     void DeepCopy(const Level2& rhs);
 };
