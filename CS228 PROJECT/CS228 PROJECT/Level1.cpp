@@ -33,15 +33,32 @@ int GetRandomMine(void)
     {
         return MINE;
     }
-
-    return EMPTY;
 }
 
 std::vector<int> GetGridRow(void)
 {
     std::vector<int> row;
     row.resize(GRID_LENGTH);
-    std::generate(row.begin(), row.end(), GetRandomMine);
+    std::fill(row.begin(), row.end(), EMPTY);
+    //std::generate(row.begin(), row.end(),
+    //    [](int i)
+    //{
+    //    if (1 <= i && i <= 10)
+    //    {
+    //        ++i;
+    //        
+    //        if (rand() % LEVEL == 0)
+    //        {
+    //            return MINE;
+    //        }
+    //    }
+    //    else
+    //    {
+    //        ++i;
+    //        return EMPTY;
+    //    }
+    //});
+
     return row;
 }
 
