@@ -453,14 +453,16 @@ void test11()
     List<int> listA(5);
 
     std::cout << "\n#ListA" << std::endl;
+    
     for (auto node : listA)
     {
+        //Not just print, check the value.
         std::cout << "Value : " << node << std::endl;
     }
+
     std::cout << "Value : " << listA.back()<< std::endl;
 
     std::cout << "Size : " << listA.size() << std::endl;
-
 }
 
 int main(int argc, char** argv)

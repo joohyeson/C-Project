@@ -13,7 +13,7 @@ Creation date: 21/07/2020
 #include "GameState.h" //class Level1 : public GameState (Inheritance)
 #include "SFML/Window.hpp"
 #include <vector> //std::vector
-#include <deque> //std::list
+#include <deque> //std::deque
 
 class Level1 : public GameState
 {
