@@ -52,20 +52,20 @@ Press R key to restart the game for both games.
 
 5. The things that we are proud of about the project.
 
-*1. We are proud of implementing the List class in the project our own. We have made a Singly linked list, vector in CS280 class. 
+* 1. We are proud of implementing the List class in the project our own. We have made a Singly linked list, vector in CS280 class. 
 But it was the first time to make a double linked list. At first, we were worried if we could do it well, but now we are happy to complete it.
 
-*2. We are proud of implementing Rule of 5, Rule of 0 ourselves. We already studied Rule of 5, Rule of 0 before, but we did not understand it well. 
+* 2. We are proud of implementing Rule of 5, Rule of 0 ourselves. We already studied Rule of 5, Rule of 0 before, but we did not understand it well. 
 However, as we implemented Rule of 5, and Rule of 0 our own this time, we got to understand this well.
 
-*3. We are proud that we used the BFS when we made minesweeper. We have learned about BFS in CS280, and we applied it to the game based on what we learned. 
+* 3. We are proud that we used the BFS when we made minesweeper. We have learned about BFS in CS280, and we applied it to the game based on what we learned. 
 And fortunately, it worked well. So we are glad that we implemented it well.
 
-*4. We are proud of the good use of the source tree. When we were doing a game project for the last semester, 
+* 4. We are proud of the good use of the source tree. When we were doing a game project for the last semester, 
 we were not using it very well, so we pushed most of the things on the master branch, but now, we can use it well. 
 And we realized that changes on the stage also be switched at the same time when switching a branch.
 
-*5. We devoted ourselves to the project every day for three weeks, including weekends. We are proud of our team's teamwork. 
+* 5. We devoted ourselves to the project every day for three weeks, including weekends. We are proud of our team's teamwork. 
 It was the first time to do a project together, but we took care of each other, never be late, and we did our best. 
 We have never shown a lazy attitude like doing nothing for the code review, or not making a pull request before the code review.
 And also, rather than bringing what we did before, and getting points without effort, 
@@ -74,7 +74,7 @@ We are proud that we have learned so much.
 
 6. The work that was done to earn an Excellent score.
 
-*1. Our team didn't only care about core requirements but also put lots of attention into the game's details.
+* 1. Our team didn't only care about core requirements but also put lots of attention into the game's details.
 Especially when implementing minesweeper, we played the original minesweeper to make it as similar as possible.
 And there was a bug that flags can be made on the number tiles, 
 a bug that can't get rid of the flags that already made, 
@@ -84,7 +84,7 @@ We fixed all these bugs, even though there is no one to play this.
 The professor told us to pay more attention to the code than to complete the game.
 But our team also put lots of effort into the game.
 
-*2. good use of STL Iterators and Algorithms -
+* 2. good use of STL Iterators and Algorithms -
 We studied an algorithm functions that we have never used to create a 2D Vector at level1.cpp. Thanks to std::generate, 
 we were able to make our code shorter and easier to understand than when we created it using the for statement.
 
@@ -127,16 +127,16 @@ bool Level1::TryToAdd(sf::Vector2i location)
     }
 ```
 
-*3. Makes good use of Inheritance and Polymorphism-In our game, GameState is an Inheritance structure, so we should get excellent in this part. Also, GameObject class was implemented using Inheritance and polymorphism.
+* 3. Makes good use of Inheritance and Polymorphism-In our game, GameState is an Inheritance structure, so we should get excellent in this part. Also, GameObject class was implemented using Inheritance and polymorphism.
 Since these parts were the key to implementing our project, if we had written the code without using Inheritance and polymorphism, the code would have been much longer and harder to use.
 
-*4. We've made our own std::list.
+* 4. We've made our own std::list.
 First, we code using the STL container list, and then, implemented List class and iterator using template, and make a test driver and check it is working properly.
 And in level2, the use of std::list was replaced with List container that we made.
 It may be easy coding for someone, but we didn't even know that the std::list was the base of the linked list, and it was the first time making a double linked list like this.
 So it took more time than we expected, and it was the most difficult part of the project.
 
-*5. We clean up the code as mush as possible that we can.
+* 5. We clean up the code as mush as possible that we can.
 Below codes were very long in the previous version of the project.
 There were lots of if checks and push backs. But now, we just have a least amount of it.
 
