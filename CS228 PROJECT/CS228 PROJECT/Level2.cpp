@@ -164,11 +164,16 @@ void Level2::Load()
     rockAnimation = LoadAnimation(eLevel2Texture::ROCK);
     smallRockAnimation = LoadAnimation(eLevel2Texture::SMALL_ROCK);
 
+   
+    backgroundTexture.loadFromFile("../Assets/Art/background.jpg");
+    backgroundTexture.setSmooth(true);
+    backgroundSprite.setTexture(backgroundTexture);
+
     mPlayer->SetValues(playerAnimation, static_cast<float>(Engine::GetWindow().GetSize().x >> 1), static_cast<float>(Engine::GetWindow().GetSize().y >> 1), 0, 20);
     mGameObjectList.push_back(mPlayer);
 
-    mPlayerOriginalScale = mPlayer->animation.GetAnimationSprite().getScale();
-    mPlayerOriginalColor = mPlayer->animation.GetAnimationSprite().getColor();
+    mPlayerOriginalScale = mPlayer->animation->GetAnimationSprite().getScale();
+    mPlayerOriginalColor = mPlayer->animation->GetAnimationSprite().getColor();
 
     for (int i = 0; i < NUMBER_OF_ASTEROID; i++)
     {
@@ -180,10 +185,6 @@ void Level2::Load()
 
 void Level2::Draw()
 {
-    sf::Texture backgroundTexture;
-    backgroundTexture.loadFromFile("../Assets/Art/background.jpg");
-    backgroundTexture.setSmooth(true);
-    sf::Sprite backgroundSprite(backgroundTexture);
     Engine::GetWindow().Draw(backgroundSprite);
 
     sf::Text text;
@@ -348,7 +349,7 @@ void Level2::Update([[maybe_unused]] double dt)
             GameObject* object = *objectIterator;
 
             object->Update();
-            object->animation.Update();
+            object->animation->Update();
 
             if (object->isAlive == false)
             {
@@ -368,32 +369,32 @@ void Level2::Update([[maybe_unused]] double dt)
 
         if (mPlayerSpriteFlags & IS_FIRING && mBulletTimer < 0.0f)
         {
-            mPlayer->animation.GetAnimationSprite().setColor(static_cast<sf::Color>(RED));
+            mPlayer->animation->GetAnimationSprite().setColor(static_cast<sf::Color>(RED));
             mBulletTimer = 0.3f;
         }
         else
         {
-            mPlayer->animation.GetAnimationSprite().setColor(mPlayerOriginalColor);
+            mPlayer->animation->GetAnimationSprite().setColor(mPlayerOriginalColor);
         }
 
         if (mPlayerSpriteFlags & IS_MOVING && mPlayerMoveTimer < 0.0f)
         {
-            mPlayer->animation.GetAnimationSprite().setScale(mPlayerOriginalScale.x, mPlayerOriginalScale.y + 50);
+            mPlayer->animation->GetAnimationSprite().setScale(mPlayerOriginalScale.x, mPlayerOriginalScale.y + 50);
             mPlayerMoveTimer = 0.3f;
         }
         else
         {
-            mPlayer->animation.GetAnimationSprite().setScale(mPlayerOriginalScale);
+            mPlayer->animation->GetAnimationSprite().setScale(mPlayerOriginalScale);
         }
 
         if (mPlayer->GetIsMoving() == true)
         {
-            mPlayer->animation = playerMoveAnimation;
+            mPlayer->animation = &playerMoveAnimation;
             mPlayerSpriteFlags |= IS_MOVING;
         }
         else
         {
-            mPlayer->animation = playerAnimation;
+            mPlayer->animation = &playerAnimation;
             mPlayerSpriteFlags &= ~IS_MOVING;
         }
 
@@ -401,7 +402,7 @@ void Level2::Update([[maybe_unused]] double dt)
         {
             if (explosion->name == "explosion")
             {
-                if (explosion->animation.IsAnimationEnded())
+                if (explosion->animation->IsAnimationEnded())
                 {
                     explosion->isAlive = false;
                 }

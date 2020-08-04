@@ -17,7 +17,7 @@ class GameObject
 {
 public:
     GameObject() = default;
-    void SetValues(const Animation& newAnimation, float newX, float newY, float newAngle = 0, float newRadius = 1);
+    void SetValues(Animation& newAnimation, float newX, float newY, float newAngle = 0, float newRadius = 1);
     virtual void Update() {};
     void Draw(sf::RenderWindow& window);
     bool IsCollideWith(GameObject* object);
@@ -26,5 +26,5 @@ public:
     float x, y, dx, dy, angle, radius;
     bool isAlive = true;
     std::string name;
-    Animation animation;
+    Animation* animation;
 };
