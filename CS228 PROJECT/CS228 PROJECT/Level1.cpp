@@ -27,7 +27,7 @@ constexpr int LEVEL = 8; // The higher is the easier.
 
 Level1::Level1() {};
 
-int Empty(void)
+int SetEmpty(void)
 {
     if (rand() % LEVEL == 0)
     {
@@ -41,21 +41,15 @@ std::vector<int> EmptyRow(void)
 {
     std::vector<int> row;
     row.resize(GRID_LENGTH);
-    std::generate(row.begin(), row.end(), Empty);
-
+    std::fill(row.begin(), row.end(), SetEmpty);
     return row;
-}
-
-int Tile(void)
-{
-    return TILE;
 }
 
 std::vector<int> TileRow(void)
 {
     std::vector<int> row;
     row.resize(GRID_LENGTH);
-    std::generate(row.begin(), row.end(), Tile);
+    std::fill(row.begin(), row.end(), TILE);
 
     return row;
 }
