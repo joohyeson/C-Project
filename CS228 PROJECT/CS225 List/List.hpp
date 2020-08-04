@@ -19,7 +19,7 @@ List<T>::List(int count) {
 
     for (int i = 0; i < count; i++)
     {
-        List<T>::push_back(0);
+        List<T>::push_back(T{});
     }
 }
 

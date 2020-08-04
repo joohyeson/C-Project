@@ -15,6 +15,17 @@ Creation date: 21/07/2020
 #include "Player.h"
 #include "../CS225 List/List.h"
 
+enum class eLevel2Texture
+{
+    NONE,
+    BULLET,
+    PLAYER,
+    PLAYER_MOVE,
+    EXPLOSION,
+    ROCK,
+    SMALL_ROCK
+};
+
 class Level2 : public GameState
 {
 public:
@@ -26,6 +37,7 @@ public:
     Level2& operator=(const Level2& rhs); // copy assignment
     Level2& operator=(Level2&& rhs); //move assignment
 
+    Animation LoadAnimation(eLevel2Texture textureEnum);
     void Load() override;
     void Update(double dt) override;
     void Unload() override;
@@ -48,6 +60,13 @@ private:
     sf::Vector2f mPlayerOriginalScale;
     sf::Color mPlayerOriginalColor;
     List<GameObject*> mGameObjectList;
+
+    sf::Texture bulletTexture;
+    sf::Texture playerTexture;
+    sf::Texture playerMoveTexture;
+    sf::Texture explosionTexture;
+    sf::Texture rockTexture;
+    sf::Texture smallRockTexture;
 
     void DeepCopy(const Level2& rhs);
 };

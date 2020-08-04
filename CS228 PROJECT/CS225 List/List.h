@@ -66,7 +66,7 @@ public:
     };
 
     List();
-    List(int count);//RAII
+    List(int count);
     ~List();
 
     List(const List<T>& rhs); // copy constructor
