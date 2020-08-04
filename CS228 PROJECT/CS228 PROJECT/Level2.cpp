@@ -164,6 +164,11 @@ void Level2::Load()
     rockAnimation = LoadAnimation(eLevel2Texture::ROCK);
     smallRockAnimation = LoadAnimation(eLevel2Texture::SMALL_ROCK);
 
+   
+    backgroundTexture.loadFromFile("../Assets/Art/background.jpg");
+    backgroundTexture.setSmooth(true);
+    backgroundSprite.setTexture(backgroundTexture);
+
     mPlayer->SetValues(playerAnimation, static_cast<float>(Engine::GetWindow().GetSize().x >> 1), static_cast<float>(Engine::GetWindow().GetSize().y >> 1), 0, 20);
     mGameObjectList.push_back(mPlayer);
 
@@ -180,10 +185,6 @@ void Level2::Load()
 
 void Level2::Draw()
 {
-    sf::Texture backgroundTexture;
-    backgroundTexture.loadFromFile("../Assets/Art/background.jpg");
-    backgroundTexture.setSmooth(true);
-    sf::Sprite backgroundSprite(backgroundTexture);
     Engine::GetWindow().Draw(backgroundSprite);
 
     sf::Text text;

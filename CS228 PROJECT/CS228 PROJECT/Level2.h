@@ -67,6 +67,9 @@ private:
     sf::Texture explosionTexture;
     sf::Texture rockTexture;
     sf::Texture smallRockTexture;
+    sf::Texture backgroundTexture;
+
+    sf::Sprite backgroundSprite;
 
     Animation bulletAnimation;
     Animation playerAnimation;
