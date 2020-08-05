@@ -80,7 +80,7 @@ The instructor will use the repo for examining the code and building the project
 - [X] Correct files submitted. No unnecessary files submitted.
 - [X] Followed the appropriate Code Quality Guidelines and Code Style Guidelines.
 - [X] Utilize `clang-format` to automate code formatting
-- [ ] No obvious memory leaks in the code. _(Like not deleting memory in a destructor or not correctly implementing rule of 5)_
+- [X] No obvious memory leaks in the code. _(Like not deleting memory in a destructor or not correctly implementing rule of 5)_
 - [X] Reused functions as much as possible.
 - [X] Code is organized nicely across multiple files.
 - [X] Submitted pre-built executable(s) of the project on the course site

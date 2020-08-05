@@ -31,14 +31,13 @@
 - [X] Correct files submitted. No unnecessary files submitted.
 - [X] Followed the appropriate Code Quality Guidelines and Code Style Guidelines.
 - [X] Utilize `clang-format` to automate code formatting
-- [X] No memory leaks detected with the CRT library.
+- [X] No obvious memory leaks in the code. _(Like not deleting memory in a destructor or not correctly implementing rule of 5)_
 - [X] Reused functions as much as possible.
 - [X] Code is organized nicely across multiple files.
 - [X] Submitted pre-built executable(s) of the project on the course site
 - [X] Source code submitted has no redundant computations.
 - [X] Reused functions/code as much as possible.
 - [X] Keep global variables to a minimum _(Allocate long lived objects on the stack in `main()` and then pass around pointers to it)_
-- [X] No memory leaks detected with the CRT library, valgrind or Dr Memory.
 - [X] All requirements that are completed are checked off here by replacing the `[ ]` with `[x]`
 
 4. This project is a mini-games project, that has playable classic games.
