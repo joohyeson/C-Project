@@ -48,6 +48,23 @@ void Level2::DeepCopy(const Level2& rhs)
 
     mBulletTimer = rhs.mBulletTimer;
     mPlayerMoveTimer = rhs.mPlayerMoveTimer;
+
+    bulletTexture = rhs.bulletTexture;
+    playerTexture = rhs.playerTexture;
+    playerMoveTexture = rhs.playerMoveTexture;
+    explosionTexture = rhs.explosionTexture;
+    rockTexture = rhs.rockTexture;
+    smallRockTexture = rhs.smallRockTexture;
+    backgroundTexture = rhs.backgroundTexture;
+
+    backgroundSprite = rhs.backgroundSprite;
+
+    bulletAnimation = rhs.bulletAnimation;
+    playerAnimation = rhs.playerAnimation;
+    playerMoveAnimation = rhs.playerAnimation;
+    explosionAnimation = rhs.explosionAnimation;
+    rockAnimation = rhs.rockAnimation;
+    smallRockAnimation = rhs.smallRockAnimation;
 }
 
 Level2::Level2(const Level2& rhs)
@@ -66,6 +83,23 @@ Level2::Level2(Level2&& rhs)
 
     mBulletTimer = rhs.mBulletTimer;
     mPlayerMoveTimer = rhs.mPlayerMoveTimer;
+
+    bulletTexture = rhs.bulletTexture;
+    playerTexture = rhs.playerTexture;
+    playerMoveTexture = rhs.playerMoveTexture;
+    explosionTexture = rhs.explosionTexture;
+    rockTexture = rhs.rockTexture;
+    smallRockTexture = rhs.smallRockTexture;
+    backgroundTexture = rhs.backgroundTexture;
+
+    backgroundSprite = rhs.backgroundSprite;
+
+    bulletAnimation = rhs.bulletAnimation;
+    playerAnimation = rhs.playerAnimation;
+    playerMoveAnimation = rhs.playerAnimation;
+    explosionAnimation = rhs.explosionAnimation;
+    rockAnimation = rhs.rockAnimation;
+    smallRockAnimation = rhs.smallRockAnimation;
 
     mPlayer = rhs.mPlayer;
     rhs.mPlayer = nullptr;
@@ -97,6 +131,23 @@ Level2& Level2::operator=(Level2&& rhs)
 
         mBulletTimer = rhs.mBulletTimer;
         mPlayerMoveTimer = rhs.mPlayerMoveTimer;
+
+        bulletTexture = rhs.bulletTexture;
+        playerTexture = rhs.playerTexture;
+        playerMoveTexture = rhs.playerMoveTexture;
+        explosionTexture = rhs.explosionTexture;
+        rockTexture = rhs.rockTexture;
+        smallRockTexture = rhs.smallRockTexture;
+        backgroundTexture = rhs.backgroundTexture;
+
+        backgroundSprite = rhs.backgroundSprite;
+
+        bulletAnimation = rhs.bulletAnimation;
+        playerAnimation = rhs.playerAnimation;
+        playerMoveAnimation = rhs.playerAnimation;
+        explosionAnimation = rhs.explosionAnimation;
+        rockAnimation = rhs.rockAnimation;
+        smallRockAnimation = rhs.smallRockAnimation;
 
         mPlayer = rhs.mPlayer;
         rhs.mPlayer = nullptr;
