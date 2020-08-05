@@ -32,10 +32,10 @@ public:
     Level2() = default;
     ~Level2();
 
-    Level2(const Level2& rhs); // copy constructor
-    Level2(Level2&& rhs); // move constructor
-    Level2& operator=(const Level2& rhs); // copy assignment
-    Level2& operator=(Level2&& rhs); //move assignment
+    Level2(const Level2& rhs);
+    Level2(Level2&& rhs);
+    Level2& operator=(const Level2& rhs);
+    Level2& operator=(Level2&& rhs);
 
     Animation LoadAnimation(eLevel2Texture textureEnum);
     void Load() override;

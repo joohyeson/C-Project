@@ -14,7 +14,6 @@ Creation date: 21/07/2020
 void GameObject::SetValues(Animation& newAnimation, float newX, float newY, float newAngle, float newRadius)
 {
     animation = &newAnimation;
-    animation->SetOwner(this);
     x = newX;
     y = newY;
     angle = newAngle;

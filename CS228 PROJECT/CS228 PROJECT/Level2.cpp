@@ -22,7 +22,7 @@ constexpr int RADIUS_OF_ASTEROID = 15;
 constexpr float MOVING_ANGLE = 3.0f;
 
 constexpr unsigned char IS_FIRING = 1 << 0;
-constexpr unsigned char IS_MOVING = 1 << 0;
+constexpr unsigned char IS_MOVING = 1 << 1;
 
 Level2::~Level2()
 {
@@ -48,14 +48,31 @@ void Level2::DeepCopy(const Level2& rhs)
 
     mBulletTimer = rhs.mBulletTimer;
     mPlayerMoveTimer = rhs.mPlayerMoveTimer;
+
+    bulletTexture = rhs.bulletTexture;
+    playerTexture = rhs.playerTexture;
+    playerMoveTexture = rhs.playerMoveTexture;
+    explosionTexture = rhs.explosionTexture;
+    rockTexture = rhs.rockTexture;
+    smallRockTexture = rhs.smallRockTexture;
+    backgroundTexture = rhs.backgroundTexture;
+
+    backgroundSprite = rhs.backgroundSprite;
+
+    bulletAnimation = rhs.bulletAnimation;
+    playerAnimation = rhs.playerAnimation;
+    playerMoveAnimation = rhs.playerAnimation;
+    explosionAnimation = rhs.explosionAnimation;
+    rockAnimation = rhs.rockAnimation;
+    smallRockAnimation = rhs.smallRockAnimation;
 }
 
-Level2::Level2(const Level2& rhs)//copy constructor
+Level2::Level2(const Level2& rhs)
 {
     DeepCopy(rhs);
 }
 
-Level2::Level2(Level2&& rhs)//move constructor
+Level2::Level2(Level2&& rhs)
 {
     mIsGameOver = rhs.mIsGameOver;
     mIsGameCleared = rhs.mIsGameCleared;
@@ -67,13 +84,30 @@ Level2::Level2(Level2&& rhs)//move constructor
     mBulletTimer = rhs.mBulletTimer;
     mPlayerMoveTimer = rhs.mPlayerMoveTimer;
 
+    bulletTexture = rhs.bulletTexture;
+    playerTexture = rhs.playerTexture;
+    playerMoveTexture = rhs.playerMoveTexture;
+    explosionTexture = rhs.explosionTexture;
+    rockTexture = rhs.rockTexture;
+    smallRockTexture = rhs.smallRockTexture;
+    backgroundTexture = rhs.backgroundTexture;
+
+    backgroundSprite = rhs.backgroundSprite;
+
+    bulletAnimation = rhs.bulletAnimation;
+    playerAnimation = rhs.playerAnimation;
+    playerMoveAnimation = rhs.playerAnimation;
+    explosionAnimation = rhs.explosionAnimation;
+    rockAnimation = rhs.rockAnimation;
+    smallRockAnimation = rhs.smallRockAnimation;
+
     mPlayer = rhs.mPlayer;
     rhs.mPlayer = nullptr;
 
     mGameObjectList = std::move(rhs.mGameObjectList);
 }
 
-Level2& Level2::operator=(const Level2& rhs)//copy assignment operator
+Level2& Level2::operator=(const Level2& rhs)
 {
     Unload();
 
@@ -82,7 +116,7 @@ Level2& Level2::operator=(const Level2& rhs)//copy assignment operator
     return *this;
 }
 
-Level2& Level2::operator=(Level2&& rhs)//move assignment operator
+Level2& Level2::operator=(Level2&& rhs)
 {
     if (this != &rhs)
     {
@@ -97,6 +131,23 @@ Level2& Level2::operator=(Level2&& rhs)//move assignment operator
 
         mBulletTimer = rhs.mBulletTimer;
         mPlayerMoveTimer = rhs.mPlayerMoveTimer;
+
+        bulletTexture = rhs.bulletTexture;
+        playerTexture = rhs.playerTexture;
+        playerMoveTexture = rhs.playerMoveTexture;
+        explosionTexture = rhs.explosionTexture;
+        rockTexture = rhs.rockTexture;
+        smallRockTexture = rhs.smallRockTexture;
+        backgroundTexture = rhs.backgroundTexture;
+
+        backgroundSprite = rhs.backgroundSprite;
+
+        bulletAnimation = rhs.bulletAnimation;
+        playerAnimation = rhs.playerAnimation;
+        playerMoveAnimation = rhs.playerAnimation;
+        explosionAnimation = rhs.explosionAnimation;
+        rockAnimation = rhs.rockAnimation;
+        smallRockAnimation = rhs.smallRockAnimation;
 
         mPlayer = rhs.mPlayer;
         rhs.mPlayer = nullptr;
@@ -231,11 +282,6 @@ void Level2::Update([[maybe_unused]] double dt)
         mBulletTimer -= static_cast<float>(dt);
     }
 
-    if (mPlayerMoveTimer > 0.0f)
-    {
-        mPlayerMoveTimer -= static_cast<float>(dt);
-    }
-
     if (!mIsGameOver)
     {
         for (auto objectAIterator = mGameObjectList.begin(); objectAIterator != mGameObjectList.end(); ++objectAIterator)
@@ -322,30 +368,6 @@ void Level2::Update([[maybe_unused]] double dt)
             }
         }
 
-        if (mPlayerSpriteFlags & IS_FIRING && mBulletTimer < 0.0f)
-        {
-            mPlayer->animation->SetSpriteColor(sf::Color(BLUE));
-            //mPlayer->animation->GetAnimationSprite().setColor(static_cast<sf::Color>(BLUE));
-            mBulletTimer = 0.3f;
-        }
-        else
-        {
-            mPlayer->animation->SetSpriteColor(mPlayerOriginalColor);
-            //mPlayer->animation->GetAnimationSprite().setColor(mPlayerOriginalColor);
-        }
-
-        if (mPlayerSpriteFlags & IS_MOVING && mPlayerMoveTimer < 0.0f)
-        {
-            mPlayer->animation->SetSpriteScale(sf::Vector2f(mPlayerOriginalScale.x, mPlayerOriginalScale.y + 50));
-            //mPlayer->animation->GetAnimationSprite().setScale(mPlayerOriginalScale.x, mPlayerOriginalScale.y + 50);
-            mPlayerMoveTimer = 0.3f;
-        }
-        else
-        {
-            mPlayer->animation->SetSpriteScale(mPlayerOriginalScale);
-            //mPlayer->animation->GetAnimationSprite().setScale(mPlayerOriginalScale);
-        }
-
         if (mPlayer->GetIsMoving() == true)
         {
             mPlayer->animation = &playerMoveAnimation;
@@ -387,6 +409,7 @@ void Level2::Update([[maybe_unused]] double dt)
                 mGameObjectList.push_front(bullet);
                 mBulletLimit--;
                 mPlayerSpriteFlags |= IS_FIRING;
+                mBulletTimer = 1.0f;
             }
         }
 
@@ -407,6 +430,24 @@ void Level2::Update([[maybe_unused]] double dt)
         else
         {
             mPlayer->SetIsMoving(false);
+        }
+
+        if (mPlayerSpriteFlags & IS_FIRING && mBulletTimer > 0.0f)
+        {
+            mPlayer->animation->GetAnimationSprite().setColor(static_cast<sf::Color>(BLUE));
+        }
+        else
+        {
+            mPlayer->animation->GetAnimationSprite().setColor(mPlayerOriginalColor);
+        }
+
+        if (mPlayerSpriteFlags & IS_MOVING)
+        {
+            mPlayer->animation->GetAnimationSprite().setScale(mPlayerOriginalScale.x * 2.0f, mPlayerOriginalScale.y * 2.0f);
+        }
+        else
+        {
+            mPlayer->animation->GetAnimationSprite().setScale(mPlayerOriginalScale);
         }
 
         for (auto object : mGameObjectList)

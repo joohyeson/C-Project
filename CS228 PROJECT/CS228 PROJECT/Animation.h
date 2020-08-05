@@ -13,8 +13,6 @@ Creation date: 23/07/2020
 #include <SFML/Graphics.hpp>
 #include <vector> //std::vector
 
-class GameObject;
-
 class Animation
 {
 public:
@@ -23,16 +21,9 @@ public:
     void Update();
     bool IsAnimationEnded();
     sf::Sprite& GetAnimationSprite();
-    void SetSpriteColor(sf::Color color);
-    void SetSpriteScale(sf::Vector2f scale);
-    void SetOwner(GameObject* owner);
 
 private:
-    GameObject* mOwner = nullptr;
-
     sf::Sprite mAnimationSprite;
     std::vector<sf::IntRect> mAnimationCoordinates;
     float mAnimationFrame, mAnimationSpeed;
-
-    bool mIsAnimationEnded = true;
 };

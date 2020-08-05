@@ -29,30 +29,19 @@ Animation::Animation(sf::Texture& texture, int x, int y, int w, int h, int count
 
 void Animation::Update()
 {
-    mAnimationFrame += mAnimationSpeed;
-
     int frameSize = static_cast<int>(mAnimationCoordinates.size());
-
-    if (mAnimationFrame + mAnimationSpeed >= mAnimationCoordinates.size())
+    
+    if (mAnimationFrame >= mAnimationCoordinates.size())
     {
-        //if (mOwner->name == "explosion")
-        //{
-        //    mIsAnimationEnded = true;
-        //}
-        //else
-        {
-            mAnimationFrame -= frameSize;
-        }
-    }
-    else
-    {
-        mIsAnimationEnded = false;
+        mAnimationFrame -= frameSize;
     }
 
     if (frameSize > 0)
     {
         mAnimationSprite.setTextureRect(mAnimationCoordinates[static_cast<int>(mAnimationFrame)]);
     }
+
+    mAnimationFrame += mAnimationSpeed;
 }
 
 bool Animation::IsAnimationEnded()
@@ -63,19 +52,4 @@ bool Animation::IsAnimationEnded()
 sf::Sprite& Animation::GetAnimationSprite()
 {
     return mAnimationSprite;
-}
-
-void Animation::SetSpriteColor(sf::Color color)
-{
-    mAnimationSprite.setColor(color);
-}
-
-void Animation::SetSpriteScale(sf::Vector2f scale)
-{
-    mAnimationSprite.setScale(scale);
-}
-
-void Animation::SetOwner(GameObject* owner)
-{
-    mOwner = owner;
 }

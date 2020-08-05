@@ -69,10 +69,10 @@ public:
     List(int count);
     ~List();
 
-    List(const List<T>& rhs); // copy constructor
-    List(List<T>&& rhs); // move constructor
-    List<T>& operator=(const List<T>& rhs); // copy assignment
-    List<T>& operator=(List<T>&& rhs); //move assignment
+    List(const List<T>& rhs);
+    List(List<T>&& rhs);
+    List<T>& operator=(const List<T>& rhs);
+    List<T>& operator=(List<T>&& rhs);
     
     void push_front(T value);
     void push_back(T value);
