@@ -87,7 +87,6 @@ The instructor will use the repo for examining the code and building the project
 - [X] Source code submitted has no redundant computations.
 - [X] Reused functions/code as much as possible.
 - [X] Keep global variables to a minimum _(Allocate long lived objects on the stack in `main()` and then pass around pointers to it)_
-- [X] No memory leaks detected with the CRT library, valgrind or Dr Memory.
 - [X] All requirements that are completed are checked off here by replacing the `[ ]` with `[x]`
 
 Score for the project will be given as the following:
