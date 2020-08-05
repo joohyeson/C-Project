@@ -110,9 +110,61 @@ AND(&) 0011
 ```c++
 //We used '>>' instead using like Engine::GetWindow().GetSize().x / 2.
 Engine::GetWindow().GetSize().x >> 1;
+```
 
-//And we used bit flags like this.
-//New flag here!
+```c++
+constexpr unsigned char IS_FIRING = 1 << 0;
+constexpr unsigned char IS_MOVING = 1 << 1;
+
+if (mBulletTimer > 0.0f)
+{
+    mBulletTimer -= static_cast<float>(dt);
+}
+
+//Toggle flag.
+if (mPlayer->GetIsMoving() == true)
+{
+    mPlayer->animation = &playerMoveAnimation;
+    mPlayerSpriteFlags |= IS_MOVING;
+}
+else
+{
+    mPlayer->animation = &playerAnimation;
+    mPlayerSpriteFlags &= ~IS_MOVING;
+}
+
+//Toggle flag.
+if (Engine::GetInput().IsKeyTriggered(sf::Keyboard::Space))
+{
+    if (mBulletLimit > 0)
+    {
+        Bullet* bullet = new Bullet();
+        bullet->SetValues(bulletAnimation, mPlayer->x, mPlayer->y, mPlayer->angle, 10.0f);
+        mGameObjectList.push_front(bullet);
+        mBulletLimit--;
+        mPlayerSpriteFlags |= IS_FIRING;
+        mBulletTimer = 1.0f;
+    }
+}
+
+//Using bit flags.
+if (mPlayerSpriteFlags & IS_FIRING && mBulletTimer > 0.0f)
+{
+    mPlayer->animation->GetAnimationSprite().setColor(static_cast<sf::Color>(BLUE));
+}
+else
+{
+    mPlayer->animation->GetAnimationSprite().setColor(mPlayerOriginalColor);
+}
+
+if (mPlayerSpriteFlags & IS_MOVING)
+{
+    mPlayer->animation->GetAnimationSprite().setScale(mPlayerOriginalScale.x * 2.0f, mPlayerOriginalScale.y * 2.0f);
+}
+else
+{
+    mPlayer->animation->GetAnimationSprite().setScale(mPlayerOriginalScale);
+}
 ```
 
 **3. Operator Overloading**

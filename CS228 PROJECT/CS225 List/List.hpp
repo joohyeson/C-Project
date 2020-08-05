@@ -212,7 +212,6 @@ typename List<T>::Iterator List<T>::erase(typename List<T>::Iterator target)
     else //current target is Tail.
     {
         pTail = nullptr;
-        pTail->pPrev = nullptr;
     }
 
     delete current;

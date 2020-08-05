@@ -35,10 +35,6 @@ void Animation::Update()
     {
         mAnimationFrame -= frameSize;
     }
-    else
-    {
-        mIsAnimationEnded = false;
-    }
 
     if (frameSize > 0)
     {
