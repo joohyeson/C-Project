@@ -29,14 +29,12 @@ List<T>::~List()
     clear();
 }
 
-//copy constructor(deep copy)
 template<typename T>
 List<T>::List(const List<T>& rhs)
 {
     deep_copy(rhs);
 }
 
-//move constructor 
 template<typename T>
 List<T>::List(List<T>&& rhs)
 {
@@ -49,7 +47,6 @@ List<T>::List(List<T>&& rhs)
     rhs.mSize = 0;
 }
 
-//copy assignment operator(deep copy)
 template<typename T>
 List<T>& List<T>::operator=(const List<T>& rhs)
 {
@@ -59,7 +56,6 @@ List<T>& List<T>::operator=(const List<T>& rhs)
     return *this;
 }
 
-//move assignmnet operator
 template<typename T>
 List<T>& List<T>::operator=(List<T>&& rhs)
 {

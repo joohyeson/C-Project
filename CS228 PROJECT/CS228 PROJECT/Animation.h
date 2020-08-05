@@ -23,9 +23,6 @@ public:
     void Update();
     bool IsAnimationEnded();
     sf::Sprite& GetAnimationSprite();
-    void SetSpriteColor(sf::Color color);
-    void SetSpriteScale(sf::Vector2f scale);
-    void SetOwner(GameObject* owner);
 
 private:
     GameObject* mOwner = nullptr;
