@@ -12,19 +12,19 @@
 - [X] [**core**] All source code, data files and project files need to build and run the project are in this repo
 - [X] [**core**] Created a ReadMe markdown file with all of the needed information
 - [X] [**core**] Created a CoreTopics markdown file with all of the needed information
-- [X] [**core**] Make good use of pointers and arrays
-- [X] [**core**] Use Bitwise operations to create a some kind of configuration variable where you extract values. _(Combine bit flags of varying powers of 2)_
-- [X] [**core**] Use bitwise operations to replace Arithmetic Operations
-- [X] [**core**] Makes good use of operator overloading
-- [X] [**core**] Has examples of Return Value Optimization
-- [X] [**core**] Makes good use of Inheritance and Polymorphism
-- [X] [**core**] Makes good use of Rule of 5
-- [X] [**core**] Makes good use of Rule of 0
-- [X] [**core**] Makes good use of RAII
-- [X] [**core**] Makes good use of Templates
-- [X] [**core**] Makes good use of STL Containers
-- [X] [**core**] Makes good use of STL Iterators
-- [X] [**core**] Makes good use of STL Algorithms
+- [X] [**core**] Make good use of pointers and arrays ()(Pointers:List.h, Line 96~99/Array:Input.h, 46~52)
+- [X] [**core**] Use Bitwise operations to create a some kind of configuration variable where you extract values. _(Combine bit flags of varying powers of 2)_ ()(Level2.cpp:435~451)
+- [X] [**core**] Use bitwise operations to replace Arithmetic Operations ()(Level2.cpp, 257)
+- [X] [**core**] Makes good use of operator overloading ()(List.h: 54~59)
+- [X] [**core**] Has examples of Return Value Optimization ()(Level2.cpp:162~198)
+- [X] [**core**] Makes good use of Inheritance and Polymorphism (GameState.h line 19, Level1.h line 22)
+- [X] [**core**] Makes good use of Rule of 5 (List.hpp, line 39)
+- [X] [**core**] Makes good use of Rule of 0 (Level1.h, line 34)
+- [X] [**core**] Makes good use of RAII (List.hpp, line 18)
+- [X] [**core**] Makes good use of Templates (List.hpp, line 22)
+- [X] [**core**] Makes good use of STL Containers (Level1.cpp, line 32)
+- [X] [**core**] Makes good use of STL Iterators (Level1.cpp, line 32)
+- [X] [**core**] Makes good use of STL Algorithms (Level1.cpp, line 32)
 - [X] All source files have a proper header comment with your name, project name, course name, term.
 - [X] All source files compile without warnings and without errors
 - [X] Reasonably High Warning levels and treat warnings as errors are enabled.
